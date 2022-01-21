@@ -34,6 +34,7 @@ if(SFML_BUILD_GRAPHICS)
         "${SRCROOT}/Graphics/Color.cpp"
         "${SRCROOT}/Graphics/Rect.cpp"
         "${SRCROOT}/Graphics/Transform.cpp"
+        "${SRCROOT}/Graphics/Transformable.cpp"
         "${SRCROOT}/Graphics/Vertex.cpp"
         "${SRCROOT}/TestUtilities/GraphicsUtil.hpp"
         "${SRCROOT}/TestUtilities/GraphicsUtil.cpp"
