@@ -2,6 +2,7 @@
 #include "GraphicsUtil.hpp"
 
 #include <doctest.h>
+#include "Approx.hpp"
 
 using doctest::Approx;
 
@@ -116,4 +117,54 @@ TEST_CASE("sf::Transformable class - [graphics]")
         transformable.scale({-1, -1});
         CHECK(transformable.getScale() == sf::Vector2f(-4, -3));
     }
+    
+    SUBCASE("getTransform() - 1")
+    {
+        sf::Transformable transformable;
+        transformable.rotate(90);
+        transformable.setPosition({1,1});
+        CHECK(transformable.getTransform().getMatrix()[0] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[1] == Approx(-1));
+        CHECK(transformable.getTransform().getMatrix()[2] == Approx(1);)
+        CHECK(transformable.getTransform().getMatrix()[3] == Approx(1));
+        CHECK(transformable.getTransform().getMatrix()[4] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[5] == Approx(1));
+        CHECK(transformable.getTransform().getMatrix()[6] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[7] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[8] == Approx(1));
+    }
+              
+    SUBCASE("getTransform() - 2")
+    {
+        sf::Transformable transformable;
+        transformable.setScale({3, 4});
+        transformable.rotate(90);
+        transformable.setPosition({1,1})
+        CHECK(transformable.getTransform().getMatrix()[0] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[1] == Approx(-4));
+        CHECK(transformable.getTransform().getMatrix()[2] == Approx(1));
+        CHECK(transformable.getTransform().getMatrix()[3] == Approx(3));
+        CHECK(transformable.getTransform().getMatrix()[4] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[5] == Approx(1));
+        CHECK(transformable.getTransform().getMatrix()[6] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[7] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[8] == Approx(1));
+    }
+    
+    SUBCASE("getTransform() - 3")
+    {
+        sf::Transformable transformable;
+        transformable.setScale({3, 4});
+        transformable.rotate(180);
+        transformable.setPosition({1,1})
+        CHECK(transformable.getTransform().getMatrix()[0] == Approx(-3));
+        CHECK(transformable.getTransform().getMatrix()[1] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[2] == Approx(1));
+        CHECK(transformable.getTransform().getMatrix()[3] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[4] == Approx(-4));
+        CHECK(transformable.getTransform().getMatrix()[5] == Approx(1));
+        CHECK(transformable.getTransform().getMatrix()[6] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[7] == Approx(0));
+        CHECK(transformable.getTransform().getMatrix()[8] == Approx(1));
+    }        
 }
