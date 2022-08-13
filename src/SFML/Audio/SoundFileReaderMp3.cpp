@@ -34,7 +34,7 @@
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4242 4244 4267 4456 4706)
-#else
+#elif !defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
@@ -43,7 +43,7 @@
 
 #ifdef _MSC_VER
 #pragma warning(pop)
-#else
+#elif !defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
 
