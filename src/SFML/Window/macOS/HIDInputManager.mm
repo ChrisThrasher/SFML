@@ -772,6 +772,7 @@ void HIDInputManager::loadKeyboard(IOHIDDeviceRef keyboard)
     if ((underlying == nullptr) || (CFArrayGetCount(underlying) == 0))
     {
         err() << "Detected a keyboard without any keys." << std::endl;
+        CFRelease(underlying);
         return;
     }
 
