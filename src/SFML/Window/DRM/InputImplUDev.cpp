@@ -353,6 +353,7 @@ void processSlots()
     }
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 bool eventProcess(sf::Event& event)
 {
     const std::lock_guard lock(inputMutex);

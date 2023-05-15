@@ -27,6 +27,7 @@ std::filesystem::path resourcesDir()
 /// \return Application exit code
 ///
 ////////////////////////////////////////////////////////////
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 int main()
 {
     std::random_device rd;

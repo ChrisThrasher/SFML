@@ -38,7 +38,6 @@ Checks: >
   -readability-container-contains,
   -readability-convert-member-functions-to-static,
   -readability-else-after-return,
-  -readability-function-cognitive-complexity,
   -readability-function-size,
   -readability-identifier-length,
   -readability-implicit-bool-conversion,
@@ -50,6 +49,8 @@ CheckOptions:
   - { key: readability-identifier-naming.FunctionCase,        value: camelBack }
   - { key: readability-identifier-naming.VariableCase,        value: camelBack }
   - { key: readability-identifier-naming.ParameterCase,       value: camelBack }
+  - { key: readability-function-cognitive-complexity.Threshold,    value: 75   }
+  - { key: readability-function-cognitive-complexity.IgnoreMacros, value: True }
 HeaderFilterRegex: '.*'
 WarningsAsErrors: '*'
 UseColor: true

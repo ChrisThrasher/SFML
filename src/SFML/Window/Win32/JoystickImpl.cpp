@@ -530,6 +530,7 @@ void JoystickImpl::updateConnectionsDInput()
 
 
 ////////////////////////////////////////////////////////////
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 bool JoystickImpl::openDInput(unsigned int index)
 {
     // Initialize DirectInput members

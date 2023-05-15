@@ -1646,6 +1646,7 @@ void WindowImplX11::cleanup()
 
 
 ////////////////////////////////////////////////////////////
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 bool WindowImplX11::processEvent(XEvent& windowEvent)
 {
     using namespace WindowsImplX11Impl;
