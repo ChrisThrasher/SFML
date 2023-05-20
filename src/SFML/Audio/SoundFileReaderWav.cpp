@@ -333,7 +333,7 @@ bool SoundFileReaderWav::parseHeader(Info& info)
             if (m_stream->seek(subChunkStart + subChunkSize) == -1)
                 return false;
         }
-        else if ((subChunkId[0] == 'd') && (subChunkId[1] == 'a') && (subChunkId[2] == 't') && (subChunkId[3] == 'a'))
+        else if (std::string_view(subChunkId, 4) == "data")
         {
             // "data" chunk
 
@@ -346,11 +346,10 @@ bool SoundFileReaderWav::parseHeader(Info& info)
 
             dataChunkFound = true;
         }
-        else
+        else if (m_stream->seek(m_stream->tell() + subChunkSize) == -1)
         {
             // unknown chunk, skip it
-            if (m_stream->seek(m_stream->tell() + subChunkSize) == -1)
-                return false;
+            return false;
         }
     }
 
