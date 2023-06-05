@@ -77,6 +77,7 @@ set(WINDOW_SRC
     Window/Vulkan.test.cpp
     Window/Window.test.cpp
     Window/WindowBase.test.cpp
+    Window/WindowStyle.test.cpp
 )
 sfml_add_test(test-sfml-window "${WINDOW_SRC}" SFML::Window)
 

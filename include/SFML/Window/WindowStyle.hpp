@@ -24,15 +24,22 @@
 
 #pragma once
 
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
+#include <type_traits>
 
-namespace sf::Style
+#include <cstdint>
+
+
+namespace sf
 {
 ////////////////////////////////////////////////////////////
 /// \ingroup window
 /// \brief Enumeration of the window styles
 ///
 ////////////////////////////////////////////////////////////
-enum
+enum class Style : std::uint8_t
 {
     None       = 0,      //!< No border / title bar (this flag and all others are mutually exclusive)
     Titlebar   = 1 << 0, //!< Title bar + fixed border
@@ -42,4 +49,67 @@ enum
 
     Default = Titlebar | Resize | Close //!< Default window style
 };
-} // namespace sf::Style
+
+
+////////////////////////////////////////////////////////////
+constexpr bool any(Style style)
+{
+    return style != Style::None;
+}
+
+
+////////////////////////////////////////////////////////////
+constexpr Style operator~(Style style)
+{
+    return static_cast<Style>(~static_cast<std::underlying_type_t<Style>>(style));
+}
+
+
+////////////////////////////////////////////////////////////
+constexpr Style operator|(Style lhs, Style rhs)
+{
+    return static_cast<Style>(
+        static_cast<std::underlying_type_t<Style>>(lhs) | static_cast<std::underlying_type_t<Style>>(rhs));
+}
+
+
+////////////////////////////////////////////////////////////
+constexpr Style operator&(Style lhs, Style rhs)
+{
+    return static_cast<Style>(
+        static_cast<std::underlying_type_t<Style>>(lhs) & static_cast<std::underlying_type_t<Style>>(rhs));
+}
+
+
+////////////////////////////////////////////////////////////
+constexpr Style operator^(Style lhs, Style rhs)
+{
+    return static_cast<Style>(
+        static_cast<std::underlying_type_t<Style>>(lhs) ^ static_cast<std::underlying_type_t<Style>>(rhs));
+}
+
+
+////////////////////////////////////////////////////////////
+inline Style& operator|=(Style& lhs, Style rhs)
+{
+    return reinterpret_cast<Style&>(
+        reinterpret_cast<std::underlying_type_t<Style>&>(lhs) |= static_cast<std::underlying_type_t<Style>>(rhs));
+}
+
+
+////////////////////////////////////////////////////////////
+inline Style& operator&=(Style& lhs, Style rhs)
+{
+    return reinterpret_cast<Style&>(
+        reinterpret_cast<std::underlying_type_t<Style>&>(lhs) &= static_cast<std::underlying_type_t<Style>>(rhs));
+}
+
+
+////////////////////////////////////////////////////////////
+inline Style& operator^=(Style& lhs, Style rhs)
+{
+    return reinterpret_cast<Style&>(
+        reinterpret_cast<std::underlying_type_t<Style>&>(lhs) ^= static_cast<std::underlying_type_t<Style>>(rhs));
+}
+
+} // namespace sf

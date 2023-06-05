@@ -27,6 +27,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/VideoMode.hpp>
+#include <SFML/Window/WindowStyle.hpp>
 #import <SFML/Window/macOS/WindowImplDelegateProtocol.h>
 
 ////////////////////////////////////////////////////////////
@@ -84,6 +85,6 @@ class WindowImplCocoa;
 /// \return an initialized controller
 ///
 ////////////////////////////////////////////////////////////
-- (id)initWithMode:(const sf::VideoMode&)mode andStyle:(unsigned long)style;
+- (id)initWithMode:(const sf::VideoMode&)mode andStyle:(sf::Style)style;
 
 @end

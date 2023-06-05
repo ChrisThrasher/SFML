@@ -135,7 +135,7 @@
 
 
 ////////////////////////////////////////////////////////
-- (id)initWithMode:(const sf::VideoMode&)mode andStyle:(unsigned long)style
+- (id)initWithMode:(const sf::VideoMode&)mode andStyle:(sf::Style)style
 {
     // If we are not on the main thread we stop here and advice the user.
     if ([NSThread currentThread] != [NSThread mainThread])
@@ -154,7 +154,7 @@
         m_window        = nil;
         m_oglView       = nil;
         m_requester     = nil;
-        m_fullscreen    = ((style & sf::Style::Fullscreen) != 0) ? YES : NO;
+        m_fullscreen    = any(style & sf::Style::Fullscreen) ? YES : NO;
         m_restoreResize = NO;
         m_highDpi       = NO;
 
@@ -236,7 +236,7 @@
 
 
 ////////////////////////////////////////////////////////
-- (void)setupWindowWithMode:(const sf::VideoMode&)mode andStyle:(unsigned long)style
+- (void)setupWindowWithMode:(const sf::VideoMode&)mode andStyle:(sf::Style)style
 {
     // We know that style & sf::Style::Fullscreen is false.
 
@@ -245,11 +245,11 @@
 
     // Convert the SFML window style to Cocoa window style.
     unsigned int nsStyle = NSBorderlessWindowMask;
-    if (style & sf::Style::Titlebar)
+    if (sf::any(style & sf::Style::Titlebar))
         nsStyle |= NSTitledWindowMask | NSMiniaturizableWindowMask;
-    if (style & sf::Style::Resize)
+    if (sf::any(style & sf::Style::Resize))
         nsStyle |= NSResizableWindowMask;
-    if (style & sf::Style::Close)
+    if (sf::any(style & sf::Style::Close))
         nsStyle |= NSClosableWindowMask;
 
     // Create the window.

@@ -70,7 +70,7 @@ WindowImplDRM::WindowImplDRM(WindowHandle /*handle*/)
 
 
 ////////////////////////////////////////////////////////////
-WindowImplDRM::WindowImplDRM(VideoMode mode, const String& /*title*/, unsigned long /*style*/, const ContextSettings& /*settings*/) :
+WindowImplDRM::WindowImplDRM(VideoMode mode, const String& /*title*/, Style /*style*/, const ContextSettings& /*settings*/) :
 m_size(mode.size)
 {
     sf::priv::InputImpl::setTerminalConfig();

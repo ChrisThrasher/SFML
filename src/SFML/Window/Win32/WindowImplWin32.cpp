@@ -150,9 +150,9 @@ WindowImplWin32::WindowImplWin32(WindowHandle handle) : m_handle(handle)
 
 
 ////////////////////////////////////////////////////////////
-WindowImplWin32::WindowImplWin32(VideoMode mode, const String& title, std::uint32_t style, const ContextSettings& /*settings*/) :
+WindowImplWin32::WindowImplWin32(VideoMode mode, const String& title, Style style, const ContextSettings& /*settings*/) :
 m_lastSize(mode.size),
-m_fullscreen((style & Style::Fullscreen) != 0),
+m_fullscreen(any(style & Style::Fullscreen)),
 m_cursorGrabbed(m_fullscreen)
 {
     // Set that this process is DPI aware and can handle DPI scaling
@@ -177,11 +177,11 @@ m_cursorGrabbed(m_fullscreen)
     }
     else
     {
-        if (style & Style::Titlebar)
+        if (any(style & Style::Titlebar))
             win32Style |= WS_CAPTION | WS_MINIMIZEBOX;
-        if (style & Style::Resize)
+        if (any(style & Style::Resize))
             win32Style |= WS_THICKFRAME | WS_MAXIMIZEBOX;
-        if (style & Style::Close)
+        if (any(style & Style::Close))
             win32Style |= WS_SYSMENU;
     }
 

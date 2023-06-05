@@ -55,7 +55,7 @@ WindowBase::WindowBase() = default;
 
 
 ////////////////////////////////////////////////////////////
-WindowBase::WindowBase(VideoMode mode, const String& title, std::uint32_t style)
+WindowBase::WindowBase(VideoMode mode, const String& title, Style style)
 {
     WindowBase::create(mode, title, style);
 }
@@ -76,19 +76,19 @@ WindowBase::~WindowBase()
 
 
 ////////////////////////////////////////////////////////////
-void WindowBase::create(VideoMode mode, const String& title, std::uint32_t style)
+void WindowBase::create(VideoMode mode, const String& title, Style style)
 {
     // Destroy the previous window implementation
     close();
 
     // Fullscreen style requires some tests
-    if (style & Style::Fullscreen)
+    if (any(style & Style::Fullscreen))
     {
         // Make sure there's not already a fullscreen window (only one is allowed)
         if (getFullscreenWindow())
         {
             err() << "Creating two fullscreen windows is not allowed, switching to windowed mode" << std::endl;
-            style &= ~static_cast<std::uint32_t>(Style::Fullscreen);
+            style &= ~Style::Fullscreen;
         }
         else
         {
@@ -106,12 +106,12 @@ void WindowBase::create(VideoMode mode, const String& title, std::uint32_t style
 
 // Check validity of style according to the underlying platform
 #if defined(SFML_SYSTEM_IOS) || defined(SFML_SYSTEM_ANDROID)
-    if (style & Style::Fullscreen)
-        style &= ~static_cast<std::uint32_t>(Style::Titlebar);
+    if (any(style & Style::Fullscreen))
+        style &= ~Style::Titlebar;
     else
         style |= Style::Titlebar;
 #else
-    if ((style & Style::Close) || (style & Style::Resize))
+    if (any(style & Style::Close) || any(style & Style::Resize))
         style |= Style::Titlebar;
 #endif
 
