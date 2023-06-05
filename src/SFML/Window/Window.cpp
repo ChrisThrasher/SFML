@@ -44,7 +44,7 @@ Window::Window() = default;
 
 
 ////////////////////////////////////////////////////////////
-Window::Window(VideoMode mode, const String& title, std::uint32_t style, const ContextSettings& settings)
+Window::Window(VideoMode mode, const String& title, Style style, const ContextSettings& settings)
 {
     Window::create(mode, title, style, settings);
 }
@@ -65,26 +65,26 @@ Window::~Window()
 
 
 ////////////////////////////////////////////////////////////
-void Window::create(VideoMode mode, const String& title, std::uint32_t style)
+void Window::create(VideoMode mode, const String& title, Style style)
 {
     Window::create(mode, title, style, ContextSettings());
 }
 
 
 ////////////////////////////////////////////////////////////
-void Window::create(VideoMode mode, const String& title, std::uint32_t style, const ContextSettings& settings)
+void Window::create(VideoMode mode, const String& title, Style style, const ContextSettings& settings)
 {
     // Destroy the previous window implementation
     close();
 
     // Fullscreen style requires some tests
-    if (style & Style::Fullscreen)
+    if (any(style & Style::Fullscreen))
     {
         // Make sure there's not already a fullscreen window (only one is allowed)
         if (getFullscreenWindow())
         {
             err() << "Creating two fullscreen windows is not allowed, switching to windowed mode" << std::endl;
-            style &= ~static_cast<std::uint32_t>(Style::Fullscreen);
+            style &= ~Style::Fullscreen;
         }
         else
         {
@@ -105,12 +105,12 @@ void Window::create(VideoMode mode, const String& title, std::uint32_t style, co
 
 // Check validity of style according to the underlying platform
 #if defined(SFML_SYSTEM_IOS) || defined(SFML_SYSTEM_ANDROID)
-    if (style & Style::Fullscreen)
-        style &= ~static_cast<std::uint32_t>(Style::Titlebar);
+    if (any(style & Style::Fullscreen))
+        style &= ~Style::Titlebar;
     else
         style |= Style::Titlebar;
 #else
-    if ((style & Style::Close) || (style & Style::Resize))
+    if (any(style & Style::Close) || any(style & Style::Resize))
         style |= Style::Titlebar;
 #endif
 

@@ -63,7 +63,7 @@ public:
     /// \param settings Additional settings for the underlying OpenGL context
     ///
     ////////////////////////////////////////////////////////////
-    WindowImplUIKit(VideoMode mode, const String& title, unsigned long style, const ContextSettings& settings);
+    WindowImplUIKit(VideoMode mode, const String& title, Style style, const ContextSettings& settings);
 
     ////////////////////////////////////////////////////////////
     /// \brief Get the OS-specific handle of the window

@@ -465,8 +465,8 @@ WindowImplX11::WindowImplX11(WindowHandle handle) : m_isExternal(true)
 
 
 ////////////////////////////////////////////////////////////
-WindowImplX11::WindowImplX11(VideoMode mode, const String& title, unsigned long style, const ContextSettings& settings) :
-m_fullscreen((style & Style::Fullscreen) != 0),
+WindowImplX11::WindowImplX11(VideoMode mode, const String& title, Style style, const ContextSettings& settings) :
+m_fullscreen(any(style & Style::Fullscreen)),
 m_cursorGrabbed(m_fullscreen)
 {
     using namespace WindowImplX11Impl;
@@ -590,17 +590,17 @@ m_cursorGrabbed(m_fullscreen)
             hints.decorations = 0;
             hints.functions   = 0;
 
-            if (style & Style::Titlebar)
+            if (any(style & Style::Titlebar))
             {
                 hints.decorations |= MWM_DECOR_BORDER | MWM_DECOR_TITLE | MWM_DECOR_MINIMIZE | MWM_DECOR_MENU;
                 hints.functions |= MWM_FUNC_MOVE | MWM_FUNC_MINIMIZE;
             }
-            if (style & Style::Resize)
+            if (any(style & Style::Resize))
             {
                 hints.decorations |= MWM_DECOR_MAXIMIZE | MWM_DECOR_RESIZEH;
                 hints.functions |= MWM_FUNC_MAXIMIZE | MWM_FUNC_RESIZE;
             }
-            if (style & Style::Close)
+            if (any(style & Style::Close))
             {
                 hints.decorations |= 0;
                 hints.functions |= MWM_FUNC_CLOSE;
@@ -618,7 +618,7 @@ m_cursorGrabbed(m_fullscreen)
     }
 
     // This is a hack to force some windows managers to disable resizing
-    if (!(style & Style::Resize))
+    if (!any(style & Style::Resize))
     {
         m_useSizeHints = true;
         XSizeHints sizeHints{};

@@ -99,8 +99,9 @@ struct WindowImpl::JoystickStatesImpl
     JoystickState states[Joystick::Count]; //!< Previous state of the joysticks
 };
 
+
 ////////////////////////////////////////////////////////////
-std::unique_ptr<WindowImpl> WindowImpl::create(VideoMode mode, const String& title, std::uint32_t style, const ContextSettings& settings)
+std::unique_ptr<WindowImpl> WindowImpl::create(VideoMode mode, const String& title, Style style, const ContextSettings& settings)
 {
     return std::make_unique<WindowImplType>(mode, title, style, settings);
 }

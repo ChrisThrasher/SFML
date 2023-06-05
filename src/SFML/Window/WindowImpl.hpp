@@ -38,6 +38,7 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Vulkan.hpp>
 #include <SFML/Window/WindowHandle.hpp>
+#include <SFML/Window/WindowStyle.hpp>
 
 #include <SFML/System/EnumArray.hpp>
 
@@ -71,10 +72,7 @@ public:
     /// \return Pointer to the created window
     ///
     ////////////////////////////////////////////////////////////
-    static std::unique_ptr<WindowImpl> create(VideoMode              mode,
-                                              const String&          title,
-                                              std::uint32_t          style,
-                                              const ContextSettings& settings);
+    static std::unique_ptr<WindowImpl> create(VideoMode mode, const String& title, Style style, const ContextSettings& settings);
 
     ////////////////////////////////////////////////////////////
     /// \brief Create a new window depending on to the current OS
