@@ -150,9 +150,9 @@ WindowImplWin32::WindowImplWin32(WindowHandle handle) : m_handle(handle)
 
 
 ////////////////////////////////////////////////////////////
-WindowImplWin32::WindowImplWin32(VideoMode mode, const String& title, Style style, const ContextSettings& /*settings*/) :
+WindowImplWin32::WindowImplWin32(VideoMode mode, const String& title, Style style, State state, const ContextSettings& /*settings*/) :
 m_lastSize(mode.size),
-m_fullscreen(any(style & Style::Fullscreen)),
+m_fullscreen(state == State::Fullscreen),
 m_cursorGrabbed(m_fullscreen)
 {
     // Set that this process is DPI aware and can handle DPI scaling

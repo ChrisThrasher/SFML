@@ -84,6 +84,7 @@ public:
     Window(VideoMode              mode,
            const String&          title,
            Style                  style    = Style::Default,
+           State                  state    = State::Windowed,
            const ContextSettings& settings = ContextSettings());
 
     ////////////////////////////////////////////////////////////
@@ -122,7 +123,7 @@ public:
     /// \param style    %Window style, a bitwise OR combination of sf::Style enumerators
     ///
     ////////////////////////////////////////////////////////////
-    void create(VideoMode mode, const String& title, Style style = Style::Default) override;
+    void create(VideoMode mode, const String& title, Style style = Style::Default, State state = State::Windowed) override;
 
     ////////////////////////////////////////////////////////////
     /// \brief Create (or recreate) the window
@@ -141,7 +142,7 @@ public:
     /// \param settings Additional settings for the underlying OpenGL context
     ///
     ////////////////////////////////////////////////////////////
-    virtual void create(VideoMode mode, const String& title, Style style, const ContextSettings& settings);
+    virtual void create(VideoMode mode, const String& title, Style style, State state, const ContextSettings& settings);
 
     ////////////////////////////////////////////////////////////
     /// \brief Create (or recreate) the window from an existing control

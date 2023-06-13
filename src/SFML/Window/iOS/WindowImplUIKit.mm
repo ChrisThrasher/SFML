@@ -47,12 +47,12 @@ WindowImplUIKit::WindowImplUIKit(WindowHandle /* handle */)
 
 
 ////////////////////////////////////////////////////////////
-WindowImplUIKit::WindowImplUIKit(VideoMode mode, const String& /* title */, Style style, const ContextSettings& /* settings */)
+WindowImplUIKit::WindowImplUIKit(VideoMode mode, const String& /* title */, Style style, State state, const ContextSettings& /* settings */)
 {
     m_backingScale = static_cast<float>([SFAppDelegate getInstance].backingScaleFactor);
 
     // Apply the fullscreen flag
-    [UIApplication sharedApplication].statusBarHidden = !any(style & Style::Titlebar) || any(style & Style::Fullscreen);
+    [UIApplication sharedApplication].statusBarHidden = !any(style & Style::Titlebar) || state == State::Fullscreen;
 
     // Set the orientation according to the requested size
     if (mode.size.x > mode.size.y)

@@ -118,13 +118,13 @@ WindowImplCocoa::WindowImplCocoa(WindowHandle handle)
 
 
 ////////////////////////////////////////////////////////////
-WindowImplCocoa::WindowImplCocoa(VideoMode mode, const String& title, Style style, const ContextSettings& /*settings*/)
+WindowImplCocoa::WindowImplCocoa(VideoMode mode, const String& title, Style style, State state, const ContextSettings& /*settings*/)
 {
     const AutoreleasePool pool;
     // Transform the app process.
     setUpProcess();
 
-    m_delegate = [[SFWindowController alloc] initWithMode:mode andStyle:style];
+    m_delegate = [[SFWindowController alloc] initWithMode:mode andStyle:style andState:state];
     [m_delegate changeTitle:sfStringToNSString(title)];
     [m_delegate setRequesterTo:this];
 

@@ -57,13 +57,17 @@ WindowImplAndroid::WindowImplAndroid(WindowHandle /* handle */)
 
 
 ////////////////////////////////////////////////////////////
-WindowImplAndroid::WindowImplAndroid(VideoMode mode, const String& /* title */, Style style, const ContextSettings& /* settings */) :
+WindowImplAndroid::WindowImplAndroid(VideoMode mode,
+                                     const String& /* title */,
+                                     Style /* style */,
+                                     State state,
+                                     const ContextSettings& /* settings */) :
 m_size(mode.size)
 {
     ActivityStates& states = getActivity();
     std::lock_guard lock(states.mutex);
 
-    if (any(style & Style::Fullscreen))
+    if (state == State::Fullscreen)
         states.fullscreen = true;
 
     WindowImplAndroid::singleInstance = this;

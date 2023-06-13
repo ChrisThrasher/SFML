@@ -56,7 +56,7 @@ public:
     /// \param settings Additional settings for the underlying OpenGL context
     ///
     ////////////////////////////////////////////////////////////
-    WindowImplDRM(VideoMode mode, const String& title, Style style, const ContextSettings& settings);
+    WindowImplDRM(VideoMode mode, const String& title, Style style, State state, const ContextSettings& settings);
 
     ////////////////////////////////////////////////////////////
     /// \brief Destructor

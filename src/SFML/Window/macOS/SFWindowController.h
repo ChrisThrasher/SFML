@@ -85,6 +85,6 @@ class WindowImplCocoa;
 /// \return an initialized controller
 ///
 ////////////////////////////////////////////////////////////
-- (id)initWithMode:(const sf::VideoMode&)mode andStyle:(sf::Style)style;
+- (id)initWithMode:(const sf::VideoMode&)mode andStyle:(sf::Style)style andState:(sf::State)state;
 
 @end

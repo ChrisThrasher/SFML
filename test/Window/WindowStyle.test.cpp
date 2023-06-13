@@ -17,7 +17,6 @@ TEST_CASE("[Window] sf::Style")
         STATIC_CHECK(sf::any(sf::Style::Titlebar));
         STATIC_CHECK(sf::any(sf::Style::Resize));
         STATIC_CHECK(sf::any(sf::Style::Close));
-        STATIC_CHECK(sf::any(sf::Style::Fullscreen));
         STATIC_CHECK(sf::any(sf::Style::Default));
     }
 
@@ -30,7 +29,7 @@ TEST_CASE("[Window] sf::Style")
 
         SECTION("operator|")
         {
-            STATIC_CHECK((sf::Style::Titlebar | sf::Style::Resize | sf::Style::Fullscreen) == static_cast<sf::Style>(11));
+            STATIC_CHECK((sf::Style::Titlebar | sf::Style::Resize) == static_cast<sf::Style>(3));
         }
 
         SECTION("operator&")

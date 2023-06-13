@@ -44,9 +44,9 @@ Window::Window() = default;
 
 
 ////////////////////////////////////////////////////////////
-Window::Window(VideoMode mode, const String& title, Style style, const ContextSettings& settings)
+Window::Window(VideoMode mode, const String& title, Style style, State state, const ContextSettings& settings)
 {
-    Window::create(mode, title, style, settings);
+    Window::create(mode, title, style, state, settings);
 }
 
 
@@ -65,26 +65,26 @@ Window::~Window()
 
 
 ////////////////////////////////////////////////////////////
-void Window::create(VideoMode mode, const String& title, Style style)
+void Window::create(VideoMode mode, const String& title, Style style, State state)
 {
-    Window::create(mode, title, style, ContextSettings());
+    Window::create(mode, title, style, state, ContextSettings());
 }
 
 
 ////////////////////////////////////////////////////////////
-void Window::create(VideoMode mode, const String& title, Style style, const ContextSettings& settings)
+void Window::create(VideoMode mode, const String& title, Style style, State state, const ContextSettings& settings)
 {
     // Destroy the previous window implementation
     close();
 
     // Fullscreen style requires some tests
-    if (any(style & Style::Fullscreen))
+    if (state == State::Fullscreen)
     {
         // Make sure there's not already a fullscreen window (only one is allowed)
         if (getFullscreenWindow())
         {
             err() << "Creating two fullscreen windows is not allowed, switching to windowed mode" << std::endl;
-            style &= ~Style::Fullscreen;
+            state = State::Windowed;
         }
         else
         {
@@ -103,7 +103,7 @@ void Window::create(VideoMode mode, const String& title, Style style, const Cont
 
 // Check validity of style according to the underlying platform
 #if defined(SFML_SYSTEM_IOS) || defined(SFML_SYSTEM_ANDROID)
-    if (any(style & Style::Fullscreen))
+    if (state == State::Fullscreen)
         style &= ~Style::Titlebar;
     else
         style |= Style::Titlebar;
@@ -113,7 +113,7 @@ void Window::create(VideoMode mode, const String& title, Style style, const Cont
 #endif
 
     // Recreate the window implementation
-    m_impl = priv::WindowImpl::create(mode, title, style, settings);
+    m_impl = priv::WindowImpl::create(mode, title, style, state, settings);
 
     // Recreate the context
     m_context = priv::GlContext::create(settings, *m_impl, mode.bitsPerPixel);

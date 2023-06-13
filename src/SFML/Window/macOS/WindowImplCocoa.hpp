@@ -84,7 +84,7 @@ public:
     /// \param settings Additional settings for the underlying OpenGL context
     ///
     ////////////////////////////////////////////////////////////
-    WindowImplCocoa(VideoMode mode, const String& title, Style style, const ContextSettings& settings);
+    WindowImplCocoa(VideoMode mode, const String& title, Style style, State state, const ContextSettings& settings);
 
     ////////////////////////////////////////////////////////////
     /// \brief Destructor

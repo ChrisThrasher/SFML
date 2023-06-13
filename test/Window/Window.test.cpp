@@ -59,7 +59,11 @@ TEST_CASE("[Window] sf::Window", runDisplayTests())
 
         SECTION("Mode, title, style, and context settings constructor")
         {
-            const sf::Window window(sf::VideoMode({360, 240}), "Window Tests", sf::Style::Resize, sf::ContextSettings(1, 1, 1));
+            const sf::Window window(sf::VideoMode({360, 240}),
+                                    "Window Tests",
+                                    sf::Style::Resize,
+                                    sf::State::Windowed,
+                                    sf::ContextSettings(1, 1, 1));
             CHECK(window.isOpen());
             CHECK(window.getSize() == sf::Vector2u(360, 240));
             CHECK(window.getNativeHandle() != sf::WindowHandle());
@@ -93,7 +97,11 @@ TEST_CASE("[Window] sf::Window", runDisplayTests())
 
         SECTION("Mode, title, style, and context settings")
         {
-            window.create(sf::VideoMode({240, 360}), "Window Tests", sf::Style::Resize, sf::ContextSettings(1, 1, 1));
+            window.create(sf::VideoMode({240, 360}),
+                          "Window Tests",
+                          sf::Style::Resize,
+                          sf::State::Windowed,
+                          sf::ContextSettings(1, 1, 1));
             CHECK(window.isOpen());
             CHECK(window.getSize() == sf::Vector2u(240, 360));
             CHECK(window.getNativeHandle() != sf::WindowHandle());

@@ -76,6 +76,7 @@ public:
     RenderWindow(VideoMode              mode,
                  const String&          title,
                  Style                  style    = Style::Default,
+                 State                  state    = State::Windowed,
                  const ContextSettings& settings = ContextSettings());
 
     ////////////////////////////////////////////////////////////

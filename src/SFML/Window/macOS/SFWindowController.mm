@@ -135,7 +135,7 @@
 
 
 ////////////////////////////////////////////////////////
-- (id)initWithMode:(const sf::VideoMode&)mode andStyle:(sf::Style)style
+- (id)initWithMode:(const sf::VideoMode&)mode andStyle:(sf::Style)style andState:(sf::State)state
 {
     // If we are not on the main thread we stop here and advice the user.
     if ([NSThread currentThread] != [NSThread mainThread])
@@ -154,7 +154,7 @@
         m_window        = nil;
         m_oglView       = nil;
         m_requester     = nil;
-        m_fullscreen    = any(style & sf::Style::Fullscreen) ? YES : NO;
+        m_fullscreen    = state == sf::State::Fullscreen ? YES : NO;
         m_restoreResize = NO;
         m_highDpi       = NO;
 
@@ -238,7 +238,7 @@
 ////////////////////////////////////////////////////////
 - (void)setupWindowWithMode:(const sf::VideoMode&)mode andStyle:(sf::Style)style
 {
-    // We know that style & sf::Style::Fullscreen is false.
+    // We know that state is not sf::State::Fullscreen.
 
     // Create our window size.
     NSRect rect = NSMakeRect(0, 0, mode.size.x, mode.size.y);

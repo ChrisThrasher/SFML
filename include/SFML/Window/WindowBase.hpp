@@ -82,7 +82,7 @@ public:
     /// \param style %Window style, a bitwise OR combination of sf::Style enumerators
     ///
     ////////////////////////////////////////////////////////////
-    WindowBase(VideoMode mode, const String& title, Style style = Style::Default);
+    WindowBase(VideoMode mode, const String& title, Style style = Style::Default, State state = State::Windowed);
 
     ////////////////////////////////////////////////////////////
     /// \brief Construct the window from an existing control
@@ -124,7 +124,7 @@ public:
     /// \param style %Window style, a bitwise OR combination of sf::Style enumerators
     ///
     ////////////////////////////////////////////////////////////
-    virtual void create(VideoMode mode, const String& title, Style style = Style::Default);
+    virtual void create(VideoMode mode, const String& title, Style style = Style::Default, State state = State::Windowed);
 
     ////////////////////////////////////////////////////////////
     /// \brief Create (or recreate) the window from an existing control

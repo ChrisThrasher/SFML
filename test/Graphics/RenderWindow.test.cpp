@@ -28,6 +28,7 @@ TEST_CASE("[Graphics] sf::RenderWindow", runDisplayTests())
         const sf::RenderWindow window(sf::VideoMode(sf::Vector2u(256, 256), 24),
                                       "Window Title",
                                       sf::Style::Default,
+                                      sf::State::Windowed,
                                       sf::ContextSettings());
         CHECK(window.getSize() == sf::Vector2u(256, 256));
     }
@@ -37,6 +38,7 @@ TEST_CASE("[Graphics] sf::RenderWindow", runDisplayTests())
         sf::RenderWindow window(sf::VideoMode(sf::Vector2u(256, 256), 24),
                                 "Window Title",
                                 sf::Style::Default,
+                                sf::State::Windowed,
                                 sf::ContextSettings());
         REQUIRE(window.getSize() == sf::Vector2u(256, 256));
 
