@@ -120,10 +120,10 @@ inline Style& operator^=(Style& lhs, Style rhs)
 enum class State : std::uint8_t
 {
     Windowed,   //!<
-    Minimized,  //!<
-    Maximized,  //!<
     Fullscreen, //!<
-    Hidden      //!<
+    // Minimized,  //!<
+    // Maximized,  //!<
+    // Hidden      //!<
 };
 
 } // namespace sf
