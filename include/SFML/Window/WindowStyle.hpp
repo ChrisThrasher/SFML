@@ -112,4 +112,19 @@ inline Style& operator^=(Style& lhs, Style rhs)
         reinterpret_cast<std::underlying_type_t<Style>&>(lhs) ^= static_cast<std::underlying_type_t<Style>>(rhs));
 }
 
+
+////////////////////////////////////////////////////////////
+/// \ingroup window
+/// \brief Enumeration of the window states
+///
+////////////////////////////////////////////////////////////
+enum class State : std::uint8_t
+{
+    Minimized,  //!<
+    Maximized,  //!<
+    Floating,   //!<
+    Fullscreen, //!<
+    Hidden      //!<
+};
+
 } // namespace sf
