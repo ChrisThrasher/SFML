@@ -122,6 +122,11 @@ jobs:
           choco install OpenCppCoverage -y
           echo "C:\Program Files\OpenCppCoverage" >> $env:GITHUB_PATH
 
+    - name: Download CMake 3.22
+      uses: jwlawson/actions-setup-cmake@v1.14
+      with:
+        cmake-version: '3.22.0'
+
     - name: Configure CMake
       shell: bash
       run: cmake -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/install -DSFML_BUILD_EXAMPLES=TRUE -DCMAKE_VERBOSE_MAKEFILE=ON -DSFML_BUILD_TEST_SUITE=TRUE ${{matrix.platform.flags}} ${{matrix.config.flags}} ${{matrix.type.flags}}
