@@ -25,7 +25,9 @@ AlignConsecutiveDeclarations: Consecutive
 AlignConsecutiveMacros: Consecutive
 AlignEscapedNewlines: Left
 AlignOperands: Align
-AlignTrailingComments: true
+AlignTrailingComments:
+    Kind: Always
+    OverEmptyLines: 0
 
 # Allow
 AllowAllArgumentsOnNextLine: false
@@ -43,6 +45,7 @@ AllowShortLambdasOnASingleLine: All
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: Yes
+BreakAfterAttributes: Never
 BreakBeforeConceptDeclarations: true
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: AfterColon
@@ -160,8 +163,9 @@ SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 
-# Line endings
-UseCRLF: false
+# Line and file endings
+InsertNewlineAtEOF: true
+LineEnding: LF
 
 # Qualifiers (const, volatile, static, etc)
 QualifierAlignment: Custom
