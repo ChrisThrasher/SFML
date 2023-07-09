@@ -35,7 +35,7 @@ namespace sf::priv
 {
 ////////////////////////////////////////////////////////////
 Keyboard::Scancode InputImpl::m_keyToScancodeMapping[Keyboard::KeyCount]; ///< Mapping from Key to Scancode
-Keyboard::Key      InputImpl::m_scancodeToKeyMapping[static_cast<std::size_t>(Keyboard::Scan::ScancodeCount)]; ///< Mapping from Scancode to Key
+Keyboard::Key InputImpl::m_scancodeToKeyMapping[static_cast<std::size_t>(Keyboard::Scan::ScancodeCount)]; ///< Mapping from Scancode to Key
 
 ////////////////////////////////////////////////////////////
 Keyboard::Key virtualKeyToSfKey(UINT virtualKey)

@@ -60,7 +60,7 @@ const char* getLibraryName(JNIEnv* lJNIEnv, jobject& objectActivityInfo)
     jobject objectName = lJNIEnv->NewStringUTF("sfml.app.lib_name");
 
     // Get the value of meta-data named "sfml.app.lib_name"
-    jclass    classBundle     = lJNIEnv->FindClass("android/os/Bundle");
+    jclass classBundle = lJNIEnv->FindClass("android/os/Bundle");
     jmethodID methodGetString = lJNIEnv->GetMethodID(classBundle, "getString", "(Ljava/lang/String;)Ljava/lang/String;");
     auto* valueString = static_cast<jstring>(lJNIEnv->CallObjectMethod(objectMetaData, methodGetString, objectName));
 
@@ -97,7 +97,7 @@ void* loadLibrary(const char* libraryName, JNIEnv* lJNIEnv, jobject& objectActiv
                                                         "Landroid/content/pm/ApplicationInfo;");
     jobject  objectApplicationInfo = lJNIEnv->GetObjectField(objectActivityInfo, fieldApplicationInfo);
 
-    jclass   classApplicationInfo  = lJNIEnv->FindClass("android/content/pm/ApplicationInfo");
+    jclass classApplicationInfo = lJNIEnv->FindClass("android/content/pm/ApplicationInfo");
     jfieldID fieldNativeLibraryDir = lJNIEnv->GetFieldID(classApplicationInfo, "nativeLibraryDir", "Ljava/lang/String;");
 
     jobject objectDirPath = lJNIEnv->GetObjectField(objectApplicationInfo, fieldNativeLibraryDir);
@@ -180,7 +180,7 @@ JNIEXPORT void ANativeActivity_onCreate(ANativeActivity* activity, void* savedSt
                                                            "getActivityInfo",
                                                            "(Landroid/content/ComponentName;I)Landroid/content/pm/"
                                                            "ActivityInfo;");
-    jobject   objectActivityInfo = lJNIEnv->CallObjectMethod(objectPackageManager, methodGetActivityInfo, objectComponentName, getMetaData);
+    jobject objectActivityInfo = lJNIEnv->CallObjectMethod(objectPackageManager, methodGetActivityInfo, objectComponentName, getMetaData);
 
     // Load our libraries in reverse order
 #if defined(STL_LIBRARY)

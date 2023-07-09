@@ -105,9 +105,9 @@ struct Event
     struct MouseWheelScrollEvent
     {
         Mouse::Wheel wheel; //!< Which wheel (for mice with multiple ones)
-        float        delta; //!< Wheel offset (positive is up/left, negative is down/right). High-precision mice may use non-integral offsets.
-        int          x; //!< X position of the mouse pointer, relative to the left of the owner window
-        int          y; //!< Y position of the mouse pointer, relative to the top of the owner window
+        float delta; //!< Wheel offset (positive is up/left, negative is down/right). High-precision mice may use non-integral offsets.
+        int x; //!< X position of the mouse pointer, relative to the left of the owner window
+        int y; //!< Y position of the mouse pointer, relative to the top of the owner window
     };
 
     ////////////////////////////////////////////////////////////

@@ -205,7 +205,7 @@ jobs:
 
   format:
     name: Formatting
-    runs-on: ubuntu-22.04
+    runs-on: macos-12
 
     strategy:
       fail-fast: false
@@ -215,10 +215,14 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install Dependencies
-      run: sudo apt-get install clang-format-14
+      run: |
+        # Do not run updates until GitHub has fixed all the issues: https://github.com/orgs/Homebrew/discussions/4612
+        # brew update
+        brew install llvm || true
+        echo /usr/local/opt/llvm/bin >> $GITHUB_PATH
 
     - name: Format Code
-      run: cmake -DCLANG_FORMAT_EXECUTABLE=clang-format-14 -P cmake/Format.cmake
+      run: cmake -DCLANG_FORMAT_EXECUTABLE=clang-format -P cmake/Format.cmake
 
     - name: Check Formatting
       run: git diff --exit-code

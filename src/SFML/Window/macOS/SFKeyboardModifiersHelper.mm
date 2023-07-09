@@ -75,7 +75,7 @@ namespace
 /// Share 'modifiers' state with all windows to correctly fire pressed/released events
 ModifiersState state;
 BOOL           isStateInitialized = NO;
-}
+} // namespace
 
 
 ////////////////////////////////////////////////////////////
