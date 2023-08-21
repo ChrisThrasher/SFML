@@ -8,4 +8,4 @@ sfml_add_example(vulkan GUI_APP
                  RESOURCES_DIR resources)
 
 # external dependency headers
-target_include_directories(vulkan SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/examples/vulkan)
+target_include_directories(vulkan SYSTEM PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
