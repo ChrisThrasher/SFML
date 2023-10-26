@@ -92,11 +92,11 @@ sfml_add_library(Graphics
 # setup dependencies
 target_link_libraries(sfml-graphics PUBLIC SFML::Window)
 
-# stb_image sources
-target_include_directories(sfml-graphics SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/stb_image")
-
-# glad sources
-target_include_directories(sfml-graphics SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/glad/include")
+# 3rd party sources
+target_include_directories(sfml-graphics SYSTEM PRIVATE
+    ${PROJECT_SOURCE_DIR}/extlibs/headers/stb_image
+    ${PROJECT_SOURCE_DIR}/extlibs/headers/glad/include
+)
 
 # find external libraries
 if(SFML_OS_ANDROID)
