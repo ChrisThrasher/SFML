@@ -282,17 +282,17 @@ if(SFML_OS_LINUX OR SFML_OS_FREEBSD OR SFML_OS_OPENBSD OR SFML_OS_NETBSD)
 endif()
 target_link_libraries(sfml-window PUBLIC SFML::System)
 
-# glad sources
-target_include_directories(sfml-window SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/glad/include")
+# 3rd party sources
+target_include_directories(sfml-window SYSTEM PRIVATE
+    ${PROJECT_SOURCE_DIR}/extlibs/headers/glad/include
+    ${PROJECT_SOURCE_DIR}/extlibs/headers/vulkan
+)
 
 # When static linking on macOS, we need to add this flag for objective C to work
 # https://developer.apple.com/library/archive/qa/qa1490/_index.html
 if((NOT BUILD_SHARED_LIBS) AND SFML_OS_MACOS)
     target_link_libraries(sfml-window PRIVATE -ObjC)
 endif()
-
-# Vulkan headers
-target_include_directories(sfml-window SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/vulkan")
 
 # CMake 3.11 and later prefer to choose GLVND, but we choose legacy OpenGL for backward compatibility
 # (unless the OpenGL_GL_PREFERENCE was explicitly set)
