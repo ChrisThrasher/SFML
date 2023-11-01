@@ -5,6 +5,7 @@
 # Helper function to enable compiler warnings for a specific target
 function(set_target_warnings target)
     option(SFML_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" FALSE)
+    option(SFML_ENABLE_HARDENING "Enable implementation-specific hardening flags" FALSE)
 
     if(SFML_COMPILER_MSVC)
         target_compile_options(${target} PRIVATE
@@ -36,6 +37,11 @@ function(set_target_warnings target)
             /wd4505 # disable warnings about unused functions that might be platform-specific
             /wd4800 # disable warnings regarding implicit conversions to bool
         )
+        if(SFML_ENABLE_HARDENING)
+            target_compile_options(${target} PRIVATE
+                /sdl # enables recommended Security Development Lifecycle (SDL) checks
+            )
+        endif()
     endif()
 
     if(SFML_COMPILER_GCC OR SFML_COMPILER_CLANG)
@@ -59,6 +65,11 @@ function(set_target_warnings target)
             -Wpedantic # warn if non-standard C++ is used
             $<$<BOOL:${SFML_OS_ANDROID}>:-Wno-main> # allow main() to be called
         )
+        if(SFML_ENABLE_HARDENING)
+            target_compile_definitions(${target} PRIVATE
+                _GLIBCXX_ASSERTIONS # run-time bounds checking for C++ strings and containers
+            )
+        endif()
     endif()
 
     if(SFML_COMPILER_GCC)
