@@ -128,28 +128,28 @@ bool isKeyPressed(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-bool isKeyPressed(Keyboard::Scancode code)
+bool isKeyPressed(Keyboard::Scan code)
 {
     return HIDInputManager::getInstance().isKeyPressed(code);
 }
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Key localize(Keyboard::Scancode code)
+Keyboard::Key localize(Keyboard::Scan code)
 {
     return HIDInputManager::getInstance().localize(code);
 }
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode delocalize(Keyboard::Key key)
+Keyboard::Scan delocalize(Keyboard::Key key)
 {
     return HIDInputManager::getInstance().delocalize(key);
 }
 
 
 ////////////////////////////////////////////////////////////
-String getDescription(Keyboard::Scancode code)
+String getDescription(Keyboard::Scan code)
 {
     return HIDInputManager::getInstance().getDescription(code);
 }

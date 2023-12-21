@@ -326,8 +326,6 @@ enum class Scan
     LaunchMediaSelect,  //!< Keyboard Launch Media Select key
 };
 
-using Scancode = Scan;
-
 ////////////////////////////////////////////////////////////
 /// \brief The total number of scancodes, ignoring Scan::Unknown
 ///
@@ -353,7 +351,7 @@ SFML_WINDOW_API bool isKeyPressed(Key key);
 /// \return True if the physical key is pressed, false otherwise
 ///
 ////////////////////////////////////////////////////////////
-SFML_WINDOW_API bool isKeyPressed(Scancode code);
+SFML_WINDOW_API bool isKeyPressed(Scan code);
 
 ////////////////////////////////////////////////////////////
 /// \brief Localize a physical key to a logical one
@@ -368,7 +366,7 @@ SFML_WINDOW_API bool isKeyPressed(Scancode code);
 /// \see delocalize
 ///
 ////////////////////////////////////////////////////////////
-SFML_WINDOW_API Key localize(Scancode code);
+SFML_WINDOW_API Key localize(Scan code);
 
 ////////////////////////////////////////////////////////////
 /// \brief Identify the physical key corresponding to a logical one
@@ -378,12 +376,12 @@ SFML_WINDOW_API Key localize(Scancode code);
 /// \return The scancode corresponding to the key under the current
 ///         keyboard layout used by the operating system, or
 ///         sf::Keyboard::Scan::Unknown when the key cannot be mapped
-///         to a sf::Keyboard::Scancode.
+///         to a sf::Keyboard::Scan.
 ///
 /// \see localize
 ///
 ////////////////////////////////////////////////////////////
-SFML_WINDOW_API Scancode delocalize(Key key);
+SFML_WINDOW_API Scan delocalize(Key key);
 
 ////////////////////////////////////////////////////////////
 /// \brief Provide a string representation for a given scancode
@@ -404,7 +402,7 @@ SFML_WINDOW_API Scancode delocalize(Key key);
 /// \return The localized description of the code
 ///
 ////////////////////////////////////////////////////////////
-SFML_WINDOW_API String getDescription(Scancode code);
+SFML_WINDOW_API String getDescription(Scan code);
 
 ////////////////////////////////////////////////////////////
 /// \brief Show or hide the virtual keyboard

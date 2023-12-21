@@ -569,7 +569,7 @@ Vector2i WindowImplWin32::contentSizeToWindowSize(const Vector2u& size)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode WindowImplWin32::toScancode(WPARAM wParam, LPARAM lParam)
+Keyboard::Scan WindowImplWin32::toScancode(WPARAM wParam, LPARAM lParam)
 {
     int code = (lParam & (0xFF << 16)) >> 16;
 

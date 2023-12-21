@@ -50,25 +50,25 @@ bool isKeyPressed(Keyboard::Key key);
 /// \copydoc sf::Keyboard::isKeyPressed(Scancode)
 ///
 ////////////////////////////////////////////////////////////
-bool isKeyPressed(Keyboard::Scancode code);
+bool isKeyPressed(Keyboard::Scan code);
 
 ////////////////////////////////////////////////////////////
 /// \copydoc sf::Keyboard::localize
 ///
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode delocalize(Keyboard::Key key);
+Keyboard::Scan delocalize(Keyboard::Key key);
 
 ////////////////////////////////////////////////////////////
 /// \copydoc sf::Keyboard::delocalize
 ///
 ////////////////////////////////////////////////////////////
-Keyboard::Key localize(Keyboard::Scancode code);
+Keyboard::Key localize(Keyboard::Scan code);
 
 ////////////////////////////////////////////////////////////
 /// \copydoc sf::Keyboard::getDescription
 ///
 ////////////////////////////////////////////////////////////
-String getDescription(Keyboard::Scancode code);
+String getDescription(Keyboard::Scan code);
 
 ////////////////////////////////////////////////////////////
 /// \brief Get the sf::Keyboard::Key from XKeyEvent
@@ -81,13 +81,13 @@ String getDescription(Keyboard::Scancode code);
 Keyboard::Key getKeyFromEvent(XKeyEvent& event);
 
 ////////////////////////////////////////////////////////////
-/// \brief Get the sf::Keyboard::Scancode from XKeyEvent
+/// \brief Get the sf::Keyboard::Scan from XKeyEvent
 ///
 /// \param event Event from which scancode is gotten
 ///
 /// \return A scancode of a key being pressed or released
 ///
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode getScancodeFromEvent(XKeyEvent& event);
+Keyboard::Scan getScancodeFromEvent(XKeyEvent& event);
 
 } // namespace sf::priv::KeyboardImpl

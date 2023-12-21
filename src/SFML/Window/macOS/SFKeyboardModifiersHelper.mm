@@ -99,7 +99,7 @@ void processOneModifier(NSUInteger                 modifiers,
                         NSUInteger                 mask,
                         BOOL&                      wasDown,
                         sf::Keyboard::Key          key,
-                        sf::Keyboard::Scancode     code,
+                        sf::Keyboard::Scan         code,
                         sf::priv::WindowImplCocoa& requester);
 
 
@@ -117,8 +117,8 @@ void processLeftRightModifiers(
     BOOL&                      rightWasDown,
     sf::Keyboard::Key          leftKey,
     sf::Keyboard::Key          rightKey,
-    sf::Keyboard::Scancode     leftCode,
-    sf::Keyboard::Scancode     rightCode,
+    sf::Keyboard::Scan         leftCode,
+    sf::Keyboard::Scan         rightCode,
     sf::priv::WindowImplCocoa& requester);
 
 
@@ -151,7 +151,7 @@ void initialiseKeyboardHelper()
 
 
 ////////////////////////////////////////////////////////
-sf::Event::KeyEvent keyEventWithModifiers(NSUInteger modifiers, sf::Keyboard::Key key, sf::Keyboard::Scancode code)
+sf::Event::KeyEvent keyEventWithModifiers(NSUInteger modifiers, sf::Keyboard::Key key, sf::Keyboard::Scan code)
 {
     sf::Event::KeyEvent event{};
     event.code     = key;
@@ -241,7 +241,7 @@ void processOneModifier(NSUInteger                 modifiers,
                         NSUInteger                 mask,
                         BOOL&                      wasDown,
                         sf::Keyboard::Key          key,
-                        sf::Keyboard::Scancode     code,
+                        sf::Keyboard::Scan         code,
                         sf::priv::WindowImplCocoa& requester)
 {
     // Setup a potential event key.
@@ -274,8 +274,8 @@ void processLeftRightModifiers(
     BOOL&                      rightWasDown,
     sf::Keyboard::Key          leftKey,
     sf::Keyboard::Key          rightKey,
-    sf::Keyboard::Scancode     leftCode,
-    sf::Keyboard::Scancode     rightCode,
+    sf::Keyboard::Scan         leftCode,
+    sf::Keyboard::Scan         rightCode,
     sf::priv::WindowImplCocoa& requester)
 {
     processOneModifier(modifiers, leftMask, leftWasDown, leftKey, leftCode, requester);

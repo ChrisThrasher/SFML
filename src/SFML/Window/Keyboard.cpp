@@ -40,25 +40,25 @@ bool Keyboard::isKeyPressed(Key key)
 }
 
 ////////////////////////////////////////////////////////////
-bool Keyboard::isKeyPressed(Scancode code)
+bool Keyboard::isKeyPressed(Scan code)
 {
     return priv::InputImpl::isKeyPressed(code);
 }
 
 ////////////////////////////////////////////////////////////
-Keyboard::Key Keyboard::localize(Scancode code)
+Keyboard::Key Keyboard::localize(Scan code)
 {
     return priv::InputImpl::localize(code);
 }
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode Keyboard::delocalize(Key key)
+Keyboard::Scan Keyboard::delocalize(Key key)
 {
     return priv::InputImpl::delocalize(key);
 }
 
 ////////////////////////////////////////////////////////////
-String Keyboard::getDescription(Scancode code)
+String Keyboard::getDescription(Scan code)
 {
     return priv::InputImpl::getDescription(code);
 }

@@ -380,7 +380,7 @@ UniChar HIDInputManager::toUnicode(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////
-Keyboard::Scancode HIDInputManager::nonLocalizedKey(UniChar virtualKeycode)
+Keyboard::Scan HIDInputManager::nonLocalizedKey(UniChar virtualKeycode)
 {
     // See Chapter 2, esp. Figure 2-10 of
     // https://developer.apple.com/legacy/library/documentation/mac/pdf/MacintoshToolboxEssentials.pdf
@@ -560,14 +560,14 @@ bool HIDInputManager::isKeyPressed(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-bool HIDInputManager::isKeyPressed(Keyboard::Scancode code)
+bool HIDInputManager::isKeyPressed(Keyboard::Scan code)
 {
     return (code != Keyboard::Scan::Unknown) && isPressed(m_keys[code]);
 }
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Key HIDInputManager::localize(Keyboard::Scancode code)
+Keyboard::Key HIDInputManager::localize(Keyboard::Scan code)
 {
     if (code == Keyboard::Scan::Unknown)
         return Keyboard::Key::Unknown;
@@ -577,7 +577,7 @@ Keyboard::Key HIDInputManager::localize(Keyboard::Scancode code)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode HIDInputManager::delocalize(Keyboard::Key key)
+Keyboard::Scan HIDInputManager::delocalize(Keyboard::Key key)
 {
     if (key == Keyboard::Key::Unknown)
         return Keyboard::Scan::Unknown;
@@ -587,7 +587,7 @@ Keyboard::Scancode HIDInputManager::delocalize(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-String HIDInputManager::getDescription(Keyboard::Scancode code)
+String HIDInputManager::getDescription(Keyboard::Scan code)
 {
     // Phase 1: Get names for layout independent keys
     // clang-format off
@@ -742,7 +742,7 @@ void HIDInputManager::initializeKeyboard()
 {
     ////////////////////////////////////////////////////////////
     // The purpose of this function is to initialize m_keys so we can get
-    // the associate IOHIDElementRef with a sf::Keyboard::Scancode
+    // the associate IOHIDElementRef with a sf::Keyboard::Scan
     // in approximately constant time.
 
     // Get only keyboards
@@ -790,8 +790,8 @@ void HIDInputManager::loadKeyboard(IOHIDDeviceRef keyboard)
 ////////////////////////////////////////////////////////////
 void HIDInputManager::loadKey(IOHIDElementRef key)
 {
-    const std::uint32_t      usage = IOHIDElementGetUsage(key);
-    const Keyboard::Scancode code  = usageToScancode(usage);
+    const std::uint32_t  usage = IOHIDElementGetUsage(key);
+    const Keyboard::Scan code  = usageToScancode(usage);
     if (code != Keyboard::Scan::Unknown)
     {
         CFRetain(key);
@@ -824,7 +824,7 @@ void HIDInputManager::buildMappings()
     // virtual code to a localized Key.
     for (unsigned int i = 0; i < Keyboard::ScancodeCount; ++i)
     {
-        const auto         scan        = static_cast<Keyboard::Scancode>(i);
+        const auto         scan        = static_cast<Keyboard::Scan>(i);
         const std::uint8_t virtualCode = scanToVirtualCode(scan);
 
         if (virtualCode == unknownVirtualCode)
@@ -989,7 +989,7 @@ bool HIDInputManager::isPressed(IOHIDElements& elements) const
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode HIDInputManager::usageToScancode(std::uint32_t usage)
+Keyboard::Scan HIDInputManager::usageToScancode(std::uint32_t usage)
 {
     // clang-format off
     switch (usage)
@@ -1196,7 +1196,7 @@ Keyboard::Scancode HIDInputManager::usageToScancode(std::uint32_t usage)
 
 
 ////////////////////////////////////////////////////////
-std::uint8_t HIDInputManager::scanToVirtualCode(Keyboard::Scancode code)
+std::uint8_t HIDInputManager::scanToVirtualCode(Keyboard::Scan code)
 {
     // clang-format off
     switch (code)
@@ -1349,7 +1349,7 @@ std::uint8_t HIDInputManager::scanToVirtualCode(Keyboard::Scancode code)
 
 
 ////////////////////////////////////////////////////////
-Keyboard::Key HIDInputManager::localizedKeyFallback(Keyboard::Scancode code)
+Keyboard::Key HIDInputManager::localizedKeyFallback(Keyboard::Scan code)
 {
     // clang-format off
     switch (code)

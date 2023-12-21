@@ -47,28 +47,28 @@ bool isKeyPressed(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-bool isKeyPressed(Keyboard::Scancode code)
+bool isKeyPressed(Keyboard::Scan code)
 {
     return KeyboardImpl::isKeyPressed(code);
 }
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Key localize(Keyboard::Scancode code)
+Keyboard::Key localize(Keyboard::Scan code)
 {
     return KeyboardImpl::localize(code);
 }
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode delocalize(Keyboard::Key key)
+Keyboard::Scan delocalize(Keyboard::Key key)
 {
     return KeyboardImpl::delocalize(key);
 }
 
 
 ////////////////////////////////////////////////////////////
-String getDescription(Keyboard::Scancode code)
+String getDescription(Keyboard::Scan code)
 {
     return KeyboardImpl::getDescription(code);
 }

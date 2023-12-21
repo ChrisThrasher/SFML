@@ -583,16 +583,16 @@ bool isKeyPressed(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-bool isKeyPressed(Keyboard::Scancode /* code */)
+bool isKeyPressed(Keyboard::Scan /* code */)
 {
     // TODO: not implemented
-    err() << "sf::Keyboard::isKeyPressed(Keyboard::Scancode) is not implemented for DRM." << std::endl;
+    err() << "sf::Keyboard::isKeyPressed(Keyboard::Scan) is not implemented for DRM." << std::endl;
     return false;
 }
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Key localize(Keyboard::Scancode /* code */)
+Keyboard::Key localize(Keyboard::Scan /* code */)
 {
     // TODO: not implemented
     err() << "sf::Keyboard::localize is not implemented for DRM." << std::endl;
@@ -601,7 +601,7 @@ Keyboard::Key localize(Keyboard::Scancode /* code */)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode delocalize(Keyboard::Key /* key */)
+Keyboard::Scan delocalize(Keyboard::Key /* key */)
 {
     // TODO: not implemented
     err() << "sf::Keyboard::delocalize is not implemented for DRM." << std::endl;
@@ -610,7 +610,7 @@ Keyboard::Scancode delocalize(Keyboard::Key /* key */)
 
 
 ////////////////////////////////////////////////////////////
-String getDescription(Keyboard::Scancode /* code */)
+String getDescription(Keyboard::Scan /* code */)
 {
     // TODO: not implemented
     err() << "sf::Keyboard::getDescription is not implemented for DRM." << std::endl;

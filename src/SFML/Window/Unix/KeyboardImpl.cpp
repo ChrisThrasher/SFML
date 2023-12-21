@@ -48,10 +48,10 @@
 namespace
 {
 
-const KeyCode                                                                     nullKeyCode = 0;
-const int                                                                         maxKeyCode  = 256;
-sf::priv::EnumArray<sf::Keyboard::Scancode, KeyCode, sf::Keyboard::ScancodeCount> scancodeToKeycode; ///< Mapping of SFML scancode to X11 KeyCode
-std::array<sf::Keyboard::Scancode, maxKeyCode> keycodeToScancode; ///< Mapping of X11 KeyCode to SFML scancode
+const KeyCode                                                                 nullKeyCode = 0;
+const int                                                                     maxKeyCode  = 256;
+sf::priv::EnumArray<sf::Keyboard::Scan, KeyCode, sf::Keyboard::ScancodeCount> scancodeToKeycode; ///< Mapping of SFML scancode to X11 KeyCode
+std::array<sf::Keyboard::Scan, maxKeyCode> keycodeToScancode; ///< Mapping of X11 KeyCode to SFML scancode
 
 ////////////////////////////////////////////////////////////
 bool isValidKeycode(KeyCode keycode)
@@ -62,7 +62,7 @@ bool isValidKeycode(KeyCode keycode)
 
 
 ////////////////////////////////////////////////////////////
-sf::Keyboard::Scancode translateKeyCode(Display* display, KeyCode keycode)
+sf::Keyboard::Scan translateKeyCode(Display* display, KeyCode keycode)
 {
     if (!isValidKeycode(keycode))
         return sf::Keyboard::Scan::Unknown;
@@ -279,9 +279,9 @@ sf::Keyboard::Scancode translateKeyCode(Display* display, KeyCode keycode)
 }
 
 ////////////////////////////////////////////////////////////
-std::unordered_map<std::string, sf::Keyboard::Scancode> getNameScancodeMap()
+std::unordered_map<std::string, sf::Keyboard::Scan> getNameScancodeMap()
 {
-    std::unordered_map<std::string, sf::Keyboard::Scancode> mapping;
+    std::unordered_map<std::string, sf::Keyboard::Scan> mapping;
 
     mapping.emplace("LSGT", sf::Keyboard::Scan::NonUsBackslash);
 
@@ -472,8 +472,8 @@ void ensureMapping()
     XkbDescPtr descriptor = XkbGetMap(display, 0, XkbUseCoreKbd);
     XkbGetNames(display, XkbKeyNamesMask, descriptor);
 
-    std::unordered_map<std::string, sf::Keyboard::Scancode> nameScancodeMap = getNameScancodeMap();
-    sf::Keyboard::Scancode                                  scancode        = sf::Keyboard::Scan::Unknown;
+    std::unordered_map<std::string, sf::Keyboard::Scan> nameScancodeMap = getNameScancodeMap();
+    sf::Keyboard::Scan                                  scancode        = sf::Keyboard::Scan::Unknown;
 
     for (int keycode = descriptor->min_key_code; keycode <= descriptor->max_key_code; ++keycode)
     {
@@ -521,7 +521,7 @@ void ensureMapping()
 
 
 ////////////////////////////////////////////////////////////
-KeyCode scancodeToKeyCode(sf::Keyboard::Scancode code)
+KeyCode scancodeToKeyCode(sf::Keyboard::Scan code)
 {
     ensureMapping();
 
@@ -533,7 +533,7 @@ KeyCode scancodeToKeyCode(sf::Keyboard::Scancode code)
 
 
 ////////////////////////////////////////////////////////////
-sf::Keyboard::Scancode keyCodeToScancode(KeyCode code)
+sf::Keyboard::Scan keyCodeToScancode(KeyCode code)
 {
     ensureMapping();
 
@@ -568,7 +568,7 @@ KeyCode keyToKeyCode(sf::Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-KeySym scancodeToKeySym(sf::Keyboard::Scancode code)
+KeySym scancodeToKeySym(sf::Keyboard::Scan code)
 {
     Display* display = sf::priv::openDisplay();
 
@@ -618,7 +618,7 @@ bool KeyboardImpl::isKeyPressed(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-bool KeyboardImpl::isKeyPressed(Keyboard::Scancode code)
+bool KeyboardImpl::isKeyPressed(Keyboard::Scan code)
 {
     const KeyCode keycode = scancodeToKeyCode(code);
     return isKeyPressedImpl(keycode);
@@ -626,7 +626,7 @@ bool KeyboardImpl::isKeyPressed(Keyboard::Scancode code)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode KeyboardImpl::delocalize(Keyboard::Key key)
+Keyboard::Scan KeyboardImpl::delocalize(Keyboard::Key key)
 {
     const KeyCode keycode = keyToKeyCode(key);
     return keyCodeToScancode(keycode);
@@ -634,7 +634,7 @@ Keyboard::Scancode KeyboardImpl::delocalize(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Key KeyboardImpl::localize(Keyboard::Scancode code)
+Keyboard::Key KeyboardImpl::localize(Keyboard::Scan code)
 {
     const KeySym keysym = scancodeToKeySym(code);
     return keySymToKey(keysym);
@@ -642,7 +642,7 @@ Keyboard::Key KeyboardImpl::localize(Keyboard::Scancode code)
 
 
 ////////////////////////////////////////////////////////////
-String KeyboardImpl::getDescription(Keyboard::Scancode code)
+String KeyboardImpl::getDescription(Keyboard::Scan code)
 {
     bool checkInput = true;
 
@@ -814,7 +814,7 @@ Keyboard::Key KeyboardImpl::getKeyFromEvent(XKeyEvent& event)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode KeyboardImpl::getScancodeFromEvent(XKeyEvent& event)
+Keyboard::Scan KeyboardImpl::getScancodeFromEvent(XKeyEvent& event)
 {
     return keyCodeToScancode(static_cast<KeyCode>(event.keycode));
 }

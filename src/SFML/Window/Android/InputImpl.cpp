@@ -47,7 +47,7 @@ bool isKeyPressed(Keyboard::Key /* key */)
 
 
 ////////////////////////////////////////////////////////////
-bool isKeyPressed(Keyboard::Scancode /* codes */)
+bool isKeyPressed(Keyboard::Scan /* codes */)
 {
     // Not applicable
     return false;
@@ -55,7 +55,7 @@ bool isKeyPressed(Keyboard::Scancode /* codes */)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Key localize(Keyboard::Scancode /* code */)
+Keyboard::Key localize(Keyboard::Scan /* code */)
 {
     // Not applicable
     return Keyboard::Key::Unknown;
@@ -63,7 +63,7 @@ Keyboard::Key localize(Keyboard::Scancode /* code */)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode delocalize(Keyboard::Key /* key */)
+Keyboard::Scan delocalize(Keyboard::Key /* key */)
 {
     // Not applicable
     return Keyboard::Scan::Unknown;
@@ -71,7 +71,7 @@ Keyboard::Scancode delocalize(Keyboard::Key /* key */)
 
 
 ////////////////////////////////////////////////////////////
-String getDescription(Keyboard::Scancode /* code */)
+String getDescription(Keyboard::Scan /* code */)
 {
     // Not applicable
     return "";

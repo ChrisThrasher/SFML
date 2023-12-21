@@ -34,8 +34,8 @@
 
 namespace
 {
-sf::priv::EnumArray<sf::Keyboard::Key, sf::Keyboard::Scancode, sf::Keyboard::KeyCount> keyToScancodeMapping; ///< Mapping from Key to Scancode
-sf::priv::EnumArray<sf::Keyboard::Scancode, sf::Keyboard::Key, sf::Keyboard::ScancodeCount> scancodeToKeyMapping; ///< Mapping from Scancode to Key
+sf::priv::EnumArray<sf::Keyboard::Key, sf::Keyboard::Scan, sf::Keyboard::KeyCount> keyToScancodeMapping; ///< Mapping from Key to Scancode
+sf::priv::EnumArray<sf::Keyboard::Scan, sf::Keyboard::Key, sf::Keyboard::ScancodeCount> scancodeToKeyMapping; ///< Mapping from Scancode to Key
 
 sf::Keyboard::Key virtualKeyToSfKey(UINT virtualKey)
 {
@@ -259,7 +259,7 @@ int sfKeyToVirtualKey(sf::Keyboard::Key key)
     // clang-format on
 }
 
-WORD sfScanToWinScan(sf::Keyboard::Scancode code)
+WORD sfScanToWinScan(sf::Keyboard::Scan code)
 {
     // Convert an SFML scancode to a Windows scancode
     // Reference: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx
@@ -430,7 +430,7 @@ WORD sfScanToWinScan(sf::Keyboard::Scancode code)
     // clang-format on
 }
 
-WORD sfScanToWinScanExtended(sf::Keyboard::Scancode code)
+WORD sfScanToWinScanExtended(sf::Keyboard::Scan code)
 {
     // Convert an SFML scancode to a Windows scancode
     // Reference: https://msdn.microsoft.com/en-us/library/aa299374(v=vs.60).aspx
@@ -483,7 +483,7 @@ WORD sfScanToWinScanExtended(sf::Keyboard::Scancode code)
     // clang-format on
 }
 
-UINT sfScanToVirtualKey(sf::Keyboard::Scancode code)
+UINT sfScanToVirtualKey(sf::Keyboard::Scan code)
 {
     const WORD winScancode = sfScanToWinScan(code);
 
@@ -527,7 +527,7 @@ void ensureMappings()
     // Phase 2: Translate scancode to virtual code to key names
     for (unsigned int i = 0; i < sf::Keyboard::ScancodeCount; ++i)
     {
-        const auto              scan       = static_cast<sf::Keyboard::Scancode>(i);
+        const auto              scan       = static_cast<sf::Keyboard::Scan>(i);
         const UINT              virtualKey = sfScanToVirtualKey(scan);
         const sf::Keyboard::Key key        = virtualKeyToSfKey(virtualKey);
         if (key != sf::Keyboard::Key::Unknown && keyToScancodeMapping[key] == sf::Keyboard::Scan::Unknown)
@@ -538,7 +538,7 @@ void ensureMappings()
     isMappingInitialized = true;
 }
 
-bool isValidScancode(sf::Keyboard::Scancode code)
+bool isValidScancode(sf::Keyboard::Scan code)
 {
     return code > sf::Keyboard::Scan::Unknown && static_cast<unsigned int>(code) < sf::Keyboard::ScancodeCount;
 }
@@ -561,7 +561,7 @@ bool isKeyPressed(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-bool isKeyPressed(Keyboard::Scancode code)
+bool isKeyPressed(Keyboard::Scan code)
 {
     const UINT virtualKey = sfScanToVirtualKey(code);
     return (GetAsyncKeyState(static_cast<int>(virtualKey)) & KF_UP) != 0;
@@ -569,7 +569,7 @@ bool isKeyPressed(Keyboard::Scancode code)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Key localize(Keyboard::Scancode code)
+Keyboard::Key localize(Keyboard::Scan code)
 {
     if (!isValidScancode(code))
         return Keyboard::Key::Unknown;
@@ -581,7 +581,7 @@ Keyboard::Key localize(Keyboard::Scancode code)
 
 
 ////////////////////////////////////////////////////////////
-Keyboard::Scancode delocalize(Keyboard::Key key)
+Keyboard::Scan delocalize(Keyboard::Key key)
 {
     if (!isValidKey(key))
         return Keyboard::Scan::Unknown;
@@ -593,7 +593,7 @@ Keyboard::Scancode delocalize(Keyboard::Key key)
 
 
 ////////////////////////////////////////////////////////////
-String getDescription(Keyboard::Scancode code)
+String getDescription(Keyboard::Scan code)
 {
     const WORD winCode = sfScanToWinScanExtended(code);
     const int  bufSize = 1024;

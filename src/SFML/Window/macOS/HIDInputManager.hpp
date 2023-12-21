@@ -125,7 +125,7 @@ public:
     /// Return sf::Keyboard::Scan::Unknown if the keycode is unknown.
     ///
     ////////////////////////////////////////////////////////////
-    static Keyboard::Scancode nonLocalizedKey(UniChar virtualKeycode);
+    static Keyboard::Scan nonLocalizedKey(UniChar virtualKeycode);
 
     ////////////////////////////////////////////////////////////
     /// \copydoc sf::Keyboard::isKeyPressed(Key)
@@ -137,25 +137,25 @@ public:
     /// \copydoc sf::Keyboard::isKeyPressed(Scancode)
     ///
     ////////////////////////////////////////////////////////////
-    bool isKeyPressed(Keyboard::Scancode code);
+    bool isKeyPressed(Keyboard::Scan code);
 
     ////////////////////////////////////////////////////////////
     /// \copydoc sf::Keyboard::localize
     ///
     ////////////////////////////////////////////////////////////
-    Keyboard::Key localize(Keyboard::Scancode code);
+    Keyboard::Key localize(Keyboard::Scan code);
 
     ////////////////////////////////////////////////////////////
     /// \copydoc sf::Keyboard::delocalize
     ///
     ////////////////////////////////////////////////////////////
-    Keyboard::Scancode delocalize(Keyboard::Key key);
+    Keyboard::Scan delocalize(Keyboard::Key key);
 
     ////////////////////////////////////////////////////////////
     /// \copydoc sf::Keyboard::getDescription
     ///
     ////////////////////////////////////////////////////////////
-    String getDescription(Keyboard::Scancode code);
+    String getDescription(Keyboard::Scan code);
 
 private:
     ////////////////////////////////////////////////////////////
@@ -268,31 +268,31 @@ private:
     ///         or Scan::Unknown if it is associated with no scancode.
     ///
     ////////////////////////////////////////////////////////////
-    static Keyboard::Scancode usageToScancode(std::uint32_t usage);
+    static Keyboard::Scan usageToScancode(std::uint32_t usage);
 
     ////////////////////////////////////////////////////////////
     /// Convert the scancode to the expected virtual code.
     ///
     ////////////////////////////////////////////////////////////
-    static std::uint8_t scanToVirtualCode(Keyboard::Scancode code);
+    static std::uint8_t scanToVirtualCode(Keyboard::Scan code);
 
     ////////////////////////////////////////////////////////////
     /// Fallback conversion for keys which aren't expected to be impacted
     /// by the layout. Can return Unknown.
     ///
     ////////////////////////////////////////////////////////////
-    static Keyboard::Key localizedKeyFallback(Keyboard::Scancode code);
+    static Keyboard::Key localizedKeyFallback(Keyboard::Scan code);
 
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    IOHIDManagerRef                                                       m_manager{}; ///< Underlying HID Manager
-    EnumArray<Keyboard::Scancode, IOHIDElements, Keyboard::ScancodeCount> m_keys; ///< All the keys on any connected keyboard
-    EnumArray<Keyboard::Key, Keyboard::Scancode, Keyboard::KeyCount> m_keyToScancodeMapping{}; ///< Mapping from Key to Scancode
-    EnumArray<Keyboard::Scancode, Keyboard::Key, Keyboard::ScancodeCount> m_scancodeToKeyMapping{}; ///< Mapping from Scancode to Key
+    IOHIDManagerRef                                                   m_manager{}; ///< Underlying HID Manager
+    EnumArray<Keyboard::Scan, IOHIDElements, Keyboard::ScancodeCount> m_keys; ///< All the keys on any connected keyboard
+    EnumArray<Keyboard::Key, Keyboard::Scan, Keyboard::KeyCount> m_keyToScancodeMapping{}; ///< Mapping from Key to Scancode
+    EnumArray<Keyboard::Scan, Keyboard::Key, Keyboard::ScancodeCount> m_scancodeToKeyMapping{}; ///< Mapping from Scancode to Key
 
     ////////////////////////////////////////////////////////////
-    /// m_keys' index corresponds to sf::Keyboard::Scancode enum.
+    /// m_keys' index corresponds to sf::Keyboard::Scan enum.
     /// If no key is assigned with key XYZ then m_keys[XYZ].size() == 0.
     /// If there are several keyboards connected and several HID keys associated
     /// with the same sf::Keyboard::Key then m_keys[XYZ] contains all these
