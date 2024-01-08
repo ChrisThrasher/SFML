@@ -43,10 +43,6 @@ RenderTextureImplDefault::RenderTextureImplDefault() = default;
 
 
 ////////////////////////////////////////////////////////////
-RenderTextureImplDefault::~RenderTextureImplDefault() = default;
-
-
-////////////////////////////////////////////////////////////
 unsigned int RenderTextureImplDefault::getMaximumAntiAliasingLevel()
 {
     // If the system is so old that it doesn't support FBOs, chances are it is
@@ -63,7 +59,7 @@ bool RenderTextureImplDefault::create(Vector2u size, unsigned int, const Context
     m_size = size;
 
     // Create the in-memory OpenGL context
-    m_context = std::make_unique<Context>(settings, size);
+    m_context = {settings, size};
 
     return true;
 }
@@ -72,14 +68,14 @@ bool RenderTextureImplDefault::create(Vector2u size, unsigned int, const Context
 ////////////////////////////////////////////////////////////
 bool RenderTextureImplDefault::activate(bool active)
 {
-    return m_context->setActive(active);
+    return m_context.setActive(active);
 }
 
 
 ////////////////////////////////////////////////////////////
 bool RenderTextureImplDefault::isSrgb() const
 {
-    return m_context->getSettings().sRgbCapable;
+    return m_context.getSettings().sRgbCapable;
 }
 
 

@@ -29,19 +29,11 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics/RenderTextureImpl.hpp>
 
+#include <SFML/Window/Context.hpp>
 #include <SFML/Window/GlResource.hpp>
 
-#include <SFML/System/Vector2.hpp>
 
-#include <memory>
-
-
-namespace sf
-{
-class Context;
-struct ContextSettings;
-
-namespace priv
+namespace sf::priv
 {
 ////////////////////////////////////////////////////////////
 /// \brief Default specialization of RenderTextureImpl,
@@ -56,12 +48,6 @@ public:
     ///
     ////////////////////////////////////////////////////////////
     RenderTextureImplDefault();
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Destructor
-    ///
-    ////////////////////////////////////////////////////////////
-    ~RenderTextureImplDefault() override;
 
     ////////////////////////////////////////////////////////////
     /// \brief Get the maximum anti-aliasing level supported by the system
@@ -116,10 +102,8 @@ private:
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    std::unique_ptr<Context> m_context; //!< P-Buffer based context
-    Vector2u                 m_size;    //!< Width and height of the P-Buffer
+    Context  m_context; //!< P-Buffer based context
+    Vector2u m_size;    //!< Width and height of the P-Buffer
 };
 
-} // namespace priv
-
-} // namespace sf
+} // namespace sf::priv
