@@ -18,17 +18,17 @@ struct JoystickObject
     sf::Text value;
 };
 
-using Texts = std::unordered_map<std::string, JoystickObject>;
+using Texts = std::unordered_map<std::string_view, JoystickObject>;
 Texts              texts;
 std::ostringstream sstr;
 float              threshold = 0.1f;
 
 // Axes labels in as strings
-const std::array<std::string, 8> axislabels = {"X", "Y", "Z", "R", "U", "V", "PovX", "PovY"};
+const std::array<std::string_view, 8> axislabels = {"X", "Y", "Z", "R", "U", "V", "PovX", "PovY"};
 
 // Helper to set text entries to a specified value
 template <typename T>
-void set(const std::string& label, const T& value)
+void set(std::string_view label, const T& value)
 {
     sstr.str("");
     sstr << value;
@@ -122,7 +122,8 @@ int main()
     for (unsigned int i = 0; i < sf::Joystick::AxisCount; ++i)
     {
         const auto [it, success] = texts.try_emplace(axislabels[i],
-                                                     JoystickObject{{font, axislabels[i] + ":"}, {font, "N/A"}});
+                                                     JoystickObject{{font, std::string(axislabels[i]) + ":"},
+                                                                    {font, "N/A"}});
         auto& [label, value]     = it->second;
         label.setPosition({5.f, 5.f + (static_cast<float>(i + 4) * font.getLineSpacing(14))});
         value.setPosition({80.f, 5.f + (static_cast<float>(i + 4) * font.getLineSpacing(14))});
