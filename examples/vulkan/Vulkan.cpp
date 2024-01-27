@@ -2565,7 +2565,7 @@ public:
 
 private:
     // NOLINTBEGIN(readability-identifier-naming)
-    sf::WindowBase window{sf::VideoMode({800, 600}), "SFML window with Vulkan", sf::Style::Default};
+    sf::WindowBase window{sf::VideoMode({800, 600}), "SFML window with Vulkan"};
 
     bool vulkanAvailable{sf::Vulkan::isAvailable()};
 
