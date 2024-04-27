@@ -549,9 +549,6 @@ namespace sf::priv::InputImpl
 bool isKeyPressed(Keyboard::Key key)
 {
     const std::lock_guard lock(inputMutex);
-    if ((static_cast<int>(key) < 0) || (static_cast<int>(key) >= static_cast<int>(keyMap.size())))
-        return false;
-
     update();
     return keyMap[key];
 }
@@ -604,9 +601,6 @@ void setVirtualKeyboardVisible(bool /*visible*/)
 bool isMouseButtonPressed(Mouse::Button button)
 {
     const std::lock_guard lock(inputMutex);
-    if ((static_cast<int>(button) < 0) || (static_cast<int>(button) >= static_cast<int>(mouseMap.size())))
-        return false;
-
     update();
     return mouseMap[button];
 }
