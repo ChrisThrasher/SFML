@@ -106,41 +106,23 @@ public:
     [[nodiscard]] constexpr Vector2<T> getCenter() const;
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of binary `operator==`
+    ///
+    /// This operator compares strict equality between two rectangles.
+    ///
+    /// \param rect Rectangle to compare
+    ///
+    /// \return `true` if \a lhs is equal to \a rhs
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr bool operator==(const Rect& rect) const = default;
+
+    ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
     Vector2<T> position{}; //!< Position of the top-left corner of the rectangle
     Vector2<T> size{};     //!< Size of the rectangle
 };
-
-////////////////////////////////////////////////////////////
-/// \relates Rect
-/// \brief Overload of binary `operator==`
-///
-/// This operator compares strict equality between two rectangles.
-///
-/// \param lhs Left operand (a rectangle)
-/// \param rhs Right operand (a rectangle)
-///
-/// \return `true` if \a lhs is equal to \a rhs
-///
-////////////////////////////////////////////////////////////
-template <typename T>
-[[nodiscard]] constexpr bool operator==(const Rect<T>& lhs, const Rect<T>& rhs);
-
-////////////////////////////////////////////////////////////
-/// \relates Rect
-/// \brief Overload of binary `operator!=`
-///
-/// This operator compares strict difference between two rectangles.
-///
-/// \param lhs Left operand (a rectangle)
-/// \param rhs Right operand (a rectangle)
-///
-/// \return `true` if \a lhs is not equal to \a rhs
-///
-////////////////////////////////////////////////////////////
-template <typename T>
-[[nodiscard]] constexpr bool operator!=(const Rect<T>& lhs, const Rect<T>& rhs);
 
 // Create type aliases for the most common types
 using IntRect   = Rect<int>;

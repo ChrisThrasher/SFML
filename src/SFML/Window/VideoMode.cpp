@@ -72,54 +72,17 @@ bool VideoMode::isValid() const
 
 
 ////////////////////////////////////////////////////////////
-bool operator==(const VideoMode& left, const VideoMode& right)
+std::strong_ordering VideoMode::operator<=>(const VideoMode& videoMode) const
 {
-    return (left.size == right.size) && (left.bitsPerPixel == right.bitsPerPixel);
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator!=(const VideoMode& left, const VideoMode& right)
-{
-    return !(left == right);
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator<(const VideoMode& left, const VideoMode& right)
-{
-    if (left.bitsPerPixel == right.bitsPerPixel)
+    if (bitsPerPixel == videoMode.bitsPerPixel)
     {
-        if (left.size.x == right.size.x)
-        {
-            return left.size.y < right.size.y;
-        }
+        if (size.x == videoMode.size.x)
+            return size.y <=> videoMode.size.y;
 
-        return left.size.x < right.size.x;
+        return size.x <=> videoMode.size.x;
     }
 
-    return left.bitsPerPixel < right.bitsPerPixel;
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator>(const VideoMode& left, const VideoMode& right)
-{
-    return right < left;
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator<=(const VideoMode& left, const VideoMode& right)
-{
-    return !(right < left);
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator>=(const VideoMode& left, const VideoMode& right)
-{
-    return !(left < right);
+    return bitsPerPixel <=> videoMode.bitsPerPixel;
 }
 
 } // namespace sf

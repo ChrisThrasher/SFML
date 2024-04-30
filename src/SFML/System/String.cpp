@@ -424,48 +424,6 @@ String::ConstIterator String::end() const
 
 
 ////////////////////////////////////////////////////////////
-bool operator==(const String& left, const String& right)
-{
-    return left.m_string == right.m_string;
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator!=(const String& left, const String& right)
-{
-    return !(left == right);
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator<(const String& left, const String& right)
-{
-    return left.m_string < right.m_string;
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator>(const String& left, const String& right)
-{
-    return right < left;
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator<=(const String& left, const String& right)
-{
-    return !(right < left);
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator>=(const String& left, const String& right)
-{
-    return !(left < right);
-}
-
-
-////////////////////////////////////////////////////////////
 String operator+(const String& left, const String& right)
 {
     String string = left;

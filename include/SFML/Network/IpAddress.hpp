@@ -31,6 +31,7 @@
 
 #include <SFML/System/Time.hpp>
 
+#include <compare>
 #include <iosfwd>
 #include <optional>
 #include <string>
@@ -162,6 +163,16 @@ public:
     [[nodiscard]] static std::optional<IpAddress> getPublicAddress(Time timeout = Time::Zero);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator<=>` to compare two IP addresses
+    ///
+    /// \param address Address to compare
+    ///
+    /// \return Three-way comparison result
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] auto operator<=>(const IpAddress& address) const = default;
+
+    ////////////////////////////////////////////////////////////
     // Static member data
     ////////////////////////////////////////////////////////////
     // NOLINTBEGIN(readability-identifier-naming)
@@ -171,79 +182,11 @@ public:
     // NOLINTEND(readability-identifier-naming)
 
 private:
-    friend SFML_NETWORK_API bool operator<(IpAddress left, IpAddress right);
-
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
     std::uint32_t m_address; //!< Address stored as an unsigned 32 bit integer
 };
-
-////////////////////////////////////////////////////////////
-/// \brief Overload of `operator==` to compare two IP addresses
-///
-/// \param left  Left operand (a IP address)
-/// \param right Right operand (a IP address)
-///
-/// \return `true` if both addresses are equal
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_NETWORK_API bool operator==(IpAddress left, IpAddress right);
-
-////////////////////////////////////////////////////////////
-/// \brief Overload of `operator!=` to compare two IP addresses
-///
-/// \param left  Left operand (a IP address)
-/// \param right Right operand (a IP address)
-///
-/// \return `true` if both addresses are different
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_NETWORK_API bool operator!=(IpAddress left, IpAddress right);
-
-////////////////////////////////////////////////////////////
-/// \brief Overload of `operator<` to compare two IP addresses
-///
-/// \param left  Left operand (a IP address)
-/// \param right Right operand (a IP address)
-///
-/// \return `true` if `left` is lesser than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_NETWORK_API bool operator<(IpAddress left, IpAddress right);
-
-////////////////////////////////////////////////////////////
-/// \brief Overload of `operator>` to compare two IP addresses
-///
-/// \param left  Left operand (a IP address)
-/// \param right Right operand (a IP address)
-///
-/// \return `true` if `left` is greater than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_NETWORK_API bool operator>(IpAddress left, IpAddress right);
-
-////////////////////////////////////////////////////////////
-/// \brief Overload of `operator<=` to compare two IP addresses
-///
-/// \param left  Left operand (a IP address)
-/// \param right Right operand (a IP address)
-///
-/// \return `true` if \a left is lesser or equal than \a right
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_NETWORK_API bool operator<=(IpAddress left, IpAddress right);
-
-////////////////////////////////////////////////////////////
-/// \brief Overload of `operator>=` to compare two IP addresses
-///
-/// \param left  Left operand (a IP address)
-/// \param right Right operand (a IP address)
-///
-/// \return `true` if `left` is greater or equal than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_NETWORK_API bool operator>=(IpAddress left, IpAddress right);
 
 ////////////////////////////////////////////////////////////
 /// \brief Overload of `operator>>` to extract an IP address from an input stream

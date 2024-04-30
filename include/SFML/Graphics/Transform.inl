@@ -184,6 +184,20 @@ constexpr Transform& Transform::scale(Vector2f factors, Vector2f center)
 
 
 ////////////////////////////////////////////////////////////
+constexpr bool Transform::operator==(const Transform& transform) const
+{
+    const float* a = getMatrix();
+    const float* b = transform.getMatrix();
+
+    // clang-format off
+    return ((a[0]  == b[0])  && (a[1]  == b[1])  && (a[3]  == b[3]) &&
+            (a[4]  == b[4])  && (a[5]  == b[5])  && (a[7]  == b[7]) &&
+            (a[12] == b[12]) && (a[13] == b[13]) && (a[15] == b[15]));
+    // clang-format on
+}
+
+
+////////////////////////////////////////////////////////////
 constexpr Transform operator*(const Transform& left, const Transform& right)
 {
     return Transform(left).combine(right);
@@ -201,27 +215,6 @@ constexpr Transform& operator*=(Transform& left, const Transform& right)
 constexpr Vector2f operator*(const Transform& left, Vector2f right)
 {
     return left.transformPoint(right);
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator==(const Transform& left, const Transform& right)
-{
-    const float* a = left.getMatrix();
-    const float* b = right.getMatrix();
-
-    // clang-format off
-    return ((a[0]  == b[0])  && (a[1]  == b[1])  && (a[3]  == b[3]) &&
-            (a[4]  == b[4])  && (a[5]  == b[5])  && (a[7]  == b[7]) &&
-            (a[12] == b[12]) && (a[13] == b[13]) && (a[15] == b[15]));
-    // clang-format on
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator!=(const Transform& left, const Transform& right)
-{
-    return !(left == right);
 }
 
 

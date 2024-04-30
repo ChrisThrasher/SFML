@@ -114,6 +114,16 @@ struct SFML_GRAPHICS_API BlendMode
               Equation alphaBlendEquation);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator==`
+    ///
+    /// \param blendMode Blend mode to compare
+    ///
+    /// \return True if blending modes are equal, false if they are different
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] bool operator==(const BlendMode& blendMode) const = default;
+
+    ////////////////////////////////////////////////////////////
     // Member Data
     ////////////////////////////////////////////////////////////
     Factor colorSrcFactor{BlendMode::Factor::SrcAlpha};         //!< Source blending factor for the color channels
@@ -123,30 +133,6 @@ struct SFML_GRAPHICS_API BlendMode
     Factor   alphaDstFactor{BlendMode::Factor::OneMinusSrcAlpha}; //!< Destination blending factor for the alpha channel
     Equation alphaEquation{BlendMode::Equation::Add};             //!< Blending equation for the alpha channel
 };
-
-////////////////////////////////////////////////////////////
-/// \relates BlendMode
-/// \brief Overload of the `operator==`
-///
-/// \param left  Left operand
-/// \param right Right operand
-///
-/// \return `true` if blending modes are equal, `false` if they are different
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_GRAPHICS_API bool operator==(const BlendMode& left, const BlendMode& right);
-
-////////////////////////////////////////////////////////////
-/// \relates BlendMode
-/// \brief Overload of the `operator!=`
-///
-/// \param left  Left operand
-/// \param right Right operand
-///
-/// \return `true` if blending modes are different, `false` if they are equal
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_GRAPHICS_API bool operator!=(const BlendMode& left, const BlendMode& right);
 
 ////////////////////////////////////////////////////////////
 // Commonly used blending modes

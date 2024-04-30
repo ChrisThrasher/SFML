@@ -76,6 +76,16 @@ public:
     [[nodiscard]] constexpr std::uint32_t toInteger() const;
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator==`
+    ///
+    /// \param color Color to compare
+    ///
+    /// \return `true` if colors are equal, `false` if they are different
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr bool operator==(const Color& color) const = default;
+
+    ////////////////////////////////////////////////////////////
     // Static member data
     ////////////////////////////////////////////////////////////
     // NOLINTBEGIN(readability-identifier-naming)
@@ -98,34 +108,6 @@ public:
     std::uint8_t b{};    //!< Blue component
     std::uint8_t a{255}; //!< Alpha (opacity) component
 };
-
-////////////////////////////////////////////////////////////
-/// \relates Color
-/// \brief Overload of the `operator==`
-///
-/// This operator compares two colors and check if they are equal.
-///
-/// \param left  Left operand
-/// \param right Right operand
-///
-/// \return `true` if colors are equal, `false` if they are different
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator==(Color left, Color right);
-
-////////////////////////////////////////////////////////////
-/// \relates Color
-/// \brief Overload of the `operator!=`
-///
-/// This operator compares two colors and check if they are different.
-///
-/// \param left  Left operand
-/// \param right Right operand
-///
-/// \return `true` if colors are different, `false` if they are equal
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator!=(Color left, Color right);
 
 ////////////////////////////////////////////////////////////
 /// \relates Color

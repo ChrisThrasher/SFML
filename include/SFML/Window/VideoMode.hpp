@@ -31,6 +31,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
+#include <compare>
 #include <vector>
 
 
@@ -97,83 +98,31 @@ public:
     [[nodiscard]] bool isValid() const;
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator==` to compare two video modes
+    ///
+    /// \param videoMode Video mode to compare
+    ///
+    /// \return Three-way comparison result
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] bool operator==(const VideoMode& videoMode) const = default;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator<=>` to compare two video modes
+    ///
+    /// \param videoMode Video mode to compare
+    ///
+    /// \return Three-way comparison result
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] std::strong_ordering operator<=>(const VideoMode& videoMode) const;
+
+    ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
     Vector2u     size;           //!< Video mode width and height, in pixels
     unsigned int bitsPerPixel{}; //!< Video mode pixel depth, in bits per pixels
 };
-
-////////////////////////////////////////////////////////////
-/// \relates VideoMode
-/// \brief Overload of `operator==` to compare two video modes
-///
-/// \param left  Left operand (a video mode)
-/// \param right Right operand (a video mode)
-///
-/// \return `true` if modes are equal
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_WINDOW_API bool operator==(const VideoMode& left, const VideoMode& right);
-
-////////////////////////////////////////////////////////////
-/// \relates VideoMode
-/// \brief Overload of `operator!=` to compare two video modes
-///
-/// \param left  Left operand (a video mode)
-/// \param right Right operand (a video mode)
-///
-/// \return `true` if modes are different
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_WINDOW_API bool operator!=(const VideoMode& left, const VideoMode& right);
-
-////////////////////////////////////////////////////////////
-/// \relates VideoMode
-/// \brief Overload of `operator<` to compare video modes
-///
-/// \param left  Left operand (a video mode)
-/// \param right Right operand (a video mode)
-///
-/// \return `true` if `left` is lesser than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_WINDOW_API bool operator<(const VideoMode& left, const VideoMode& right);
-
-////////////////////////////////////////////////////////////
-/// \relates VideoMode
-/// \brief Overload of `operator>` to compare video modes
-///
-/// \param left  Left operand (a video mode)
-/// \param right Right operand (a video mode)
-///
-/// \return `true` if `left` is greater than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_WINDOW_API bool operator>(const VideoMode& left, const VideoMode& right);
-
-////////////////////////////////////////////////////////////
-/// \relates VideoMode
-/// \brief Overload of `operator<=` to compare video modes
-///
-/// \param left  Left operand (a video mode)
-/// \param right Right operand (a video mode)
-///
-/// \return `true` if `left` is lesser or equal than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_WINDOW_API bool operator<=(const VideoMode& left, const VideoMode& right);
-
-////////////////////////////////////////////////////////////
-/// \relates VideoMode
-/// \brief Overload of `operator>=` to compare video modes
-///
-/// \param left  Left operand (a video mode)
-/// \param right Right operand (a video mode)
-///
-/// \return `true` if `left` is greater or equal than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_WINDOW_API bool operator>=(const VideoMode& left, const VideoMode& right);
 
 } // namespace sf
 

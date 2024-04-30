@@ -96,6 +96,16 @@ struct SFML_GRAPHICS_API StencilValue
     template <typename T>
     StencilValue(T) = delete;
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator==`
+    ///
+    /// \param stencilValue Stencil value to compare
+    ///
+    /// \return `true` if stencil values are equal, `false` if they are different
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] bool operator==(const StencilValue& stencilValue) const = default;
+
     unsigned int value{}; //!< The stored stencil value
 };
 
@@ -105,6 +115,16 @@ struct SFML_GRAPHICS_API StencilValue
 ////////////////////////////////////////////////////////////
 struct SFML_GRAPHICS_API StencilMode
 {
+    ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator==`
+    ///
+    /// \param stencilMode Stencil mode to compare
+    ///
+    /// \return `true` if stencil modes are equal, `false` if they are different
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] bool operator==(const StencilMode& stencilMode) const = default;
+
     StencilComparison stencilComparison{StencilComparison::Always}; //!< The comparison we're performing the stencil test with
     StencilUpdateOperation stencilUpdateOperation{
         StencilUpdateOperation::Keep}; //!< The update operation to perform if the stencil test passes
@@ -112,30 +132,6 @@ struct SFML_GRAPHICS_API StencilMode
     StencilValue stencilMask{~0u}; //!< The mask to apply to both the reference value and the value in the stencil buffer
     bool stencilOnly{};            //!< Whether we should update the color buffer in addition to the stencil buffer
 };
-
-////////////////////////////////////////////////////////////
-/// \relates StencilMode
-/// \brief Overload of the `operator==`
-///
-/// \param left  Left operand
-/// \param right Right operand
-///
-/// \return `true` if stencil modes are equal, `false` if they are different
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_GRAPHICS_API bool operator==(const StencilMode& left, const StencilMode& right);
-
-////////////////////////////////////////////////////////////
-/// \relates StencilMode
-/// \brief Overload of the `operator!=`
-///
-/// \param left  Left operand
-/// \param right Right operand
-///
-/// \return `true` if stencil modes are different, `false` if they are equal
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_GRAPHICS_API bool operator!=(const StencilMode& left, const StencilMode& right);
 
 } // namespace sf
 

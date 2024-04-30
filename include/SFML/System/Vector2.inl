@@ -198,20 +198,4 @@ constexpr Vector2<T>& operator/=(Vector2<T>& left, T right)
     return left;
 }
 
-
-////////////////////////////////////////////////////////////
-template <typename T>
-constexpr bool operator==(Vector2<T> left, Vector2<T> right)
-{
-    return (left.x == right.x) && (left.y == right.y);
-}
-
-
-////////////////////////////////////////////////////////////
-template <typename T>
-constexpr bool operator!=(Vector2<T> left, Vector2<T> right)
-{
-    return !(left == right);
-}
-
 } // namespace sf
