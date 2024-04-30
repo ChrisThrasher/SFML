@@ -234,7 +234,7 @@ void Http::Response::parse(const std::string& data)
     if (toLower(getField("transfer-encoding")) != "chunked")
     {
         // Not chunked - just read everything at once
-        std::copy(std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>(), std::back_inserter(m_body));
+        std::ranges::copy(std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>(), std::back_inserter(m_body));
     }
     else
     {

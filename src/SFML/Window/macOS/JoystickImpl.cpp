@@ -313,9 +313,9 @@ bool JoystickImpl::open(unsigned int index)
 
     // Ensure that the buttons will be indexed in the same order as their
     // HID Usage (assigned by manufacturer and/or a driver).
-    std::sort(m_buttons.begin(),
-              m_buttons.end(),
-              [](IOHIDElementRef b1, IOHIDElementRef b2) { return IOHIDElementGetUsage(b1) < IOHIDElementGetUsage(b2); });
+    std::ranges::sort(m_buttons,
+                      [](IOHIDElementRef b1, IOHIDElementRef b2)
+                      { return IOHIDElementGetUsage(b1) < IOHIDElementGetUsage(b2); });
 
     // Retain all these objects for personal use
     for (IOHIDElementRef iohidElementRef : m_buttons)
