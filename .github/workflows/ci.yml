@@ -84,6 +84,11 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
+    # Workaround for broken clang on ubuntu runner until https://github.com/actions/runner-images/issues/8659 gets fixed
+    - uses: mjp41/workaround8649@c8550b715ccdc17f89c8d5c28d7a48eeff9c94a8
+      with:
+        os: ${{ matrix.platform.os }}
+
     - name: Set Visual Studio Architecture
       if: contains(matrix.platform.name, 'Windows VS') && !contains(matrix.platform.name, 'MSBuild')
       uses: ilammy/msvc-dev-cmd@v1
@@ -275,6 +280,11 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
+    # Workaround for broken clang on ubuntu runner until https://github.com/actions/runner-images/issues/8659 gets fixed
+    - uses: mjp41/workaround8649@c8550b715ccdc17f89c8d5c28d7a48eeff9c94a8
+      with:
+        os: ${{ matrix.platform.os }}
+
     - name: Get CMake and Ninja
       uses: lukka/get-cmake@latest
       with:
@@ -318,6 +328,11 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+
+    # Workaround for broken clang on ubuntu runner until https://github.com/actions/runner-images/issues/8659 gets fixed
+    - uses: mjp41/workaround8649@c8550b715ccdc17f89c8d5c28d7a48eeff9c94a8
+      with:
+        os: ${{ matrix.platform.os }}
 
     - name: Get CMake and Ninja
       uses: lukka/get-cmake@latest

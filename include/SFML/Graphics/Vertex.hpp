@@ -93,19 +93,16 @@ struct Vertex
 /// It is recommended to use aggregate initialization to create vertex
 /// objects, which initializes the members in order.
 ///
-/// On a C++20-compliant compiler (or where supported as an extension)
-/// it is possible to use "designated initializers" to only initialize
+/// It is possible to use "designated initializers" to only initialize
 /// a subset of members, with the restriction of having to follow the
 /// same order in which they are defined.
 ///
 /// Example:
 /// \code
-/// // C++17 and above
 /// sf::Vertex v0{{5.0f, 5.0f}};                               // explicit 'position', implicit 'color' and 'texCoords'
 /// sf::Vertex v1{{5.0f, 5.0f}, sf::Color::Red};               // explicit 'position' and 'color', implicit 'texCoords'
 /// sf::Vertex v2{{5.0f, 5.0f}, sf::Color::Red, {1.0f, 1.0f}}; // everything is explicitly specified
 ///
-/// // C++20 and above (or compilers supporting "designated initializers" as an extension)
 /// sf::Vertex v3{
 ///    .position{5.0f, 5.0f},
 ///    .texCoords{1.0f, 1.0f}
