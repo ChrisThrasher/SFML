@@ -203,6 +203,29 @@ public:
     ////////////////////////////////////////////////////////////
     constexpr Vector2 cwiseDiv(const Vector2& rhs) const;
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Overload of binary operator ==
+    ///
+    /// This operator compares strict equality between two vectors.
+    ///
+    /// \param vector Vector to compare
+    ///
+    /// \return True if \c left is equal to \c right
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr bool operator==(const Vector2& vector) const = default;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Overload of binary operator !=
+    ///
+    /// This operator compares strict difference between two vectors.
+    ///
+    /// \param vector Vector to compare
+    ///
+    /// \return True if \c left is not equal to \c right
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr bool operator!=(const Vector2& vector) const = default;
 
     ////////////////////////////////////////////////////////////
     // Member data
@@ -365,36 +388,6 @@ template <typename T>
 ////////////////////////////////////////////////////////////
 template <typename T>
 constexpr Vector2<T>& operator/=(Vector2<T>& left, T right);
-
-////////////////////////////////////////////////////////////
-/// \relates Vector2
-/// \brief Overload of binary operator ==
-///
-/// This operator compares strict equality between two vectors.
-///
-/// \param left  Left operand (a vector)
-/// \param right Right operand (a vector)
-///
-/// \return True if \c left is equal to \c right
-///
-////////////////////////////////////////////////////////////
-template <typename T>
-[[nodiscard]] constexpr bool operator==(const Vector2<T>& left, const Vector2<T>& right);
-
-////////////////////////////////////////////////////////////
-/// \relates Vector2
-/// \brief Overload of binary operator !=
-///
-/// This operator compares strict difference between two vectors.
-///
-/// \param left  Left operand (a vector)
-/// \param right Right operand (a vector)
-///
-/// \return True if \c left is not equal to \c right
-///
-////////////////////////////////////////////////////////////
-template <typename T>
-[[nodiscard]] constexpr bool operator!=(const Vector2<T>& left, const Vector2<T>& right);
 
 } // namespace sf
 

@@ -62,20 +62,6 @@ constexpr std::uint32_t Color::toInteger() const
 
 
 ////////////////////////////////////////////////////////////
-constexpr bool operator==(const Color& left, const Color& right)
-{
-    return (left.r == right.r) && (left.g == right.g) && (left.b == right.b) && (left.a == right.a);
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator!=(const Color& left, const Color& right)
-{
-    return !(left == right);
-}
-
-
-////////////////////////////////////////////////////////////
 constexpr Color operator+(const Color& left, const Color& right)
 {
     const auto clampedAdd = [](std::uint8_t lhs, std::uint8_t rhs) -> std::uint8_t

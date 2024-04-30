@@ -204,22 +204,6 @@ constexpr Vector2<T>& operator/=(Vector2<T>& left, T right)
 
 
 ////////////////////////////////////////////////////////////
-template <typename T>
-constexpr bool operator==(const Vector2<T>& left, const Vector2<T>& right)
-{
-    return (left.x == right.x) && (left.y == right.y);
-}
-
-
-////////////////////////////////////////////////////////////
-template <typename T>
-constexpr bool operator!=(const Vector2<T>& left, const Vector2<T>& right)
-{
-    return (left.x != right.x) || (left.y != right.y);
-}
-
-
-////////////////////////////////////////////////////////////
 // Static member data
 ////////////////////////////////////////////////////////////
 

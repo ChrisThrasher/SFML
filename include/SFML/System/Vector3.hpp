@@ -130,6 +130,30 @@ public:
     constexpr Vector3 cwiseDiv(const Vector3& rhs) const;
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of binary operator ==
+    ///
+    /// This operator compares strict equality between two vectors.
+    ///
+    /// \param vector Vector to compare
+    ///
+    /// \return True if \a left is equal to \a right
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr bool operator==(const Vector3& vector) const = default;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Overload of binary operator !=
+    ///
+    /// This operator compares strict difference between two vectors.
+    ///
+    /// \param vector Vector to compare
+    ///
+    /// \return True if \a left is not equal to \a right
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr bool operator!=(const Vector3& vector) const = default;
+
+    ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
     T x{}; //!< X coordinate of the vector
@@ -277,36 +301,6 @@ template <typename T>
 ////////////////////////////////////////////////////////////
 template <typename T>
 constexpr Vector3<T>& operator/=(Vector3<T>& left, T right);
-
-////////////////////////////////////////////////////////////
-/// \relates Vector3
-/// \brief Overload of binary operator ==
-///
-/// This operator compares strict equality between two vectors.
-///
-/// \param left  Left operand (a vector)
-/// \param right Right operand (a vector)
-///
-/// \return True if \a left is equal to \a right
-///
-////////////////////////////////////////////////////////////
-template <typename T>
-[[nodiscard]] constexpr bool operator==(const Vector3<T>& left, const Vector3<T>& right);
-
-////////////////////////////////////////////////////////////
-/// \relates Vector3
-/// \brief Overload of binary operator !=
-///
-/// This operator compares strict difference between two vectors.
-///
-/// \param left  Left operand (a vector)
-/// \param right Right operand (a vector)
-///
-/// \return True if \a left is not equal to \a right
-///
-////////////////////////////////////////////////////////////
-template <typename T>
-[[nodiscard]] constexpr bool operator!=(const Vector3<T>& left, const Vector3<T>& right);
 
 // Define the most common types
 using Vector3i = Vector3<int>;
