@@ -158,9 +158,9 @@ bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
         // Check for duplicate channel entries
         {
             auto sortedChannelMap = channelMap;
-            std::sort(sortedChannelMap.begin(), sortedChannelMap.end());
+            std::ranges::sort(sortedChannelMap);
 
-            if (std::adjacent_find(sortedChannelMap.begin(), sortedChannelMap.end()) != sortedChannelMap.end())
+            if (std::ranges::adjacent_find(sortedChannelMap) != sortedChannelMap.end())
             {
                 err() << "Duplicate channels in channel map" << std::endl;
                 return false;
@@ -170,7 +170,7 @@ bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
         // Construct the target channel map by removing unused channels
         for (auto iter = targetChannelMap.begin(); iter != targetChannelMap.end();)
         {
-            if (std::find(channelMap.begin(), channelMap.end(), iter->channel) == channelMap.end())
+            if (std::ranges::find(channelMap, iter->channel) == channelMap.end())
             {
                 iter = targetChannelMap.erase(iter);
             }
@@ -183,9 +183,8 @@ bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
         // Verify that all the input channels exist in the target channel map
         for (const SoundChannel channel : channelMap)
         {
-            if (std::find_if(targetChannelMap.begin(),
-                             targetChannelMap.end(),
-                             [channel](const SupportedChannel& c) { return c.channel == channel; }) ==
+            if (std::ranges::find_if(targetChannelMap,
+                                     [channel](const SupportedChannel& c) { return c.channel == channel; }) ==
                 targetChannelMap.end())
             {
                 err() << "Could not map all input channels to a channel supported by WAV" << std::endl;
@@ -196,7 +195,7 @@ bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
         // Build the remap table
         for (auto i = 0u; i < channelCount; ++i)
             m_remapTable[i] = static_cast<std::size_t>(
-                std::find(channelMap.begin(), channelMap.end(), targetChannelMap[i].channel) - channelMap.begin());
+                std::ranges::find(channelMap, targetChannelMap[i].channel) - channelMap.begin());
 
         // Generate the channel mask
         for (const auto& channel : targetChannelMap)

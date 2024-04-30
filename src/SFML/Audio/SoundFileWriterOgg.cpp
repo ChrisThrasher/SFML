@@ -119,7 +119,7 @@ bool SoundFileWriterOgg::open(const std::filesystem::path&     filename,
     }
 
     // Check if the channel map contains channels that we cannot remap to a mapping supported by FLAC
-    if (!std::is_permutation(channelMap.begin(), channelMap.end(), targetChannelMap.begin()))
+    if (!std::ranges::is_permutation(channelMap, targetChannelMap))
     {
         err() << "Provided channel map cannot be reordered to a channel map supported by Vorbis" << std::endl;
         return false;
@@ -127,8 +127,7 @@ bool SoundFileWriterOgg::open(const std::filesystem::path&     filename,
 
     // Build the remap table
     for (auto i = 0u; i < channelCount; ++i)
-        m_remapTable[i] = static_cast<std::size_t>(
-            std::find(channelMap.begin(), channelMap.end(), targetChannelMap[i]) - channelMap.begin());
+        m_remapTable[i] = static_cast<std::size_t>(std::ranges::find(channelMap, targetChannelMap[i]) - channelMap.begin());
 
     // Save the channel count
     m_channelCount = channelCount;

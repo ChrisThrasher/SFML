@@ -43,7 +43,7 @@ TEST_CASE("[Window] sf::VideoMode", runDisplayTests())
     SECTION("getFullscreenModes()")
     {
         const auto& modes = sf::VideoMode::getFullscreenModes();
-        CHECK(std::is_sorted(modes.begin(), modes.end(), std::greater<>()));
+        CHECK(std::ranges::is_sorted(modes, std::greater<>()));
     }
 
     SECTION("isValid()")

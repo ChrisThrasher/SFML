@@ -370,14 +370,14 @@ std::uint64_t SoundFileReaderFlac::read(std::int16_t* samples, std::uint64_t max
         {
             // There are more leftovers than needed
             const auto signedMaxCount = static_cast<std::vector<std::int16_t>::difference_type>(maxCount);
-            std::copy(m_clientData.leftovers.begin(), m_clientData.leftovers.begin() + signedMaxCount, samples);
+            std::ranges::copy(m_clientData.leftovers.begin(), m_clientData.leftovers.begin() + signedMaxCount, samples);
             m_clientData.leftovers = std::vector<std::int16_t>(m_clientData.leftovers.begin() + signedMaxCount,
                                                                m_clientData.leftovers.end());
             return maxCount;
         }
 
         // We can use all the leftovers and decode new frames
-        std::copy(m_clientData.leftovers.begin(), m_clientData.leftovers.end(), samples);
+        std::ranges::copy(m_clientData.leftovers, samples);
     }
 
     // Reset the data that will be used in the callback

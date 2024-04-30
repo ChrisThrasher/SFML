@@ -463,9 +463,7 @@ void JoystickImpl::cleanupDInput()
 bool JoystickImpl::isConnectedDInput(unsigned int index)
 {
     // Check if a joystick with the given index is in the connected list
-    return std::any_of(joystickList.cbegin(),
-                       joystickList.cend(),
-                       [index](const JoystickRecord& record) { return record.index == index; });
+    return std::ranges::any_of(joystickList, [index](const JoystickRecord& record) { return record.index == index; });
 }
 
 
@@ -483,10 +481,10 @@ void JoystickImpl::updateConnectionsDInput()
                                                     DIEDFL_ATTACHEDONLY);
 
     // Remove devices that were not connected during the enumeration
-    joystickList.erase(std::remove_if(joystickList.begin(),
-                                      joystickList.end(),
-                                      [](const JoystickRecord& joystickRecord) { return !joystickRecord.plugged; }),
-                       joystickList.end());
+    const auto [begin, end] = std::ranges::remove_if(joystickList,
+                                                     [](const JoystickRecord& joystickRecord)
+                                                     { return !joystickRecord.plugged; });
+    joystickList.erase(begin, end);
 
     if (FAILED(result))
     {

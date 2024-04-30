@@ -65,7 +65,7 @@ std::vector<VideoMode> VideoModeImpl::getFullscreenModes()
             continue;
 
         // If not yet listed we add it to our modes array.
-        if (std::find(modes.begin(), modes.end(), mode) == modes.end())
+        if (std::ranges::find(modes, mode) == modes.end())
             modes.push_back(mode);
     }
 

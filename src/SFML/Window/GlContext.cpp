@@ -488,12 +488,11 @@ void GlContext::unregisterUnsharedGlObject(std::shared_ptr<void> object)
         // Find the object in unshared objects and remove it if its associated context is currently active
         // This will trigger the destructor of the object since shared_ptr
         // in unshared objects should be the only one existing
-        const auto iter = std::find_if(unsharedGlObjects->begin(),
-                                       unsharedGlObjects->end(),
-                                       [&object](const Impl::UnsharedGlObject& obj) {
-                                           return (obj.object == object) &&
-                                                  (obj.contextId == GlContextImpl::CurrentContext::get().id);
-                                       });
+        const auto iter = std::ranges::find_if(*unsharedGlObjects,
+                                               [&object](const Impl::UnsharedGlObject& obj) {
+                                                   return (obj.object == object) &&
+                                                          (obj.contextId == GlContextImpl::CurrentContext::get().id);
+                                               });
 
         if (iter != unsharedGlObjects->end())
             unsharedGlObjects->erase(iter);
@@ -675,8 +674,7 @@ bool GlContext::isExtensionAvailable(std::string_view name)
     // the shared context will be created for the duration of this call
     const auto sharedContext = SharedContext::get();
 
-    return std::find(sharedContext->extensions.begin(), sharedContext->extensions.end(), name) !=
-           sharedContext->extensions.end();
+    return std::ranges::find(sharedContext->extensions, name) != sharedContext->extensions.end();
 }
 
 

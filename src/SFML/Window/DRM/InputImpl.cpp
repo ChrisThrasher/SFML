@@ -646,9 +646,7 @@ void setMousePosition(Vector2i position, const WindowBase& /*relativeTo*/)
 ////////////////////////////////////////////////////////////
 bool isTouchDown(unsigned int finger)
 {
-    return std::any_of(touchSlots.cbegin(),
-                       touchSlots.cend(),
-                       [finger](const TouchSlot& slot) { return slot.id == finger; });
+    return std::ranges::any_of(touchSlots, [finger](const TouchSlot& slot) { return slot.id == finger; });
 }
 
 
