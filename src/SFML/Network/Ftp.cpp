@@ -391,7 +391,7 @@ Ftp::Response Ftp::getResponse()
         }
         else
         {
-            std::copy(m_receiveBuffer.begin(), m_receiveBuffer.end(), buffer);
+            std::ranges::copy(m_receiveBuffer, buffer);
             length = m_receiveBuffer.size();
             m_receiveBuffer.clear();
         }

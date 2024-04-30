@@ -619,7 +619,7 @@ m_cursorGrabbed(m_fullscreen)
     // For simplicity, we retrieve it via the base executable name.
     std::string       executableName = findExecutableName().string();
     std::vector<char> windowInstance(executableName.size() + 1, 0);
-    std::copy(executableName.begin(), executableName.end(), windowInstance.begin());
+    std::ranges::copy(executableName, windowInstance.begin());
     hint.res_name = windowInstance.data();
 
     // The class name identifies a class of windows that
@@ -627,7 +627,7 @@ m_cursorGrabbed(m_fullscreen)
     // the class name.
     std::string       ansiTitle = title.toAnsiString();
     std::vector<char> windowClass(ansiTitle.size() + 1, 0);
-    std::copy(ansiTitle.begin(), ansiTitle.end(), windowClass.begin());
+    std::ranges::copy(ansiTitle, windowClass.begin());
     hint.res_class = windowClass.data();
 
     XSetClassHint(m_display.get(), m_window, &hint);
@@ -688,7 +688,7 @@ WindowImplX11::~WindowImplX11()
 
     // Remove this window from the global list of windows (required for focus request)
     const std::lock_guard lock(allWindowsMutex);
-    allWindows.erase(std::find(allWindows.begin(), allWindows.end(), this));
+    allWindows.erase(std::ranges::find(allWindows, this));
 }
 
 

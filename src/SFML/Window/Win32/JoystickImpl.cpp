@@ -501,10 +501,10 @@ void JoystickImpl::updateConnectionsDInput()
                                                     DIEDFL_ATTACHEDONLY);
 
     // Remove devices that were not connected during the enumeration
-    joystickList.erase(std::remove_if(joystickList.begin(),
-                                      joystickList.end(),
-                                      [](const JoystickRecord& joystickRecord) { return !joystickRecord.plugged; }),
-                       joystickList.end());
+    const auto [begin, end] = std::ranges::remove_if(joystickList,
+                                                     [](const JoystickRecord& joystickRecord)
+                                                     { return !joystickRecord.plugged; });
+    joystickList.erase(begin, end);
 
     if (FAILED(result))
     {

@@ -56,7 +56,7 @@ const std::vector<VideoMode>& VideoMode::getFullscreenModes()
     static const auto modes = []
     {
         std::vector<VideoMode> result = priv::VideoModeImpl::getFullscreenModes();
-        std::sort(result.begin(), result.end(), std::greater<>());
+        std::ranges::sort(result, std::greater<>());
         return result;
     }();
 
@@ -69,7 +69,7 @@ bool VideoMode::isValid() const
 {
     const std::vector<VideoMode>& modes = getFullscreenModes();
 
-    return std::find(modes.begin(), modes.end(), *this) != modes.end();
+    return std::ranges::find(modes, *this) != modes.end();
 }
 
 

@@ -383,7 +383,7 @@ std::uint64_t SoundFileReaderFlac::read(std::int16_t* samples, std::uint64_t max
         else
         {
             // We can use all the leftovers and decode new frames
-            std::copy(m_clientData.leftovers.begin(), m_clientData.leftovers.end(), samples);
+            std::ranges::copy(m_clientData.leftovers, samples);
         }
     }
 
