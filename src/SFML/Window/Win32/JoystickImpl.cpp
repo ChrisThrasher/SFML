@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <array>
 #include <iomanip>
+#include <numbers>
 #include <ostream>
 #include <regstr.h>
 #include <sstream>
@@ -382,7 +383,7 @@ JoystickState JoystickImpl::update()
         // Special case for POV, it is given as an angle
         if (pos.dwPOV != 0xFFFF)
         {
-            const float angle                = static_cast<float>(pos.dwPOV) / 18000.f * 3.141592654f;
+            const float angle                = static_cast<float>(pos.dwPOV) / 18000.f * std::numbers::pi_v<float>;
             state.axes[Joystick::Axis::PovX] = std::sin(angle) * 100;
             state.axes[Joystick::Axis::PovY] = std::cos(angle) * 100;
         }
@@ -917,7 +918,7 @@ JoystickState JoystickImpl::updateDInputBuffered()
 
                     if (value != 0xFFFF)
                     {
-                        const float angle = (static_cast<float>(value)) * 3.141592654f / DI_DEGREES / 180.f;
+                        const float angle = (static_cast<float>(value)) * std::numbers::pi_v<float> / DI_DEGREES / 180.f;
 
                         m_state.axes[Joystick::Axis::PovX] = std::sin(angle) * 100.f;
                         m_state.axes[Joystick::Axis::PovY] = std::cos(angle) * 100.f;
@@ -1008,7 +1009,7 @@ JoystickState JoystickImpl::updateDInputPolled()
 
                     if (value != 0xFFFF)
                     {
-                        const float angle = (static_cast<float>(value)) * 3.141592654f / DI_DEGREES / 180.f;
+                        const float angle = (static_cast<float>(value)) * std::numbers::pi_v<float> / DI_DEGREES / 180.f;
 
                         state.axes[Joystick::Axis::PovX] = std::sin(angle) * 100.f;
                         state.axes[Joystick::Axis::PovY] = std::cos(angle) * 100.f;
