@@ -94,48 +94,6 @@ constexpr Angle radians(float angle)
 
 
 ////////////////////////////////////////////////////////////
-constexpr bool operator==(Angle left, Angle right)
-{
-    return left.asRadians() == right.asRadians();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator!=(Angle left, Angle right)
-{
-    return left.asRadians() != right.asRadians();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator<(Angle left, Angle right)
-{
-    return left.asRadians() < right.asRadians();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator>(Angle left, Angle right)
-{
-    return left.asRadians() > right.asRadians();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator<=(Angle left, Angle right)
-{
-    return left.asRadians() <= right.asRadians();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator>=(Angle left, Angle right)
-{
-    return left.asRadians() >= right.asRadians();
-}
-
-
-////////////////////////////////////////////////////////////
 constexpr Angle operator-(Angle right)
 {
     return radians(-right.asRadians());
