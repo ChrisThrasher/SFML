@@ -10,6 +10,7 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <numbers>
 #include <vector>
 
 #include <cmath>
@@ -20,8 +21,8 @@ namespace
 {
 constexpr auto windowWidth  = 800u;
 constexpr auto windowHeight = 600u;
-constexpr auto pi           = 3.14159265359f;
-constexpr auto sqrt2        = 2.0f * 0.707106781186547524401f;
+constexpr auto pi           = std::numbers::pi_v<float>;
+constexpr auto sqrt2        = std::numbers::sqrt2_v<float>;
 
 std::filesystem::path resourcesDir()
 {
