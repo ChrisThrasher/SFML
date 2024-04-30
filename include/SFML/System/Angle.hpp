@@ -24,6 +24,11 @@
 
 #pragma once
 
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
+#include <compare>
+
 
 namespace sf
 {
@@ -129,6 +134,16 @@ public:
     [[nodiscard]] constexpr Angle wrapUnsigned() const;
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator<=>` to compare two angles
+    ///
+    /// \param angle Right hand operand
+    ///
+    /// \return Three-way comparison result
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr auto operator<=>(const Angle& angle) const = default;
+
+    ////////////////////////////////////////////////////////////
     // Static member data
     ////////////////////////////////////////////////////////////
     // NOLINTNEXTLINE(readability-identifier-naming)
@@ -178,84 +193,6 @@ private:
 ///
 ////////////////////////////////////////////////////////////
 [[nodiscard]] constexpr Angle radians(float angle);
-
-////////////////////////////////////////////////////////////
-/// \relates Angle
-/// \brief Overload of `operator==` to compare two angle values
-/// \note Does not automatically wrap the angle value
-///
-/// \param left  Left operand (an angle)
-/// \param right Right operand (an angle)
-///
-/// \return `true` if both angle values are equal
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator==(Angle left, Angle right);
-
-////////////////////////////////////////////////////////////
-/// \relates Angle
-/// \brief Overload of `operator!=` to compare two angle values
-/// \note Does not automatically wrap the angle value
-///
-/// \param left  Left operand (an angle)
-/// \param right Right operand (an angle)
-///
-/// \return `true` if both angle values are different
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator!=(Angle left, Angle right);
-
-////////////////////////////////////////////////////////////
-/// \relates Angle
-/// \brief Overload of `operator<` to compare two angle values
-/// \note Does not automatically wrap the angle value
-///
-/// \param left  Left operand (an angle)
-/// \param right Right operand (an angle)
-///
-/// \return `true` if \a left is less than \a right
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator<(Angle left, Angle right);
-
-////////////////////////////////////////////////////////////
-/// \relates Angle
-/// \brief Overload of `operator>` to compare two angle values
-/// \note Does not automatically wrap the angle value
-///
-/// \param left  Left operand (an angle)
-/// \param right Right operand (an angle)
-///
-/// \return `true` if \a left is greater than \a right
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator>(Angle left, Angle right);
-
-////////////////////////////////////////////////////////////
-/// \relates Angle
-/// \brief Overload of `operator<=` to compare two angle values
-/// \note Does not automatically wrap the angle value
-///
-/// \param left  Left operand (an angle)
-/// \param right Right operand (an angle)
-///
-/// \return `true` if \a left is less than or equal to \a right
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator<=(Angle left, Angle right);
-
-////////////////////////////////////////////////////////////
-/// \relates Angle
-/// \brief Overload of `operator>=` to compare two angle values
-/// \note Does not automatically wrap the angle value
-///
-/// \param left  Left operand (an angle)
-/// \param right Right operand (an angle)
-///
-/// \return `true` if \a left is greater than or equal to \a right
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator>=(Angle left, Angle right);
 
 ////////////////////////////////////////////////////////////
 /// \relates Angle

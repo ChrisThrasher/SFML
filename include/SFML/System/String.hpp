@@ -31,6 +31,7 @@
 
 #include <SFML/System/Utf.hpp>
 
+#include <compare>
 #include <locale>
 #include <string>
 
@@ -551,87 +552,22 @@ public:
     ////////////////////////////////////////////////////////////
     [[nodiscard]] ConstIterator end() const;
 
-private:
-    friend SFML_SYSTEM_API bool operator==(const String& left, const String& right);
-    friend SFML_SYSTEM_API bool operator<(const String& left, const String& right);
+    ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator<=>` to compare two strings
+    ///
+    /// \param string String to compare
+    ///
+    /// \return Three-way comparison result
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] auto operator<=>(const String& string) const = default;
 
+private:
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
     std::u32string m_string; //!< Internal string of UTF-32 characters
 };
-
-////////////////////////////////////////////////////////////
-/// \relates String
-/// \brief Overload of `operator==` to compare two UTF-32 strings
-///
-/// \param left  Left operand (a string)
-/// \param right Right operand (a string)
-///
-/// \return `true` if both strings are equal
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_SYSTEM_API bool operator==(const String& left, const String& right);
-
-////////////////////////////////////////////////////////////
-/// \relates String
-/// \brief Overload of `operator!=` to compare two UTF-32 strings
-///
-/// \param left  Left operand (a string)
-/// \param right Right operand (a string)
-///
-/// \return `true` if both strings are different
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_SYSTEM_API bool operator!=(const String& left, const String& right);
-
-////////////////////////////////////////////////////////////
-/// \relates String
-/// \brief Overload of `operator<` to compare two UTF-32 strings
-///
-/// \param left  Left operand (a string)
-/// \param right Right operand (a string)
-///
-/// \return `true` if `left` is lexicographically before `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_SYSTEM_API bool operator<(const String& left, const String& right);
-
-////////////////////////////////////////////////////////////
-/// \relates String
-/// \brief Overload of `operator>` to compare two UTF-32 strings
-///
-/// \param left  Left operand (a string)
-/// \param right Right operand (a string)
-///
-/// \return `true` if `left` is lexicographically after `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_SYSTEM_API bool operator>(const String& left, const String& right);
-
-////////////////////////////////////////////////////////////
-/// \relates String
-/// \brief Overload of `operator<=` to compare two UTF-32 strings
-///
-/// \param left  Left operand (a string)
-/// \param right Right operand (a string)
-///
-/// \return `true` if `left` is lexicographically before or equivalent to `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_SYSTEM_API bool operator<=(const String& left, const String& right);
-
-////////////////////////////////////////////////////////////
-/// \relates String
-/// \brief Overload of `operator>=` to compare two UTF-32 strings
-///
-/// \param left  Left operand (a string)
-/// \param right Right operand (a string)
-///
-/// \return `true` if `left` is lexicographically after or equivalent to `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_SYSTEM_API bool operator>=(const String& left, const String& right);
 
 ////////////////////////////////////////////////////////////
 /// \relates String

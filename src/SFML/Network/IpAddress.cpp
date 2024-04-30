@@ -192,48 +192,6 @@ std::optional<IpAddress> IpAddress::getPublicAddress(Time timeout)
 
 
 ////////////////////////////////////////////////////////////
-bool operator==(IpAddress left, IpAddress right)
-{
-    return !(left < right) && !(right < left);
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator!=(IpAddress left, IpAddress right)
-{
-    return !(left == right);
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator<(IpAddress left, IpAddress right)
-{
-    return left.m_address < right.m_address;
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator>(IpAddress left, IpAddress right)
-{
-    return right < left;
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator<=(IpAddress left, IpAddress right)
-{
-    return !(right < left);
-}
-
-
-////////////////////////////////////////////////////////////
-bool operator>=(IpAddress left, IpAddress right)
-{
-    return !(left < right);
-}
-
-
-////////////////////////////////////////////////////////////
 std::istream& operator>>(std::istream& stream, std::optional<IpAddress>& address)
 {
     std::string str;

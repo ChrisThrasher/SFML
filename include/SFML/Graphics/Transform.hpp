@@ -259,6 +259,19 @@ public:
     constexpr Transform& scale(Vector2f factors, Vector2f center);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of binary `operator==` to compare two transforms
+    ///
+    /// Performs an element-wise comparison of the elements of the
+    /// left transform with the elements of the right transform.
+    ///
+    /// \param transform Transform to compare
+    ///
+    /// \return `true` if the transforms are equal, `false` otherwise
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr bool operator==(const Transform& transform) const;
+
+    ////////////////////////////////////////////////////////////
     // Static member data
     ////////////////////////////////////////////////////////////
     // NOLINTNEXTLINE(readability-identifier-naming)
@@ -317,35 +330,6 @@ constexpr Transform& operator*=(Transform& left, const Transform& right);
 ///
 ////////////////////////////////////////////////////////////
 [[nodiscard]] constexpr Vector2f operator*(const Transform& left, Vector2f right);
-
-////////////////////////////////////////////////////////////
-/// \relates sf::Transform
-/// \brief Overload of binary `operator==` to compare two transforms
-///
-/// Performs an element-wise comparison of the elements of the
-/// left transform with the elements of the right transform.
-///
-/// \param left Left operand (the first transform)
-/// \param right Right operand (the second transform)
-///
-/// \return `true` if the transforms are equal, `false` otherwise
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator==(const Transform& left, const Transform& right);
-
-////////////////////////////////////////////////////////////
-/// \relates sf::Transform
-/// \brief Overload of binary `operator!=` to compare two transforms
-///
-/// This call is equivalent to `!(left == right)`.
-///
-/// \param left Left operand (the first transform)
-/// \param right Right operand (the second transform)
-///
-/// \return `true` if the transforms are not equal, `false` otherwise
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator!=(const Transform& left, const Transform& right);
 
 } // namespace sf
 
