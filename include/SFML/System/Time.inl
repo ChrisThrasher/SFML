@@ -27,6 +27,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/System/Time.hpp> // NOLINT(misc-header-include-cycle)
 
+#include <compare>
 #include <ratio>
 
 #include <cassert>
@@ -95,48 +96,6 @@ constexpr Time milliseconds(std::int32_t amount)
 constexpr Time microseconds(std::int64_t amount)
 {
     return std::chrono::microseconds(amount);
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator==(Time left, Time right)
-{
-    return left.asMicroseconds() == right.asMicroseconds();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator!=(Time left, Time right)
-{
-    return left.asMicroseconds() != right.asMicroseconds();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator<(Time left, Time right)
-{
-    return left.asMicroseconds() < right.asMicroseconds();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator>(Time left, Time right)
-{
-    return left.asMicroseconds() > right.asMicroseconds();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator<=(Time left, Time right)
-{
-    return left.asMicroseconds() <= right.asMicroseconds();
-}
-
-
-////////////////////////////////////////////////////////////
-constexpr bool operator>=(Time left, Time right)
-{
-    return left.asMicroseconds() >= right.asMicroseconds();
 }
 
 

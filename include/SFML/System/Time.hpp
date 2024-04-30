@@ -104,6 +104,16 @@ public:
     constexpr operator std::chrono::duration<Rep, Period>() const;
 
     ////////////////////////////////////////////////////////////
+    /// \brief Overload of `operator<=>` to compare two time values
+    ///
+    /// \param time Right hand operand
+    ///
+    /// \return Three-way comparison result
+    ///
+    ////////////////////////////////////////////////////////////
+    [[nodiscard]] constexpr auto operator<=>(const Time& time) const = default;
+
+    ////////////////////////////////////////////////////////////
     // Static member data
     ////////////////////////////////////////////////////////////
     // NOLINTNEXTLINE(readability-identifier-naming)
@@ -154,78 +164,6 @@ private:
 ///
 ////////////////////////////////////////////////////////////
 [[nodiscard]] constexpr Time microseconds(std::int64_t amount);
-
-////////////////////////////////////////////////////////////
-/// \relates Time
-/// \brief Overload of `operator==` to compare two time values
-///
-/// \param left  Left operand (a time)
-/// \param right Right operand (a time)
-///
-/// \return `true` if both time values are equal
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator==(Time left, Time right);
-
-////////////////////////////////////////////////////////////
-/// \relates Time
-/// \brief Overload of `operator!=` to compare two time values
-///
-/// \param left  Left operand (a time)
-/// \param right Right operand (a time)
-///
-/// \return `true` if both time values are different
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator!=(Time left, Time right);
-
-////////////////////////////////////////////////////////////
-/// \relates Time
-/// \brief Overload of `operator<` to compare two time values
-///
-/// \param left  Left operand (a time)
-/// \param right Right operand (a time)
-///
-/// \return `true` if `left` is lesser than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator<(Time left, Time right);
-
-////////////////////////////////////////////////////////////
-/// \relates Time
-/// \brief Overload of `operator>` to compare two time values
-///
-/// \param left  Left operand (a time)
-/// \param right Right operand (a time)
-///
-/// \return `true` if `left` is greater than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator>(Time left, Time right);
-
-////////////////////////////////////////////////////////////
-/// \relates Time
-/// \brief Overload of `operator<=` to compare two time values
-///
-/// \param left  Left operand (a time)
-/// \param right Right operand (a time)
-///
-/// \return `true` if `left` is lesser or equal than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator<=(Time left, Time right);
-
-////////////////////////////////////////////////////////////
-/// \relates Time
-/// \brief Overload of `operator>=` to compare two time values
-///
-/// \param left  Left operand (a time)
-/// \param right Right operand (a time)
-///
-/// \return `true` if `left` is greater or equal than `right`
-///
-////////////////////////////////////////////////////////////
-[[nodiscard]] constexpr bool operator>=(Time left, Time right);
 
 ////////////////////////////////////////////////////////////
 /// \relates Time

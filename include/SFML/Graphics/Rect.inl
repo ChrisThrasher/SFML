@@ -111,20 +111,4 @@ constexpr Vector2<T> Rect<T>::getCenter() const
     return position + size / T{2};
 }
 
-
-////////////////////////////////////////////////////////////
-template <typename T>
-constexpr bool operator==(const Rect<T>& lhs, const Rect<T>& rhs)
-{
-    return (lhs.position == rhs.position) && (lhs.size == rhs.size);
-}
-
-
-////////////////////////////////////////////////////////////
-template <typename T>
-constexpr bool operator!=(const Rect<T>& lhs, const Rect<T>& rhs)
-{
-    return !(lhs == rhs);
-}
-
 } // namespace sf
