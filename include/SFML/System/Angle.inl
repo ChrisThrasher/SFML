@@ -27,6 +27,8 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/System/Angle.hpp> // NOLINT(misc-header-include-cycle)
 
+#include <numbers>
+
 #include <cassert>
 
 
@@ -34,8 +36,6 @@ namespace sf
 {
 namespace priv
 {
-constexpr float pi = 3.141592654f;
-
 constexpr float positiveRemainder(float a, float b)
 {
     assert(b > 0.0f && "Cannot calculate remainder with non-positive divisor");
@@ -62,7 +62,7 @@ constexpr float Angle::asDegrees() const
 ////////////////////////////////////////////////////////////
 constexpr float Angle::asRadians() const
 {
-    return m_degrees * (priv::pi / 180);
+    return m_degrees * (std::numbers::pi_v<float> / 180);
 }
 
 
@@ -96,7 +96,7 @@ constexpr Angle degrees(float angle)
 ////////////////////////////////////////////////////////////
 constexpr Angle radians(float angle)
 {
-    return Angle(angle * (180 / priv::pi));
+    return Angle(angle * (180 / std::numbers::pi_v<float>));
 }
 
 
