@@ -57,9 +57,8 @@ struct SoundRecorder::Impl
         // Find the device by its name
         auto devices = getAvailableDevices();
 
-        const auto iter = std::find_if(devices.begin(),
-                                       devices.end(),
-                                       [this](const ma_device_info& info) { return info.name == deviceName; });
+        const auto iter = std::ranges::find_if(devices,
+                                               [this](const ma_device_info& info) { return info.name == deviceName; });
 
         if (iter == devices.end())
             return false;

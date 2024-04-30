@@ -66,7 +66,7 @@ void copyMatrix(const Transform& source, Matrix<4, 4>& dest)
 ////////////////////////////////////////////////////////////
 void copyMatrix(const float* source, std::size_t elements, float* dest)
 {
-    std::copy(source, source + elements, dest);
+    std::ranges::copy(source, source + elements, dest);
 }
 
 } // namespace sf::priv
