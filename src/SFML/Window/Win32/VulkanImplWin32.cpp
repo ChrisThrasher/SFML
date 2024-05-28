@@ -175,7 +175,7 @@ VulkanFunctionPointer VulkanImpl::getFunction(const char* name)
 ////////////////////////////////////////////////////////////
 const std::vector<const char*>& VulkanImpl::getGraphicsRequiredInstanceExtensions()
 {
-    static const std::vector<const char*> extensions{VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME};
+    static const std::vector extensions{VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME};
     return extensions;
 }
 
