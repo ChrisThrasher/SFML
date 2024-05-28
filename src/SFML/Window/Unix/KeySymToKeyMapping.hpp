@@ -27,9 +27,9 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Window/Keyboard.hpp> // sf::Keyboard::Key
+#include <SFML/Window/Keyboard.hpp>
 
-#include <X11/X.h> // KeySym
+#include <X11/X.h>
 
 namespace sf::priv
 {
