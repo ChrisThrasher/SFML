@@ -86,8 +86,7 @@ class GlxErrorHandler
 public:
     explicit GlxErrorHandler(::Display* display) : m_display(display)
     {
-        glxErrorOccurred  = false;
-        m_previousHandler = XSetErrorHandler(handleXError);
+        glxErrorOccurred = false;
     }
 
     ~GlxErrorHandler()
@@ -99,7 +98,7 @@ public:
 private:
     std::lock_guard<std::recursive_mutex> m_lock{glxErrorMutex};
     ::Display*                            m_display;
-    int (*m_previousHandler)(::Display*, XErrorEvent*);
+    int (*m_previousHandler)(::Display*, XErrorEvent*){XSetErrorHandler(handleXError)};
 };
 } // namespace
 
