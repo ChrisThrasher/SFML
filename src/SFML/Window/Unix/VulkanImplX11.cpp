@@ -207,9 +207,7 @@ bool VulkanImpl::createVulkanSurface(const VkInstance&            instance,
     surfaceCreateInfo.dpy                        = display.get();
     surfaceCreateInfo.window                     = windowHandle;
 
-    const bool result = (vkCreateXlibSurfaceKHR(instance, &surfaceCreateInfo, allocator, &surface) == VK_SUCCESS);
-
-    return result;
+    return vkCreateXlibSurfaceKHR(instance, &surfaceCreateInfo, allocator, &surface) == VK_SUCCESS;
 }
 
 } // namespace sf::priv
