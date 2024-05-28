@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Window/macOS/HIDInputManager.hpp> // For localizedKeys and nonLocalizedKeys
+#include <SFML/Window/macOS/HIDInputManager.hpp>
 #import <SFML/Window/macOS/SFKeyboardModifiersHelper.h>
 #import <SFML/Window/macOS/SFOpenGLView+keyboard_priv.h>
 #include <SFML/Window/macOS/WindowImplCocoa.hpp>
