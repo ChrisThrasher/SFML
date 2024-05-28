@@ -283,13 +283,11 @@ unsigned int getUsbAttributeUint(udev_device* udevDevice, const std::string& att
     if (!udevDevice)
         return 0;
 
-    const char*  attribute = getUsbAttribute(udevDevice, attributeName);
-    unsigned int value     = 0;
-
+    const char* attribute = getUsbAttribute(udevDevice, attributeName);
     if (attribute)
-        value = static_cast<unsigned int>(std::strtoul(attribute, nullptr, 16));
+        return static_cast<unsigned int>(std::strtoul(attribute, nullptr, 16));
 
-    return value;
+    return 0;
 }
 
 // Get a udev property value for a joystick as an unsigned int
@@ -298,13 +296,11 @@ unsigned int getUdevAttributeUint(udev_device* udevDevice, const std::string& at
     if (!udevDevice)
         return 0;
 
-    const char*  attribute = getUdevAttribute(udevDevice, attributeName);
-    unsigned int value     = 0;
-
+    const char* attribute = getUdevAttribute(udevDevice, attributeName);
     if (attribute)
-        value = static_cast<unsigned int>(std::strtoul(attribute, nullptr, 16));
+        return static_cast<unsigned int>(std::strtoul(attribute, nullptr, 16));
 
-    return value;
+    return 0;
 }
 
 // Get the joystick vendor id
@@ -324,10 +320,8 @@ unsigned int getJoystickVendorId(unsigned int index)
         return 0;
     }
 
-    unsigned int id = 0;
-
     // First try using udev
-    id = getUdevAttributeUint(udevDevice, "ID_VENDOR_ID");
+    unsigned int id = getUdevAttributeUint(udevDevice, "ID_VENDOR_ID");
 
     if (id)
     {
@@ -365,10 +359,8 @@ unsigned int getJoystickProductId(unsigned int index)
         return 0;
     }
 
-    unsigned int id = 0;
-
     // First try using udev
-    id = getUdevAttributeUint(udevDevice, "ID_MODEL_ID");
+    unsigned int id = getUdevAttributeUint(udevDevice, "ID_MODEL_ID");
 
     if (id)
     {
