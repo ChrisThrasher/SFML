@@ -26,14 +26,11 @@ TEST_CASE("[Graphics] sf::StencilMode")
 
     SECTION("Stencil value type traits")
     {
-        STATIC_CHECK(!std::is_default_constructible_v<sf::StencilValue>);
         STATIC_CHECK(!std::is_convertible_v<bool, sf::StencilValue>);
         STATIC_CHECK(!std::is_convertible_v<char, sf::StencilValue>);
         STATIC_CHECK(!std::is_convertible_v<unsigned char, sf::StencilValue>);
         STATIC_CHECK(!std::is_convertible_v<short, sf::StencilValue>);
         STATIC_CHECK(!std::is_convertible_v<unsigned short, sf::StencilValue>);
-        STATIC_CHECK(std::is_convertible_v<int, sf::StencilValue>);
-        STATIC_CHECK(std::is_convertible_v<unsigned int, sf::StencilValue>);
     }
 
     SECTION("Stencil value construction")
@@ -47,25 +44,27 @@ TEST_CASE("[Graphics] sf::StencilMode")
         SECTION("operator==")
         {
             CHECK(sf::StencilMode{} == sf::StencilMode{});
-            CHECK(sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, 1, 0u, true} ==
-                  sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, 1, 0u, true});
+            CHECK(sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, {1}, {0u}, true} ==
+                  sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, {1}, {0u}, true});
 
             CHECK_FALSE(sf::StencilMode{} ==
-                        sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, 1, 0u, true});
-            CHECK_FALSE(sf::StencilMode{sf::StencilComparison::Greater, sf::StencilUpdateOperation::Invert, 0, ~0u, false} ==
-                        sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, 1, 0u, true});
+                        sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, {1}, {0u}, true});
+            CHECK_FALSE(
+                sf::StencilMode{sf::StencilComparison::Greater, sf::StencilUpdateOperation::Invert, {0}, {~0u}, false} ==
+                sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, {1}, {0u}, true});
         }
 
         SECTION("operator!=")
         {
             CHECK_FALSE(sf::StencilMode{} != sf::StencilMode{});
-            CHECK_FALSE(sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, 1, 0u, true} !=
-                        sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, 1, 0u, true});
+            CHECK_FALSE(
+                sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, {1}, {0u}, true} !=
+                sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, {1}, {0u}, true});
 
             CHECK(sf::StencilMode{} !=
-                  sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, 1, 0u, true});
-            CHECK(sf::StencilMode{sf::StencilComparison::Greater, sf::StencilUpdateOperation::Invert, 0, ~0u, false} !=
-                  sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, 1, 0u, true});
+                  sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, {1}, {0u}, true});
+            CHECK(sf::StencilMode{sf::StencilComparison::Greater, sf::StencilUpdateOperation::Invert, {0}, {~0u}, false} !=
+                  sf::StencilMode{sf::StencilComparison::Equal, sf::StencilUpdateOperation::Replace, {1}, {0u}, true});
         }
     }
 }

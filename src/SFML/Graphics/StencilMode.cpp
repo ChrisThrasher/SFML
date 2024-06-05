@@ -31,18 +31,6 @@
 namespace sf
 {
 ////////////////////////////////////////////////////////////
-StencilValue::StencilValue(int theValue) : value(static_cast<unsigned int>(theValue))
-{
-}
-
-
-////////////////////////////////////////////////////////////
-StencilValue::StencilValue(unsigned int theValue) : value(theValue)
-{
-}
-
-
-////////////////////////////////////////////////////////////
 bool operator==(const StencilMode& left, const StencilMode& right)
 {
     return left.stencilUpdateOperation == right.stencilUpdateOperation &&
