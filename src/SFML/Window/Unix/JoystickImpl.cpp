@@ -189,19 +189,13 @@ void updatePluggedList(udev_device* udevDevice = nullptr)
         return;
     }
 
-    int result = 0;
-
-    result = udev_enumerate_add_match_subsystem(udevEnumerator, "input");
-
-    if (result < 0)
+    if (udev_enumerate_add_match_subsystem(udevEnumerator, "input") < 0)
     {
         sf::err() << "Error while adding udev enumerator match" << std::endl;
         return;
     }
 
-    result = udev_enumerate_scan_devices(udevEnumerator);
-
-    if (result < 0)
+    if (udev_enumerate_scan_devices(udevEnumerator) < 0)
     {
         sf::err() << "Error while enumerating udev devices" << std::endl;
         return;
