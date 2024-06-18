@@ -440,17 +440,13 @@ public:
 
         // Retrieve the available instance layers
         std::uint32_t objectCount = 0;
-
-        std::vector<VkLayerProperties> layers;
-
         if (vkEnumerateInstanceLayerProperties(&objectCount, nullptr) != VK_SUCCESS)
         {
             vulkanAvailable = false;
             return;
         }
 
-        layers.resize(objectCount);
-
+        std::vector<VkLayerProperties> layers(objectCount);
         if (vkEnumerateInstanceLayerProperties(&objectCount, layers.data()) != VK_SUCCESS)
         {
             vulkanAvailable = false;
@@ -571,17 +567,13 @@ public:
 
         // Retrieve list of GPUs
         std::uint32_t objectCount = 0;
-
-        std::vector<VkPhysicalDevice> devices;
-
         if (vkEnumeratePhysicalDevices(instance, &objectCount, nullptr) != VK_SUCCESS)
         {
             vulkanAvailable = false;
             return;
         }
 
-        devices.resize(objectCount);
-
+        std::vector<VkPhysicalDevice> devices(objectCount);
         if (vkEnumeratePhysicalDevices(instance, &objectCount, devices.data()) != VK_SUCCESS)
         {
             vulkanAvailable = false;
@@ -594,16 +586,13 @@ public:
             VkPhysicalDeviceProperties deviceProperties;
             vkGetPhysicalDeviceProperties(dev, &deviceProperties);
 
-            std::vector<VkExtensionProperties> extensions;
-
             if (vkEnumerateDeviceExtensionProperties(dev, nullptr, &objectCount, nullptr) != VK_SUCCESS)
             {
                 vulkanAvailable = false;
                 return;
             }
 
-            extensions.resize(objectCount);
-
+            std::vector<VkExtensionProperties> extensions(objectCount);
             if (vkEnumerateDeviceExtensionProperties(dev, nullptr, &objectCount, extensions.data()) != VK_SUCCESS)
             {
                 vulkanAvailable = false;
@@ -684,13 +673,9 @@ public:
     {
         // Select a queue family that supports graphics operations and surface presentation
         std::uint32_t objectCount = 0;
-
-        std::vector<VkQueueFamilyProperties> queueFamilyProperties;
-
         vkGetPhysicalDeviceQueueFamilyProperties(gpu, &objectCount, nullptr);
 
-        queueFamilyProperties.resize(objectCount);
-
+        std::vector<VkQueueFamilyProperties> queueFamilyProperties(objectCount);
         vkGetPhysicalDeviceQueueFamilyProperties(gpu, &objectCount, queueFamilyProperties.data());
 
         for (std::size_t i = 0; i < queueFamilyProperties.size(); ++i)
@@ -751,17 +736,13 @@ public:
     {
         // Select a surface format that supports RGBA color format
         std::uint32_t objectCount = 0;
-
-        std::vector<VkSurfaceFormatKHR> surfaceFormats;
-
         if (vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &objectCount, nullptr) != VK_SUCCESS)
         {
             vulkanAvailable = false;
             return;
         }
 
-        surfaceFormats.resize(objectCount);
-
+        std::vector<VkSurfaceFormatKHR> surfaceFormats(objectCount);
         if (vkGetPhysicalDeviceSurfaceFormatsKHR(gpu, surface, &objectCount, surfaceFormats.data()) != VK_SUCCESS)
         {
             vulkanAvailable = false;
@@ -797,16 +778,13 @@ public:
         }
 
         // Select a swapchain present mode
-        std::vector<VkPresentModeKHR> presentModes;
-
         if (vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &objectCount, nullptr) != VK_SUCCESS)
         {
             vulkanAvailable = false;
             return;
         }
 
-        presentModes.resize(objectCount);
-
+        std::vector<VkPresentModeKHR> presentModes(objectCount);
         if (vkGetPhysicalDeviceSurfacePresentModesKHR(gpu, surface, &objectCount, presentModes.data()) != VK_SUCCESS)
         {
             vulkanAvailable = false;
