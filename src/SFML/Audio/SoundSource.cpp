@@ -31,6 +31,8 @@
 
 #include <algorithm>
 
+#include <cassert>
+
 
 namespace sf
 {
@@ -54,6 +56,8 @@ void SoundSource::setPan(float pan)
 ////////////////////////////////////////////////////////////
 void SoundSource::setVolume(float volume)
 {
+    assert(volume >= 0 && "SoundSource::setVolume() Volume must be greater than or equal to 0");
+    assert(volume <= 100 && "SoundSource::setVolume() Volume must be less than or equal to 100");
     if (auto* sound = static_cast<ma_sound*>(getSound()))
         ma_sound_set_volume(sound, volume * 0.01f);
 }
