@@ -75,7 +75,7 @@ function(set_target_warnings target)
 
     # Disable certain deprecation warnings
     if(SFML_OS_WINDOWS)
-        target_compile_definitions(${target} PRIVATE -D_CRT_SECURE_NO_WARNINGS)
-        target_compile_definitions(${target} PRIVATE -D_WINSOCK_DEPRECATED_NO_WARNINGS)
+        target_compile_definitions(${target} PRIVATE _CRT_SECURE_NO_WARNINGS)
+        target_compile_definitions(${target} PRIVATE _WINSOCK_DEPRECATED_NO_WARNINGS)
     endif()
 endfunction()
