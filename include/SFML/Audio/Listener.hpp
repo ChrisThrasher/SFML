@@ -164,7 +164,7 @@ SFML_AUDIO_API void setVelocity(const Vector3f& velocity);
 /// \see `getCone`
 ///
 ////////////////////////////////////////////////////////////
-SFML_AUDIO_API void setCone(const Listener::Cone& cone);
+SFML_AUDIO_API void setCone(const Cone& cone);
 
 ////////////////////////////////////////////////////////////
 /// \brief Get the cone properties of the listener in the audio scene
@@ -174,7 +174,7 @@ SFML_AUDIO_API void setCone(const Listener::Cone& cone);
 /// \see `setCone`
 ///
 ////////////////////////////////////////////////////////////
-[[nodiscard]] SFML_AUDIO_API Listener::Cone getCone();
+[[nodiscard]] SFML_AUDIO_API Cone getCone();
 
 ////////////////////////////////////////////////////////////
 /// \brief Set the upward vector of the listener in the scene
