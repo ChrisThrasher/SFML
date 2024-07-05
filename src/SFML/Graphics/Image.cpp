@@ -299,10 +299,7 @@ bool Image::loadFromStream(InputStream& stream)
     }
 
     // Setup the stb_image callbacks
-    stbi_io_callbacks callbacks;
-    callbacks.read = read;
-    callbacks.skip = skip;
-    callbacks.eof  = eof;
+    const stbi_io_callbacks callbacks{read, skip, eof};
 
     // Load the image and get a pointer to the pixels in memory
     Vector2i imageSize;
