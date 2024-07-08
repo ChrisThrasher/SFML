@@ -367,7 +367,7 @@ bool isWMAbsolutePositionGood()
 
     return std::any_of(std::begin(wmAbsPosGood),
                        std::end(wmAbsPosGood),
-                       [&](const sf::String& name) { return name == windowManagerName; });
+                       [](const sf::String& name) { return name == windowManagerName; });
 }
 
 // Initialize raw mouse input

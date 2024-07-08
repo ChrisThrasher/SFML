@@ -496,7 +496,7 @@ void GlContext::unregisterUnsharedGlObject(std::shared_ptr<void> object)
         // in unshared objects should be the only one existing
         const auto iter = std::find_if(unsharedGlObjects->begin(),
                                        unsharedGlObjects->end(),
-                                       [&](const Impl::UnsharedGlObject& obj) {
+                                       [&object](const Impl::UnsharedGlObject& obj) {
                                            return (obj.object == object) &&
                                                   (obj.contextId == GlContextImpl::CurrentContext::get().id);
                                        });

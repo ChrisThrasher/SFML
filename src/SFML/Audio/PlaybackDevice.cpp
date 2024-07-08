@@ -66,7 +66,9 @@ bool setDevice(const std::string& name)
 {
     // Perform a sanity check to make sure the user isn't passing us a non-existent device name
     const auto devices = priv::AudioDevice::getAvailableDevices();
-    if (auto iter = std::find_if(devices.begin(), devices.end(), [&](const auto& device) { return device.name == name; });
+    if (auto iter = std::find_if(devices.begin(),
+                                 devices.end(),
+                                 [name](const auto& device) { return device.name == name; });
         iter == devices.end())
         return false;
 
