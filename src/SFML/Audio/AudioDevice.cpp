@@ -464,7 +464,7 @@ std::optional<ma_device_id> AudioDevice::getSelectedDeviceId() const
 
     auto iter = std::find_if(devices.begin(),
                              devices.end(),
-                             [&](const auto& device) { return device.name == deviceName; });
+                             [deviceName](const auto& device) { return device.name == deviceName; });
 
     if (iter != devices.end())
         return iter->id;
