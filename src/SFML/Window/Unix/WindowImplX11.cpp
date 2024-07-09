@@ -88,8 +88,6 @@ std::bitset<256>                      isKeyFiltered;
 std::recursive_mutex                  allWindowsMutex;
 sf::String                            windowManagerName;
 
-sf::String wmAbsPosGood[] = {"Enlightenment", "FVWM", "i3"};
-
 constexpr unsigned long eventMask = FocusChangeMask | ButtonPressMask | ButtonReleaseMask | ButtonMotionMask |
                                     PointerMotionMask | KeyPressMask | KeyReleaseMask | StructureNotifyMask |
                                     EnterWindowMask | LeaveWindowMask | VisibilityChangeMask | PropertyChangeMask;
@@ -365,8 +363,9 @@ bool isWMAbsolutePositionGood()
     if (!ewmhSupported())
         return false;
 
-    return std::any_of(std::begin(wmAbsPosGood),
-                       std::end(wmAbsPosGood),
+    static const std::array<sf::String, 3> wmAbsPosGood = {"Enlightenment", "FVWM", "i3"};
+    return std::any_of(wmAbsPosGood.begin(),
+                       wmAbsPosGood.end(),
                        [](const sf::String& name) { return name == windowManagerName; });
 }
 
