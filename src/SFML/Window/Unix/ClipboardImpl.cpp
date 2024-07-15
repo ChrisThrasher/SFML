@@ -285,11 +285,7 @@ void ClipboardImpl::processEvent(XEvent& windowEvent)
                 if (selectionRequestEvent.target == m_targets)
                 {
                     // Respond to a request for our valid conversion targets
-                    std::vector<Atom> targets;
-
-                    targets.push_back(m_targets);
-                    targets.push_back(m_text);
-                    targets.push_back(XA_STRING);
+                    std::vector<Atom> targets{m_targets, m_text, XA_STRING};
 
                     if (m_utf8String != None)
                         targets.push_back(m_utf8String);
