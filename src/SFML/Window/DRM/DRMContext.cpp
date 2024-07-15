@@ -225,10 +225,8 @@ std::uint32_t findCrtcForConnector(const sf::priv::Drm& drm, const drmModeRes& r
 {
     for (int i = 0; i < connector.count_encoders; ++i)
     {
-        const std::uint32_t     encoderId = connector.encoders[i];
-        const drmModeEncoderPtr encoder   = drmModeGetEncoder(drm.fileDescriptor, encoderId);
-
-        if (encoder)
+        const std::uint32_t encoderId = connector.encoders[i];
+        if (auto* encoder = drmModeGetEncoder(drm.fileDescriptor, encoderId))
         {
             const std::uint32_t crtcId = findCrtcForEncoder(resources, *encoder);
 
