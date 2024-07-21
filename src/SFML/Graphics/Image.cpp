@@ -562,9 +562,8 @@ void Image::flipHorizontally()
 
         for (std::size_t y = 0; y < m_size.y; ++y)
         {
-            auto left = m_pixels.begin() + static_cast<std::vector<std::uint8_t>::iterator::difference_type>(y * rowSize);
-            auto right = m_pixels.begin() +
-                         static_cast<std::vector<std::uint8_t>::iterator::difference_type>((y + 1) * rowSize - 4);
+            auto left = m_pixels.begin() + static_cast<std::vector<std::uint8_t>::difference_type>(y * rowSize);
+            auto right = m_pixels.begin() + static_cast<std::vector<std::uint8_t>::difference_type>((y + 1) * rowSize - 4);
 
             for (std::size_t x = 0; x < m_size.x / 2; ++x)
             {
@@ -583,7 +582,7 @@ void Image::flipVertically()
 {
     if (!m_pixels.empty())
     {
-        const auto rowSize = static_cast<std::vector<std::uint8_t>::iterator::difference_type>(m_size.x * 4);
+        const auto rowSize = static_cast<std::vector<std::uint8_t>::difference_type>(m_size.x * 4);
 
         auto top    = m_pixels.begin();
         auto bottom = m_pixels.end() - rowSize;
