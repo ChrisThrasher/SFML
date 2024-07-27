@@ -568,8 +568,7 @@ m_cursorGrabbed(m_fullscreen)
     // change our window's decorations and functions according to the requested style)
     if (!m_fullscreen)
     {
-        const Atom wmHintsAtom = getAtom("_MOTIF_WM_HINTS", false);
-        if (wmHintsAtom)
+        if (const Atom wmHintsAtom = getAtom("_MOTIF_WM_HINTS", false))
         {
             // NOLINTBEGIN(readability-identifier-naming)
             // Disable naming check so these better match the contents of the Motif library
@@ -1430,9 +1429,7 @@ void WindowImplX11::switchToFullscreen()
 
     if (ewmhSupported())
     {
-        const Atom netWmBypassCompositor = getAtom("_NET_WM_BYPASS_COMPOSITOR");
-
-        if (netWmBypassCompositor)
+        if (const Atom netWmBypassCompositor = getAtom("_NET_WM_BYPASS_COMPOSITOR"))
         {
             constexpr unsigned long bypassCompositor = 1;
 

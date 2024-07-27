@@ -69,9 +69,7 @@ const GUID guidDevinterfaceHid = {0x4d1e55b2, 0xf16f, 0x11cf, {0x88, 0xcb, 0x00,
 void setProcessDpiAware()
 {
     // Try SetProcessDpiAwareness first
-    HINSTANCE shCoreDll = LoadLibrary(L"Shcore.dll");
-
-    if (shCoreDll)
+    if (HINSTANCE shCoreDll = LoadLibrary(L"Shcore.dll"))
     {
         enum ProcessDpiAwareness
         {

@@ -448,10 +448,8 @@ void checkInit()
     // Use environment variable "SFML_DRM_REFRESH" (or 0 if not set)
     // Use in combination with mode to request specific refresh rate for the mode
     // if multiple refresh rates for same mode might be supported
-    unsigned int refreshRate   = 0;
-    char*        refreshString = std::getenv("SFML_DRM_REFRESH");
-
-    if (refreshString)
+    unsigned int refreshRate = 0;
+    if (char* refreshString = std::getenv("SFML_DRM_REFRESH"))
         refreshRate = static_cast<unsigned int>(atoi(refreshString));
 
     if (initDrm(drmNode,
