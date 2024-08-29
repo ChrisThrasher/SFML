@@ -1,70 +1,35 @@
-set(INCROOT ${PROJECT_SOURCE_DIR}/include/SFML/Audio)
-set(SRCROOT ${PROJECT_SOURCE_DIR}/src/SFML/Audio)
-
 # all source files
 set(SRC
-    ${SRCROOT}/AudioResource.cpp
-    ${INCROOT}/AudioResource.hpp
-    ${SRCROOT}/AudioDevice.cpp
-    ${SRCROOT}/AudioDevice.hpp
-    ${INCROOT}/Export.hpp
-    ${SRCROOT}/Listener.cpp
-    ${INCROOT}/Listener.hpp
-    ${SRCROOT}/Miniaudio.cpp
-    ${SRCROOT}/MiniaudioUtils.hpp
-    ${SRCROOT}/MiniaudioUtils.cpp
-    ${SRCROOT}/Music.cpp
-    ${INCROOT}/Music.hpp
-    ${SRCROOT}/PlaybackDevice.cpp
-    ${INCROOT}/PlaybackDevice.hpp
-    ${SRCROOT}/Sound.cpp
-    ${INCROOT}/Sound.hpp
-    ${SRCROOT}/SoundBuffer.cpp
-    ${INCROOT}/SoundBuffer.hpp
-    ${SRCROOT}/SoundBufferRecorder.cpp
-    ${INCROOT}/SoundBufferRecorder.hpp
-    ${INCROOT}/SoundChannel.hpp
-    ${SRCROOT}/InputSoundFile.cpp
-    ${INCROOT}/InputSoundFile.hpp
-    ${SRCROOT}/OutputSoundFile.cpp
-    ${INCROOT}/OutputSoundFile.hpp
-    ${SRCROOT}/SoundRecorder.cpp
-    ${INCROOT}/SoundRecorder.hpp
-    ${SRCROOT}/SoundSource.cpp
-    ${INCROOT}/SoundSource.hpp
-    ${SRCROOT}/SoundStream.cpp
-    ${INCROOT}/SoundStream.hpp
+    AudioResource.cpp
+    AudioDevice.cpp
+    Listener.cpp
+    Miniaudio.cpp
+    MiniaudioUtils.cpp
+    Music.cpp
+    PlaybackDevice.cpp
+    Sound.cpp
+    SoundBuffer.cpp
+    SoundBufferRecorder.cpp
+    InputSoundFile.cpp
+    OutputSoundFile.cpp
+    SoundRecorder.cpp
+    SoundSource.cpp
+    SoundStream.cpp
+    SoundFileFactory.cpp
+    SoundFileReaderFlac.cpp
+    SoundFileReaderMp3.cpp
+    SoundFileReaderOgg.cpp
+    SoundFileReaderWav.cpp
+    SoundFileWriterFlac.cpp
+    SoundFileWriterOgg.cpp
+    SoundFileWriterWav.cpp
 )
-source_group("" FILES ${SRC})
-
-set(CODECS_SRC
-    ${SRCROOT}/SoundFileFactory.cpp
-    ${INCROOT}/SoundFileFactory.hpp
-    ${INCROOT}/SoundFileFactory.inl
-    ${INCROOT}/SoundFileReader.hpp
-    ${SRCROOT}/SoundFileReaderFlac.hpp
-    ${SRCROOT}/SoundFileReaderFlac.cpp
-    ${SRCROOT}/SoundFileReaderMp3.hpp
-    ${SRCROOT}/SoundFileReaderMp3.cpp
-    ${SRCROOT}/SoundFileReaderOgg.hpp
-    ${SRCROOT}/SoundFileReaderOgg.cpp
-    ${SRCROOT}/SoundFileReaderWav.hpp
-    ${SRCROOT}/SoundFileReaderWav.cpp
-    ${INCROOT}/SoundFileWriter.hpp
-    ${SRCROOT}/SoundFileWriterFlac.hpp
-    ${SRCROOT}/SoundFileWriterFlac.cpp
-    ${SRCROOT}/SoundFileWriterOgg.hpp
-    ${SRCROOT}/SoundFileWriterOgg.cpp
-    ${SRCROOT}/SoundFileWriterWav.hpp
-    ${SRCROOT}/SoundFileWriterWav.cpp
-)
-source_group("codecs" FILES ${CODECS_SRC})
 
 # Ensure certain files are compiled as Objective-C++
 # See: https://miniaud.io/docs/manual/index.html#Building
 if(SFML_OS_IOS)
     enable_language(OBJCXX)
-    set_source_files_properties(${SRCROOT}/Miniaudio.cpp PROPERTIES LANGUAGE OBJCXX)
+    set_source_files_properties(Miniaudio.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()
 
 # let CMake know about our additional audio libraries paths (on Android and macOS)
@@ -80,7 +45,7 @@ find_package(FLAC REQUIRED)
 
 # define the sfml-audio target
 sfml_add_library(Audio
-                 SOURCES ${SRC} ${CODECS_SRC})
+                 SOURCES ${SRC})
 
 # avoids warnings in vorbisfile.h
 target_compile_definitions(sfml-audio PRIVATE OV_EXCLUDE_STATIC_CALLBACKS FLAC__NO_DLL)

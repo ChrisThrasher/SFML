@@ -1,70 +1,36 @@
-set(INCROOT ${PROJECT_SOURCE_DIR}/include/SFML/System)
-set(SRCROOT ${PROJECT_SOURCE_DIR}/src/SFML/System)
-
 # all source files
 set(SRC
-    ${INCROOT}/Angle.hpp
-    ${INCROOT}/Angle.inl
-    ${SRCROOT}/Clock.cpp
-    ${INCROOT}/Clock.hpp
-    ${SRCROOT}/EnumArray.hpp
-    ${SRCROOT}/Err.cpp
-    ${INCROOT}/Err.hpp
-    ${SRCROOT}/Exception.cpp
-    ${INCROOT}/Exception.hpp
-    ${INCROOT}/Export.hpp
-    ${INCROOT}/InputStream.hpp
-    ${INCROOT}/NativeActivity.hpp
-    ${SRCROOT}/Sleep.cpp
-    ${INCROOT}/Sleep.hpp
-    ${SRCROOT}/String.cpp
-    ${INCROOT}/String.hpp
-    ${INCROOT}/String.inl
-    ${INCROOT}/Time.hpp
-    ${INCROOT}/Time.inl
-    ${INCROOT}/Utf.hpp
-    ${INCROOT}/Utf.inl
-    ${SRCROOT}/Utils.hpp
-    ${SRCROOT}/Utils.cpp
-    ${SRCROOT}/Vector2.cpp
-    ${INCROOT}/Vector2.hpp
-    ${INCROOT}/Vector2.inl
-    ${SRCROOT}/Vector3.cpp
-    ${INCROOT}/Vector3.hpp
-    ${INCROOT}/Vector3.inl
-    ${SRCROOT}/FileInputStream.cpp
-    ${INCROOT}/FileInputStream.hpp
-    ${SRCROOT}/MemoryInputStream.cpp
-    ${INCROOT}/MemoryInputStream.hpp
-    ${INCROOT}/SuspendAwareClock.hpp
+    Clock.cpp
+    Err.cpp
+    Exception.cpp
+    Sleep.cpp
+    String.cpp
+    Utils.cpp
+    Vector2.cpp
+    Vector3.cpp
+    FileInputStream.cpp
+    MemoryInputStream.cpp
 )
-source_group("" FILES ${SRC})
 
 # add platform specific sources
 if(SFML_OS_WINDOWS)
     set(PLATFORM_SRC
-        ${SRCROOT}/Win32/SleepImpl.cpp
-        ${SRCROOT}/Win32/SleepImpl.hpp
+        Win32/SleepImpl.cpp
     )
-    source_group("windows" FILES ${PLATFORM_SRC})
 else()
     set(PLATFORM_SRC
-        ${SRCROOT}/Unix/SleepImpl.cpp
-        ${SRCROOT}/Unix/SleepImpl.hpp
+        Unix/SleepImpl.cpp
     )
 
     if(SFML_OS_ANDROID)
         list(APPEND PLATFORM_SRC
-            ${SRCROOT}/Android/Activity.hpp
-            ${SRCROOT}/Android/Activity.cpp
-            ${SRCROOT}/Android/NativeActivity.cpp
-            ${SRCROOT}/Android/ResourceStream.cpp
-            ${SRCROOT}/Android/ResourceStream.cpp
-            ${SRCROOT}/Android/SuspendAwareClock.cpp
+            Android/Activity.cpp
+            Android/NativeActivity.cpp
+            Android/ResourceStream.cpp
+            Android/ResourceStream.cpp
+            Android/SuspendAwareClock.cpp
         )
     endif()
-
-    source_group("unix" FILES ${PLATFORM_SRC})
 endif()
 
 find_package(Threads REQUIRED)
