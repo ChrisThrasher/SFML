@@ -214,10 +214,7 @@ TEST_CASE("[Window] sf::WindowBase", runDisplayTests())
         windowBase.setMinimumSize(sf::Vector2u(200, 300));
     }
 
-    // Test for compilation but do not run. This code sometimes hangs indefinitely
-    // when running on the BuildBot CI pipeline. Because it contains no
-    // assertions we have nothing to gain by running it anyways
-    (void)[]
+    SECTION("handleEvents()")
     {
         sf::WindowBase windowBase(sf::VideoMode({360, 240}), "WindowBase Tests");
 
@@ -257,5 +254,5 @@ TEST_CASE("[Window] sf::WindowBase", runDisplayTests())
 
         // Should compile if user provides a function pointer
         windowBase.handleEvents(+[](const sf::Event::Closed&) {});
-    };
+    }
 }
