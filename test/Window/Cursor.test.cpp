@@ -51,7 +51,7 @@ TEST_CASE("[Window] sf::Cursor", runDisplayTests())
         }
     }
 
-    SECTION("loadFromPixels()")
+    SECTION("createFromPixels()")
     {
         static constexpr std::array<std::uint8_t, 4> pixels{};
 
@@ -61,7 +61,7 @@ TEST_CASE("[Window] sf::Cursor", runDisplayTests())
         CHECK(sf::Cursor::createFromPixels(pixels.data(), {1, 1}, {}));
     }
 
-    SECTION("loadFromSystem()")
+    SECTION("createFromSystem()")
     {
         CHECK(sf::Cursor::createFromSystem(sf::Cursor::Type::Hand));
         CHECK(sf::Cursor::createFromSystem(sf::Cursor::Type::SizeHorizontal));
