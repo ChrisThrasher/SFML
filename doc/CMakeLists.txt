@@ -12,7 +12,7 @@ if(SFML_OS_MACOS)
     list(APPEND CMAKE_PROGRAM_PATH ${ADDITIONAL_PATHS})
 endif()
 
-find_package(Doxygen REQUIRED)
+find_package(Doxygen 1.9 REQUIRED)
 
 # see if we can generate the CHM documentation
 set(DOXYGEN_HHC_PROGRAM)
