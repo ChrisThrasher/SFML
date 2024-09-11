@@ -56,7 +56,7 @@ enum class Button
 };
 
 // NOLINTNEXTLINE(readability-identifier-naming)
-static constexpr unsigned int ButtonCount{5}; //!< The total number of mouse buttons
+constexpr unsigned int ButtonCount{5}; //!< The total number of mouse buttons
 
 ////////////////////////////////////////////////////////////
 /// \brief Mouse wheels
