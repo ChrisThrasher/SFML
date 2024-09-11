@@ -42,9 +42,9 @@ namespace sf::Joystick
 ///
 ////////////////////////////////////////////////////////////
 // NOLINTBEGIN(readability-identifier-naming)
-static constexpr unsigned int Count{8};        //!< Maximum number of supported joysticks
-static constexpr unsigned int ButtonCount{32}; //!< Maximum number of supported buttons
-static constexpr unsigned int AxisCount{8};    //!< Maximum number of supported axes
+constexpr unsigned int Count{8};        //!< Maximum number of supported joysticks
+constexpr unsigned int ButtonCount{32}; //!< Maximum number of supported buttons
+constexpr unsigned int AxisCount{8};    //!< Maximum number of supported axes
 // NOLINTEND(readability-identifier-naming)
 
 ////////////////////////////////////////////////////////////

@@ -52,7 +52,7 @@ enum class Type
 };
 
 // NOLINTNEXTLINE(readability-identifier-naming)
-static constexpr unsigned int Count{6}; //!< The total number of sensor types
+constexpr unsigned int Count{6}; //!< The total number of sensor types
 
 ////////////////////////////////////////////////////////////
 /// \brief Check if a sensor is available on the underlying platform
