@@ -372,10 +372,8 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         brew update
-        brew install llvm lld || true
-        ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
-        ln -s "$(brew --prefix llvm)/bin/run-clang-tidy" "/usr/local/bin/run-clang-tidy"
-        echo /usr/local/opt/llvm/bin >> $GITHUB_PATH
+        brew install llvm || true
+        echo "$(brew --prefix llvm)/bin" >> $GITHUB_PATH
 
     - name: Configure
       run: cmake --preset dev -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_UNITY_BUILD=ON ${{matrix.platform.flags}}
