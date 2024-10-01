@@ -1423,7 +1423,7 @@ public:
         VkBuffer       stagingBuffer       = {};
         VkDeviceMemory stagingBufferMemory = {};
 
-        if (!createBuffer(sizeof(vertexData),
+        if (!createBuffer(vertexData.size(),
                           VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                           stagingBuffer,
@@ -1436,7 +1436,7 @@ public:
         void* ptr = nullptr;
 
         // Map the buffer into our address space
-        if (vkMapMemory(device, stagingBufferMemory, 0, sizeof(vertexData), 0, &ptr) != VK_SUCCESS)
+        if (vkMapMemory(device, stagingBufferMemory, 0, vertexData.size(), 0, &ptr) != VK_SUCCESS)
         {
             vkFreeMemory(device, stagingBufferMemory, nullptr);
             vkDestroyBuffer(device, stagingBuffer, nullptr);
@@ -1446,13 +1446,13 @@ public:
         }
 
         // Copy the vertex data into the buffer
-        std::memcpy(ptr, vertexData.data(), sizeof(vertexData));
+        std::memcpy(ptr, vertexData.data(), vertexData.size());
 
         // Unmap the buffer
         vkUnmapMemory(device, stagingBufferMemory);
 
         // Create the GPU local vertex buffer
-        if (!createBuffer(sizeof(vertexData),
+        if (!createBuffer(vertexData.size(),
                           VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                           vertexBuffer,
@@ -1466,7 +1466,7 @@ public:
         }
 
         // Copy the contents of the staging buffer into the GPU vertex buffer
-        vulkanAvailable = copyBuffer(vertexBuffer, stagingBuffer, sizeof(vertexData));
+        vulkanAvailable = copyBuffer(vertexBuffer, stagingBuffer, vertexData.size());
 
         // Free the staging buffer and its memory
         vkFreeMemory(device, stagingBufferMemory, nullptr);
@@ -1502,7 +1502,7 @@ public:
         VkBuffer       stagingBuffer       = {};
         VkDeviceMemory stagingBufferMemory = {};
 
-        if (!createBuffer(sizeof(indexData),
+        if (!createBuffer(indexData.size(),
                           VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
                           VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
                           stagingBuffer,
@@ -1515,7 +1515,7 @@ public:
         void* ptr = nullptr;
 
         // Map the buffer into our address space
-        if (vkMapMemory(device, stagingBufferMemory, 0, sizeof(indexData), 0, &ptr) != VK_SUCCESS)
+        if (vkMapMemory(device, stagingBufferMemory, 0, indexData.size(), 0, &ptr) != VK_SUCCESS)
         {
             vkFreeMemory(device, stagingBufferMemory, nullptr);
             vkDestroyBuffer(device, stagingBuffer, nullptr);
@@ -1525,13 +1525,13 @@ public:
         }
 
         // Copy the index data into the buffer
-        std::memcpy(ptr, indexData.data(), sizeof(indexData));
+        std::memcpy(ptr, indexData.data(), indexData.size());
 
         // Unmap the buffer
         vkUnmapMemory(device, stagingBufferMemory);
 
         // Create the GPU local index buffer
-        if (!createBuffer(sizeof(indexData),
+        if (!createBuffer(indexData.size(),
                           VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
                           VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
                           indexBuffer,
@@ -1545,7 +1545,7 @@ public:
         }
 
         // Copy the contents of the staging buffer into the GPU index buffer
-        vulkanAvailable = copyBuffer(indexBuffer, stagingBuffer, sizeof(indexData));
+        vulkanAvailable = copyBuffer(indexBuffer, stagingBuffer, indexData.size());
 
         // Free the staging buffer and its memory
         vkFreeMemory(device, stagingBufferMemory, nullptr);

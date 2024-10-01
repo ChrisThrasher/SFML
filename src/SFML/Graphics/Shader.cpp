@@ -885,7 +885,7 @@ bool Shader::compile(std::string_view vertexShaderCode, std::string_view geometr
         if (success == GL_FALSE)
         {
             std::array<char, 1024> log{};
-            glCheck(GLEXT_glGetInfoLog(shader, sizeof(log), nullptr, log.data()));
+            glCheck(GLEXT_glGetInfoLog(shader, log.size(), nullptr, log.data()));
             err() << "Failed to compile " << shaderTypeStr << " shader:" << '\n' << log.data() << std::endl;
             glCheck(GLEXT_glDeleteObject(shader));
             glCheck(GLEXT_glDeleteObject(shaderProgram));
@@ -922,7 +922,7 @@ bool Shader::compile(std::string_view vertexShaderCode, std::string_view geometr
     if (success == GL_FALSE)
     {
         std::array<char, 1024> log{};
-        glCheck(GLEXT_glGetInfoLog(shaderProgram, sizeof(log), nullptr, log.data()));
+        glCheck(GLEXT_glGetInfoLog(shaderProgram, log.size(), nullptr, log.data()));
         err() << "Failed to link shader:" << '\n' << log.data() << std::endl;
         glCheck(GLEXT_glDeleteObject(shaderProgram));
         return false;
