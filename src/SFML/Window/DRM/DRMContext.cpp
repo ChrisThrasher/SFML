@@ -512,20 +512,9 @@ EGLDisplay getInitializedDisplay()
 namespace sf::priv
 {
 ////////////////////////////////////////////////////////////
-DRMContext::DRMContext(DRMContext* shared)
+DRMContext::DRMContext(DRMContext* shared) :
+DRMContext(shared, ContextSettings{}, VideoMode::getDesktopMode().bitsPerPixel)
 {
-    contextCount++;
-
-    // Get the initialized EGL display
-    m_display = getInitializedDisplay();
-
-    // Get the best EGL config matching the default video settings
-    m_config = getBestConfig(m_display, VideoMode::getDesktopMode().bitsPerPixel, ContextSettings{});
-    updateSettings();
-
-    // Create EGL context
-    createContext(shared);
-
     if (shared)
         createSurface(shared->m_size, VideoMode::getDesktopMode().bitsPerPixel, false);
     else // create a surface to force the GL to initialize (seems to be required for glGetString() etc )
@@ -534,40 +523,33 @@ DRMContext::DRMContext(DRMContext* shared)
 
 
 ////////////////////////////////////////////////////////////
-DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, const WindowImpl& owner, unsigned int bitsPerPixel)
+DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, const WindowImpl& owner, unsigned int bitsPerPixel) :
+DRMContext(shared, settings, bitsPerPixel)
 {
-    contextCount++;
-
-    // Get the initialized EGL display
-    m_display = getInitializedDisplay();
-
-    // Get the best EGL config matching the requested video settings
-    m_config = getBestConfig(m_display, bitsPerPixel, settings);
-    updateSettings();
-
-    // Create EGL context
-    createContext(shared);
-
-    const Vector2u size = owner.getSize();
-    createSurface(size, bitsPerPixel, true);
+    createSurface(owner.getSize(), bitsPerPixel, true);
 }
 
 
 ////////////////////////////////////////////////////////////
-DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, Vector2u size)
+DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, Vector2u size) :
+DRMContext(shared, settings, VideoMode::getDesktopMode().bitsPerPixel)
 {
-    contextCount++;
+    createSurface(size, VideoMode::getDesktopMode().bitsPerPixel, false);
+}
 
-    // Get the initialized EGL display
-    m_display = getInitializedDisplay();
 
-    // Get the best EGL config matching the requested video settings
-    m_config = getBestConfig(m_display, VideoMode::getDesktopMode().bitsPerPixel, settings);
+////////////////////////////////////////////////////////////
+DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, unsigned int bitsPerPixel) :
+// Get the initialized EGL display
+m_display(getInitializedDisplay()),
+// Get the best EGL config matching the requested video settings
+m_config(getBestConfig(m_display, bitsPerPixel, settings))
+{
+    ++contextCount;
     updateSettings();
 
     // Create EGL context
     createContext(shared);
-    createSurface(size, VideoMode::getDesktopMode().bitsPerPixel, false);
 }
 
 
@@ -605,8 +587,7 @@ DRMContext::~DRMContext()
     if (m_gbmSurface)
         gbm_surface_destroy(m_gbmSurface);
 
-    contextCount--;
-    if (contextCount == 0)
+    if (--contextCount == 0)
         cleanup();
 }
 

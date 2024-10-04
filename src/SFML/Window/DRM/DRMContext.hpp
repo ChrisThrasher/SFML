@@ -188,6 +188,16 @@ protected:
 
 private:
     ////////////////////////////////////////////////////////////
+    /// \brief Extract common initialization logic
+    ///
+    /// \param shared       Context to share the new one with
+    /// \param settings     Creation parameters
+    /// \param bitsPerPixel Pixel depth, in bits per pixel
+    ///
+    ////////////////////////////////////////////////////////////
+    DRMContext(DRMContext* shared, const ContextSettings& settings, unsigned int bitsPerPixel);
+
+    ////////////////////////////////////////////////////////////
     /// \brief Helper to copy the picked EGL configuration
     ///
     ////////////////////////////////////////////////////////////
