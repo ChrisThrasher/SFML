@@ -511,7 +511,7 @@ namespace sf::priv
 ////////////////////////////////////////////////////////////
 DRMContext::DRMContext(DRMContext* shared)
 {
-    contextCount++;
+    ++contextCount;
 
     // Get the initialized EGL display
     m_display = getInitializedDisplay();
@@ -533,7 +533,7 @@ DRMContext::DRMContext(DRMContext* shared)
 ////////////////////////////////////////////////////////////
 DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, const WindowImpl& owner, unsigned int bitsPerPixel)
 {
-    contextCount++;
+    ++contextCount;
 
     // Get the initialized EGL display
     m_display = getInitializedDisplay();
@@ -553,7 +553,7 @@ DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, cons
 ////////////////////////////////////////////////////////////
 DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, Vector2u size)
 {
-    contextCount++;
+    ++contextCount;
 
     // Get the initialized EGL display
     m_display = getInitializedDisplay();
