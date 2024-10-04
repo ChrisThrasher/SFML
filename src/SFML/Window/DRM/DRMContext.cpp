@@ -514,7 +514,7 @@ namespace sf::priv
 ////////////////////////////////////////////////////////////
 DRMContext::DRMContext(DRMContext* shared)
 {
-    contextCount++;
+    ++contextCount;
     if (initDrm() < 0)
         return;
 
@@ -540,7 +540,7 @@ DRMContext::DRMContext(DRMContext* shared)
 ////////////////////////////////////////////////////////////
 DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, const WindowImpl& owner, unsigned int /*bitsPerPixel*/)
 {
-    contextCount++;
+    ++contextCount;
     if (initDrm() < 0)
         return;
 
@@ -563,7 +563,7 @@ DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, cons
 ////////////////////////////////////////////////////////////
 DRMContext::DRMContext(DRMContext* shared, const ContextSettings& settings, Vector2u /*size*/)
 {
-    contextCount++;
+    ++contextCount;
     if (initDrm() < 0)
         return;
 
