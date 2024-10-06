@@ -458,7 +458,7 @@ constexpr Time& operator%=(Time& left, Time right);
 /// a number of seconds, milliseconds or microseconds. It
 /// even interoperates with the `<chrono>` header. You can
 /// construct an `sf::Time` from a `chrono::duration` and read
-/// any `sf::Time` as a chrono::duration.
+/// any `sf::Time` as a `std::chrono::duration`.
 ///
 /// By using such a flexible interface, the API doesn't
 /// impose any fixed type or resolution for time values,
