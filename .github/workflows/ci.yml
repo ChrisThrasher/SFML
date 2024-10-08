@@ -269,7 +269,7 @@ jobs:
 
   format:
     name: Formatting
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -279,7 +279,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Format Code
-      run: cmake -DCLANG_FORMAT_EXECUTABLE=clang-format-14 -P cmake/Format.cmake
+      run: cmake -DCLANG_FORMAT_EXECUTABLE=clang-format-18 -P cmake/Format.cmake
 
     - name: Check Formatting
       run: git diff --exit-code
