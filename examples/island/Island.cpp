@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <deque>
 #include <iostream>
 #include <mutex>
@@ -41,7 +42,7 @@ struct WorkItem
 std::deque<WorkItem>       workQueue;
 std::array<std::thread, 4> threads;
 int                        pendingWorkCount    = 0;
-bool                       workPending         = true;
+std::atomic<bool>          workPending         = true;
 bool                       bufferUploadPending = false;
 std::recursive_mutex       workQueueMutex;
 
@@ -348,12 +349,11 @@ void threadFunction()
         workItem.targetBuffer = nullptr;
 
         // Check if there are new work items in the queue
+        if (!workPending)
+            return;
+
         {
             const std::lock_guard lock(workQueueMutex);
-
-            if (!workPending)
-                return;
-
             if (!workQueue.empty())
             {
                 workItem = workQueue.front();
@@ -600,10 +600,7 @@ int main()
     }
 
     // Shut down our thread pool
-    {
-        const std::lock_guard lock(workQueueMutex);
-        workPending = false;
-    }
+    workPending = false;
 
     for (auto& thread : threads)
         thread.join();
