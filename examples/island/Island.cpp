@@ -24,10 +24,10 @@
 namespace
 {
 // Width and height of the application window
-const sf::Vector2u windowSize(800, 600);
+constexpr sf::Vector2u windowSize(800, 600);
 
 // Resolution of the generated terrain
-const sf::Vector2u resolution(800, 600);
+constexpr sf::Vector2u resolution(800, 600);
 
 // Thread pool parameters
 const unsigned int threadCount = 4;
