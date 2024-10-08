@@ -121,10 +121,8 @@ MiniaudioUtils::SoundBase::SoundBase(const ma_data_source_vtable&     dataSource
     if (const ma_result result = ma_data_source_init(&config, &dataSourceBase); result != MA_SUCCESS)
         err() << "Failed to initialize audio data source: " << ma_result_description(result) << std::endl;
 
-    resourceEntryIter = AudioDevice::registerResource(
-        this,
-        [](void* ptr) { static_cast<SoundBase*>(ptr)->deinitialize(); },
-        reinitializeFunc);
+    resourceEntryIter = AudioDevice::
+        registerResource(this, [](void* ptr) { static_cast<SoundBase*>(ptr)->deinitialize(); }, reinitializeFunc);
 }
 
 
