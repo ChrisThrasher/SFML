@@ -24,10 +24,10 @@
 namespace
 {
 // Width and height of the application window
-const sf::Vector2u windowSize(800, 600);
+constexpr sf::Vector2u windowSize(800, 600);
 
 // Resolution of the generated terrain
-const sf::Vector2u resolution(800, 600);
+constexpr sf::Vector2u resolution(800, 600);
 
 // Thread pool parameters
 const unsigned int threadCount = 4;
@@ -242,8 +242,8 @@ sf::Vector2f computeNormal(float left, float right, float bottom, float top)
 ////////////////////////////////////////////////////////////
 sf::Vertex computeVertex(sf::Vector2u position)
 {
-    static const auto scalingFactors = sf::Vector2f(windowSize).componentWiseDiv(sf::Vector2f(resolution));
-    sf::Vertex        vertex;
+    static constexpr auto scalingFactors = sf::Vector2f(windowSize).componentWiseDiv(sf::Vector2f(resolution));
+    sf::Vertex            vertex;
     vertex.position  = sf::Vector2f(position).componentWiseMul(scalingFactors);
     vertex.color     = getTerrainColor(getElevation(position), getMoisture(position));
     vertex.texCoords = computeNormal(getElevation(position - sf::Vector2u(1, 0)),
