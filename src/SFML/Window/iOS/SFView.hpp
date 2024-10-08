@@ -42,7 +42,8 @@
 ////////////////////////////////////////////////////////////
 /// \brief Construct the view with its initial size
 ///
-/// \param frame Dimensions of the view
+/// \param frame  Dimensions of the view
+/// \param factor Scale factor
 ///
 /// \return Id of the view
 ///
