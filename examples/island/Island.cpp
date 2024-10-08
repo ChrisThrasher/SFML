@@ -30,7 +30,6 @@ constexpr sf::Vector2u windowSize(800, 600);
 constexpr sf::Vector2u resolution(800, 600);
 
 // Thread pool parameters
-constexpr unsigned int threadCount  = 4;
 constexpr unsigned int blockCount   = 32;
 constexpr unsigned int rowBlockSize = (resolution.y / blockCount) + 1;
 
@@ -40,12 +39,12 @@ struct WorkItem
     unsigned int index{};
 };
 
-std::queue<WorkItem>     workQueue;
-std::vector<std::thread> threads;
-int                      pendingWorkCount    = 0;
-bool                     workPending         = true;
-bool                     bufferUploadPending = false;
-std::recursive_mutex     workQueueMutex;
+std::queue<WorkItem>       workQueue;
+std::array<std::thread, 4> threads;
+int                        pendingWorkCount    = 0;
+bool                       workPending         = true;
+bool                       bufferUploadPending = false;
+std::recursive_mutex       workQueueMutex;
 
 struct Setting
 {
@@ -466,10 +465,8 @@ int main()
     else
     {
         // Start up our thread pool
-        for (unsigned int i = 0; i < threadCount; ++i)
-        {
-            threads.emplace_back(threadFunction);
-        }
+        for (auto& thread : threads)
+            thread = std::thread(threadFunction);
 
         // Create our VertexBuffer with enough space to hold all the terrain geometry
         if (!terrain.create(resolution.x * resolution.y * 6))
@@ -606,9 +603,6 @@ int main()
         workPending = false;
     }
 
-    while (!threads.empty())
-    {
-        threads.back().join();
-        threads.pop_back();
-    }
+    for (auto& thread : threads)
+        thread.join();
 }
