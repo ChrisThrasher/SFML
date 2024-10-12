@@ -18,10 +18,9 @@
 
 namespace
 {
-constexpr auto windowWidth  = 800u;
-constexpr auto windowHeight = 600u;
-constexpr auto pi           = 3.14159265359f;
-constexpr auto sqrt2        = 2.0f * 0.707106781186547524401f;
+constexpr auto windowSize = sf::Vector2u(800, 600);
+constexpr auto pi         = 3.14159265359f;
+constexpr auto sqrt2      = 2.0f * 0.707106781186547524401f;
 
 std::filesystem::path resourcesDir()
 {
@@ -50,9 +49,9 @@ public:
         return m_name;
     }
 
-    void update(float time, float x, float y)
+    void update(float time, sf::Vector2f position)
     {
-        onUpdate(time, x, y);
+        onUpdate(time, position);
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override
@@ -88,7 +87,7 @@ protected:
 
 private:
     // Virtual functions to be implemented in derived effects
-    virtual void onUpdate(float time, float x, float y)                          = 0;
+    virtual void onUpdate(float time, sf::Vector2f position)                     = 0;
     virtual void onDraw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual void onStart()                                                       = 0;
     virtual void onStop()                                                        = 0;
@@ -112,7 +111,7 @@ class Surround : public Effect
 public:
     Surround() : Effect("Surround / Attenuation")
     {
-        m_listener.setPosition({(windowWidth - 20.f) / 2.f, (windowHeight - 20.f) / 2.f});
+        m_listener.setPosition((sf::Vector2f(windowSize) - sf::Vector2f(20, 20)) / 2.f);
         m_listener.setFillColor(sf::Color::Red);
 
         // Load the music file
@@ -129,9 +128,9 @@ public:
         m_music.setAttenuation(0.04f);
     }
 
-    void onUpdate(float /*time*/, float x, float y) override
+    void onUpdate(float /*time*/, sf::Vector2f position) override
     {
-        m_position = {windowWidth * x - 10.f, windowHeight * y - 10.f};
+        m_position = sf::Vector2f(windowSize).componentWiseMul(position) - sf::Vector2f(10, 10);
         m_music.setPosition({m_position.x, m_position.y, 0.f});
     }
 
@@ -196,14 +195,14 @@ public:
         // Set initial volume
         m_music.setVolume(m_volume);
 
-        m_pitchText.setPosition({windowWidth / 2.f - 120.f, windowHeight / 2.f - 80.f});
-        m_volumeText.setPosition({windowWidth / 2.f - 120.f, windowHeight / 2.f - 30.f});
+        m_pitchText.setPosition(sf::Vector2f(windowSize) / 2.f - sf::Vector2f(120, 80));
+        m_volumeText.setPosition(sf::Vector2f(windowSize) / 2.f - sf::Vector2f(120, 30));
     }
 
-    void onUpdate(float /*time*/, float x, float y) override
+    void onUpdate(float /*time*/, sf::Vector2f position) override
     {
-        m_pitch  = std::clamp(2.f * x, 0.f, 2.f);
-        m_volume = std::clamp(100.f * (1.f - y), 0.f, 100.f);
+        m_pitch  = std::clamp(2.f * position.x, 0.f, 2.f);
+        m_volume = std::clamp(100.f * (1.f - position.y), 0.f, 100.f);
 
         m_music.setPitch(m_pitch);
         m_music.setVolume(m_volume);
@@ -249,13 +248,13 @@ class Attenuation : public Effect
 public:
     Attenuation() : Effect("Attenuation"), m_text(getFont())
     {
-        m_listener.setPosition({(windowWidth - 20.f) / 2.f, (windowHeight - 20.f) / 2.f + 100.f});
+        m_listener.setPosition({(windowSize.x - 20.f) / 2.f, (windowSize.y - 20.f) / 2.f + 100.f});
         m_listener.setFillColor(sf::Color::Red);
 
         m_soundShape.setFillColor(sf::Color::Magenta);
 
         // Sound cone parameters
-        static constexpr auto coneHeight     = windowHeight * 2.f;
+        static constexpr auto coneHeight     = windowSize.y * 2.f;
         static constexpr auto outerConeAngle = sf::degrees(120.f);
         static constexpr auto innerConeAngle = sf::degrees(30.f);
 
@@ -312,9 +311,9 @@ public:
         m_text.setPosition({20.f, 20.f});
     }
 
-    void onUpdate(float /*time*/, float x, float y) override
+    void onUpdate(float /*time*/, sf::Vector2f position) override
     {
-        m_position = {windowWidth * x - 10.f, windowHeight * y - 10.f};
+        m_position = sf::Vector2f(windowSize).componentWiseMul(position) - sf::Vector2f(10, 10);
         m_music.setPosition({m_position.x, m_position.y, 0.f});
     }
 
@@ -371,18 +370,18 @@ public:
     m_currentAmplitude(getFont(), "Amplitude: 0.05"),
     m_currentFrequency(getFont(), "Frequency: 200 Hz")
     {
-        m_instruction.setPosition({windowWidth / 2.f - 370.f, windowHeight / 2.f - 200.f});
-        m_currentType.setPosition({windowWidth / 2.f - 150.f, windowHeight / 2.f - 100.f});
-        m_currentAmplitude.setPosition({windowWidth / 2.f - 150.f, windowHeight / 2.f - 50.f});
-        m_currentFrequency.setPosition({windowWidth / 2.f - 150.f, windowHeight / 2.f});
+        m_instruction.setPosition({windowSize.x / 2.f - 370.f, windowSize.y / 2.f - 200.f});
+        m_currentType.setPosition({windowSize.x / 2.f - 150.f, windowSize.y / 2.f - 100.f});
+        m_currentAmplitude.setPosition({windowSize.x / 2.f - 150.f, windowSize.y / 2.f - 50.f});
+        m_currentFrequency.setPosition({windowSize.x / 2.f - 150.f, windowSize.y / 2.f});
 
         sf::SoundStream::initialize(1, sampleRate, {sf::SoundChannel::Mono});
     }
 
-    void onUpdate(float /*time*/, float x, float y) override
+    void onUpdate(float /*time*/, sf::Vector2f position) override
     {
-        m_amplitude = std::clamp(0.2f * (1.f - y), 0.f, 0.2f);
-        m_frequency = std::clamp(500.f * x, 0.f, 500.f);
+        m_amplitude = std::clamp(0.2f * (1.f - position.y), 0.f, 0.2f);
+        m_frequency = std::clamp(500.f * position.x, 0.f, 500.f);
 
         m_currentAmplitude.setString("Amplitude: " + std::to_string(m_amplitude));
         m_currentFrequency.setString("Frequency: " + std::to_string(m_frequency) + " Hz");
@@ -531,13 +530,13 @@ public:
     m_currentVelocity(getFont(), "Velocity: " + std::to_string(m_velocity)),
     m_currentFactor(getFont(), "Doppler Factor: " + std::to_string(m_factor))
     {
-        m_listener.setPosition({(windowWidth - 20.f) / 2.f, (windowHeight - 20.f) / 2.f});
+        m_listener.setPosition({(windowSize.x - 20.f) / 2.f, (windowSize.y - 20.f) / 2.f});
         m_listener.setFillColor(sf::Color::Red);
 
-        m_position.y = (windowHeight - 20.f) / 2.f - 40.f;
+        m_position.y = (windowSize.y - 20.f) / 2.f - 40.f;
 
-        m_currentVelocity.setPosition({windowWidth / 2.f - 150.f, windowHeight * 3.f / 4.f - 50.f});
-        m_currentFactor.setPosition({windowWidth / 2.f - 150.f, windowHeight * 3.f / 4.f});
+        m_currentVelocity.setPosition({windowSize.x / 2.f - 150.f, windowSize.y * 3.f / 4.f - 50.f});
+        m_currentFactor.setPosition({windowSize.x / 2.f - 150.f, windowSize.y * 3.f / 4.f});
 
         // Set attenuation to a nice value
         setAttenuation(0.05f);
@@ -545,15 +544,15 @@ public:
         sf::SoundStream::initialize(1, sampleRate, {sf::SoundChannel::Mono});
     }
 
-    void onUpdate(float time, float x, float y) override
+    void onUpdate(float time, sf::Vector2f position) override
     {
-        m_velocity = std::clamp(150.f * (1.f - y), 0.f, 150.f);
-        m_factor   = std::clamp(x, 0.f, 1.f);
+        m_velocity = std::clamp(150.f * (1.f - position.y), 0.f, 150.f);
+        m_factor   = std::clamp(position.x, 0.f, 1.f);
 
         m_currentVelocity.setString("Velocity: " + std::to_string(m_velocity));
         m_currentFactor.setString("Doppler Factor: " + std::to_string(m_factor));
 
-        m_position.x = std::fmod(time, 8.f) * windowWidth / 8.f;
+        m_position.x = std::fmod(time, 8.f) * windowSize.x / 8.f;
 
         setPosition({m_position.x, m_position.y, 0.f});
         setVelocity({m_velocity, 0.f, 0.f});
@@ -634,9 +633,9 @@ private:
 class Processing : public Effect
 {
 public:
-    void onUpdate([[maybe_unused]] float time, float x, float y) override
+    void onUpdate([[maybe_unused]] float time, sf::Vector2f position) override
     {
-        m_position = {windowWidth * x - 10.f, windowHeight * y - 10.f};
+        m_position = sf::Vector2f(windowSize).componentWiseMul(position) - sf::Vector2f(10, 10);
         m_music.setPosition({m_position.x, m_position.y, 0.f});
     }
 
@@ -671,11 +670,11 @@ protected:
     m_enabledText(getFont(), "Processing: Enabled"),
     m_instructions(getFont(), "Press Space to enable/disable processing")
     {
-        m_listener.setPosition({(windowWidth - 20.f) / 2.f, (windowHeight - 20.f) / 2.f});
+        m_listener.setPosition({(windowSize.x - 20.f) / 2.f, (windowSize.y - 20.f) / 2.f});
         m_listener.setFillColor(sf::Color::Red);
 
-        m_enabledText.setPosition({windowWidth / 2.f - 120.f, windowHeight * 3.f / 4.f - 50.f});
-        m_instructions.setPosition({windowWidth / 2.f - 250.f, windowHeight * 3.f / 4.f});
+        m_enabledText.setPosition({windowSize.x / 2.f - 120.f, windowSize.y * 3.f / 4.f - 50.f});
+        m_instructions.setPosition({windowSize.x / 2.f - 250.f, windowSize.y * 3.f / 4.f});
 
         // Load the music file
         if (!m_music.openFromFile(resourcesDir() / "doodle_pop.ogg"))
@@ -1072,9 +1071,7 @@ private:
 int main()
 {
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode({windowWidth, windowHeight}),
-                            "SFML Sound Effects",
-                            sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(windowSize), "SFML Sound Effects", sf::Style::Titlebar | sf::Style::Close);
     window.setVerticalSyncEnabled(true);
 
     // Open the application font and pass it to the Effect class
@@ -1214,8 +1211,8 @@ int main()
         }
 
         // Update the current example
-        const auto [x, y] = sf::Vector2f(sf::Mouse::getPosition(window)).componentWiseDiv(sf::Vector2f(window.getSize()));
-        effects[current]->update(clock.getElapsedTime().asSeconds(), x, y);
+        const auto position = sf::Vector2f(sf::Mouse::getPosition(window)).componentWiseDiv(sf::Vector2f(window.getSize()));
+        effects[current]->update(clock.getElapsedTime().asSeconds(), position);
 
         // Clear the window
         window.clear(sf::Color(50, 50, 50));
