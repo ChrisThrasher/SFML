@@ -25,7 +25,7 @@ std::mt19937       rng(rd());
 ////////////////////////////////////////////////////////////
 struct Effect : sf::Drawable
 {
-    virtual void update(float time, float x, float y) = 0;
+    virtual void update(float time, sf::Vector2f position) = 0;
 };
 
 
@@ -42,9 +42,9 @@ public:
         m_shader.setUniform("texture", sf::Shader::CurrentTexture);
     }
 
-    void update(float /* time */, float x, float y) override
+    void update(float /* time */, sf::Vector2f position) override
     {
-        m_shader.setUniform("pixel_threshold", (x + y) / 30);
+        m_shader.setUniform("pixel_threshold", (position.x + position.y) / 30);
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override
@@ -65,11 +65,11 @@ private:
 class WaveBlur : public Effect
 {
 public:
-    void update(float time, float x, float y) override
+    void update(float time, sf::Vector2f position) override
     {
         m_shader.setUniform("wave_phase", time);
-        m_shader.setUniform("wave_amplitude", sf::Vector2f(x * 40, y * 40));
-        m_shader.setUniform("blur_radius", (x + y) * 0.008f);
+        m_shader.setUniform("wave_amplitude", position * 40.f);
+        m_shader.setUniform("blur_radius", (position.x + position.y) * 0.008f);
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override
@@ -116,11 +116,11 @@ private:
 class StormBlink : public Effect
 {
 public:
-    void update(float time, float x, float y) override
+    void update(float time, sf::Vector2f position) override
     {
         const float radius = 200 + std::cos(time) * 150;
 
-        m_shader.setUniform("storm_position", sf::Vector2f(x * 800, y * 600));
+        m_shader.setUniform("storm_position", position.componentWiseMul({800, 600}));
         m_shader.setUniform("storm_inner_radius", radius / 3);
         m_shader.setUniform("storm_total_radius", radius);
         m_shader.setUniform("blink_alpha", 0.5f + std::cos(time * 3) * 0.25f);
@@ -166,9 +166,9 @@ private:
 class Edge : public Effect
 {
 public:
-    void update(float time, float x, float y) override
+    void update(float time, sf::Vector2f position) override
     {
-        m_shader.setUniform("edge_threshold", 1 - (x + y) / 2);
+        m_shader.setUniform("edge_threshold", 1 - (position.x + position.y) / 2);
 
         // Render the updated scene to the off-screen surface
         m_surface.clear(sf::Color::White);
@@ -222,7 +222,7 @@ private:
 class Geometry : public Effect
 {
 public:
-    void update(float /* time */, float x, float y) override
+    void update(float /* time */, sf::Vector2f position) override
     {
         // Reset our transformation matrix
         m_transform = sf::Transform::Identity;
@@ -231,10 +231,10 @@ public:
         m_transform.translate({400.f, 300.f});
 
         // Rotate everything based on cursor position
-        m_transform.rotate(sf::degrees(x * 360.f));
+        m_transform.rotate(sf::degrees(position.x * 360.f));
 
         // Adjust billboard size to scale between 25 and 75
-        const float size = 25 + std::abs(y) * 50;
+        const float size = 25 + std::abs(position.y) * 50;
 
         // Update the shader parameter
         m_shader.setUniform("size", sf::Vector2f{size, size});
@@ -487,9 +487,8 @@ int main()
         if (Effect* currentEffect = effects[current])
         {
             // Update the current example
-            const auto [x,
-                        y] = sf::Vector2f(sf::Mouse::getPosition(window)).componentWiseDiv(sf::Vector2f(window.getSize()));
-            currentEffect->update(clock.getElapsedTime().asSeconds(), x, y);
+            const auto position = sf::Vector2f(sf::Mouse::getPosition(window)).componentWiseDiv(sf::Vector2f(window.getSize()));
+            currentEffect->update(clock.getElapsedTime().asSeconds(), position);
 
             // Clear the window
             window.clear(currentEffect == &*edgeEffect ? sf::Color::White : sf::Color(50, 50, 50));
