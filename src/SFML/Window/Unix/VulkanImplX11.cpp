@@ -43,41 +43,32 @@ namespace
 {
 struct VulkanLibraryWrapper
 {
-    ~VulkanLibraryWrapper()
-    {
-        if (library)
-            dlclose(library);
-    }
-
     // Try to load the library and all the required entry points
     bool loadLibrary()
     {
         if (library)
             return true;
 
-        library = dlopen("libvulkan.so.1", RTLD_LAZY);
+        library.reset(dlopen("libvulkan.so.1", RTLD_LAZY));
 
         if (!library)
             return false;
 
         if (!loadEntryPoint(vkGetInstanceProcAddr, "vkGetInstanceProcAddr"))
         {
-            dlclose(library);
-            library = nullptr;
+            library.reset();
             return false;
         }
 
         if (!loadEntryPoint(vkEnumerateInstanceLayerProperties, "vkEnumerateInstanceLayerProperties"))
         {
-            dlclose(library);
-            library = nullptr;
+            library.reset();
             return false;
         }
 
         if (!loadEntryPoint(vkEnumerateInstanceExtensionProperties, "vkEnumerateInstanceExtensionProperties"))
         {
-            dlclose(library);
-            library = nullptr;
+            library.reset();
             return false;
         }
 
@@ -87,12 +78,19 @@ struct VulkanLibraryWrapper
     template <typename T>
     bool loadEntryPoint(T& entryPoint, const char* name)
     {
-        entryPoint = reinterpret_cast<T>(dlsym(library, name));
+        entryPoint = reinterpret_cast<T>(dlsym(library.get(), name));
 
         return entryPoint != nullptr;
     }
 
-    void* library{};
+    struct SharedLibraryDeleter
+    {
+        void operator()(void* ptr) const
+        {
+            dlclose(ptr);
+        }
+    };
+    std::unique_ptr<void, SharedLibraryDeleter> library;
 
     PFN_vkGetInstanceProcAddr                  vkGetInstanceProcAddr{};
     PFN_vkEnumerateInstanceLayerProperties     vkEnumerateInstanceLayerProperties{};
@@ -169,7 +167,7 @@ VulkanFunctionPointer VulkanImpl::getFunction(const char* name)
     if (!isAvailable(false))
         return nullptr;
 
-    return reinterpret_cast<VulkanFunctionPointer>(dlsym(wrapper.library, name));
+    return reinterpret_cast<VulkanFunctionPointer>(dlsym(wrapper.library.get(), name));
 }
 
 
