@@ -251,13 +251,7 @@ void EglContext::createContext(EglContext* shared)
 {
     const EGLint contextVersion[] = {EGL_CONTEXT_CLIENT_VERSION, 1, EGL_NONE};
 
-    EGLContext toShared = nullptr;
-
-    if (shared)
-        toShared = shared->m_context;
-    else
-        toShared = EGL_NO_CONTEXT;
-
+    const EGLContext toShared = shared ? shared->m_context : EGL_NO_CONTEXT;
     if (toShared != EGL_NO_CONTEXT)
         eglCheck(eglMakeCurrent(m_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
 
