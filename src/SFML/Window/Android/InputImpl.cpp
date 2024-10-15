@@ -92,10 +92,9 @@ void setVirtualKeyboardVisible(bool visible)
     JavaVM* lJavaVM = states.activity->vm;
     JNIEnv* lJNIEnv = states.activity->env;
 
-    JavaVMAttachArgs lJavaVMAttachArgs;
+    JavaVMAttachArgs lJavaVMAttachArgs{};
     lJavaVMAttachArgs.version = JNI_VERSION_1_6;
     lJavaVMAttachArgs.name    = "NativeThread";
-    lJavaVMAttachArgs.group   = nullptr;
 
     const jint lResult = lJavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
 
