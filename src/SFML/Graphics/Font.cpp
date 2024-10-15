@@ -292,10 +292,9 @@ bool Font::openFromStream(InputStream& stream)
     fontHandles->streamRec.close              = &close;
 
     // Setup the FreeType callbacks that will read our stream
-    FT_Open_Args args;
+    FT_Open_Args args{};
     args.flags  = FT_OPEN_STREAM;
     args.stream = &fontHandles->streamRec;
-    args.driver = nullptr;
 
     // Load the new font face from the specified stream
     FT_Face face = nullptr;
