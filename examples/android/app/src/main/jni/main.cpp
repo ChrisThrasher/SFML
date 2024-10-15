@@ -33,10 +33,9 @@ int vibrate(sf::Time duration)
     JNIEnv& env = *activity.env;
 
     // First, attach this thread to the main thread
-    JavaVMAttachArgs attachargs;
+    JavaVMAttachArgs attachargs{};
     attachargs.version = JNI_VERSION_1_6;
     attachargs.name    = "NativeThread";
-    attachargs.group   = nullptr;
     jint res           = vm.AttachCurrentThread(&env, &attachargs);
 
     if (res == JNI_ERR)
