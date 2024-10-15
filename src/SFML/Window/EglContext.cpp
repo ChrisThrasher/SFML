@@ -191,9 +191,7 @@ EglContext::~EglContext()
     cleanupUnsharedResources();
 
     // Deactivate the current context
-    const EGLContext currentContext = eglCheck(eglGetCurrentContext());
-
-    if (currentContext == m_context)
+    if (eglCheck(eglGetCurrentContext()) == m_context)
     {
         eglCheck(eglMakeCurrent(m_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
     }
