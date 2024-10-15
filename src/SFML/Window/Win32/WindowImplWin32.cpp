@@ -477,16 +477,9 @@ bool WindowImplWin32::hasFocus() const
 ////////////////////////////////////////////////////////////
 void WindowImplWin32::registerWindowClass()
 {
-    WNDCLASSW windowClass;
-    windowClass.style         = 0;
+    WNDCLASSW windowClass{};
     windowClass.lpfnWndProc   = &WindowImplWin32::globalOnEvent;
-    windowClass.cbClsExtra    = 0;
-    windowClass.cbWndExtra    = 0;
     windowClass.hInstance     = GetModuleHandleW(nullptr);
-    windowClass.hIcon         = nullptr;
-    windowClass.hCursor       = nullptr;
-    windowClass.hbrBackground = nullptr;
-    windowClass.lpszMenuName  = nullptr;
     windowClass.lpszClassName = className;
     RegisterClassW(&windowClass);
 }
