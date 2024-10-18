@@ -174,13 +174,8 @@ DrmFb* drmFbGetFromBo(gbm_bo& bo)
         modifiers[static_cast<std::size_t>(i)] = modifiers[0];
     }
 
-    std::uint32_t flags = 0;
-    if (modifiers[0])
-    {
-        flags = DRM_MODE_FB_MODIFIERS;
-    }
-
-    int result = drmModeAddFB2WithModifiers(drmFd,
+    const std::uint32_t flags  = modifiers[0] ? DRM_MODE_FB_MODIFIERS : 0;
+    int                 result = drmModeAddFB2WithModifiers(drmFd,
                                             width,
                                             height,
                                             format,
