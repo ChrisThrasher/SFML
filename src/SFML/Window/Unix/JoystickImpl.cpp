@@ -29,6 +29,7 @@
 
 #include <SFML/System/Err.hpp>
 
+#include <algorithm>
 #include <fcntl.h>
 #include <libudev.h>
 #include <linux/joystick.h>
@@ -554,9 +555,7 @@ JoystickCaps JoystickImpl::getCapabilities() const
     // Get the number of buttons
     char buttonCount = 0;
     ioctl(m_file, JSIOCGBUTTONS, &buttonCount);
-    caps.buttonCount = static_cast<unsigned int>(buttonCount);
-    if (caps.buttonCount > Joystick::ButtonCount)
-        caps.buttonCount = Joystick::ButtonCount;
+    caps.buttonCount = std::min(static_cast<unsigned int>(buttonCount), Joystick::ButtonCount);
 
     // Get the supported axes
     char axesCount = 0;
