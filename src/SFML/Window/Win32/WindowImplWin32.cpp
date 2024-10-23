@@ -39,6 +39,7 @@
 #include <array>
 #include <dbt.h>
 #include <ostream>
+#include <string_view>
 #include <vector>
 
 #include <cstddef>
@@ -60,10 +61,10 @@
 
 namespace
 {
-unsigned int               windowCount      = 0; // Windows owned by SFML
-unsigned int               handleCount      = 0; // All window handles
-const wchar_t*             className        = L"SFML_Window";
-sf::priv::WindowImplWin32* fullscreenWindow = nullptr;
+unsigned int                windowCount      = 0; // Windows owned by SFML
+unsigned int                handleCount      = 0; // All window handles
+constexpr std::wstring_view className        = L"SFML_Window";
+sf::priv::WindowImplWin32*  fullscreenWindow = nullptr;
 
 constexpr GUID guidDevinterfaceHid = {0x4d1e55b2, 0xf16f, 0x11cf, {0x88, 0xcb, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30}};
 
@@ -212,7 +213,7 @@ m_cursorGrabbed(m_fullscreen)
     }
 
     // Create the window
-    m_handle = CreateWindowW(className,
+    m_handle = CreateWindowW(className.data(),
                              reinterpret_cast<const wchar_t*>(title.toUtf16().c_str()),
                              win32Style,
                              left,
@@ -284,7 +285,7 @@ WindowImplWin32::~WindowImplWin32()
 
         // Unregister window class if we were the last window
         if (windowCount == 0)
-            UnregisterClassW(className, GetModuleHandleW(nullptr));
+            UnregisterClassW(className.data(), GetModuleHandleW(nullptr));
     }
     else
     {
@@ -488,7 +489,7 @@ void WindowImplWin32::registerWindowClass()
     windowClass.hCursor       = nullptr;
     windowClass.hbrBackground = nullptr;
     windowClass.lpszMenuName  = nullptr;
-    windowClass.lpszClassName = className;
+    windowClass.lpszClassName = className.data();
     RegisterClassW(&windowClass);
 }
 
