@@ -339,7 +339,7 @@ void threadFunction()
 {
     std::vector<sf::Vertex> vertices(resolution.x * rowBlockSize * 6);
 
-    WorkItem workItem = {nullptr, 0};
+    WorkItem workItem;
 
     // Loop until the application exits
     for (;;)
