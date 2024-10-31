@@ -112,8 +112,8 @@ int main()
     sstr.str("");
     sstr << threshold << "  (Change with up/down arrow keys)";
     {
-        const auto [it, success] = texts.emplace("Threshold", JoystickObject{{font, "Threshold:"}, {font, sstr.str()}});
-        auto& [label, value]     = it->second;
+        const auto [it, success] = texts.try_emplace("Threshold", JoystickObject{{font, "Threshold:"}, {font, sstr.str()}});
+        auto& [label, value] = it->second;
         label.setPosition({5.f, 5.f + 2 * font.getLineSpacing(14)});
         value.setPosition({80.f, 5.f + 2 * font.getLineSpacing(14)});
     }
