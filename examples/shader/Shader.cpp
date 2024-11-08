@@ -25,7 +25,7 @@ std::mt19937       rng(rd());
 ////////////////////////////////////////////////////////////
 struct Effect : sf::Drawable
 {
-    virtual void update(float time, sf::Vector2f position) = 0;
+    virtual void update(sf::Time time, sf::Vector2f position) = 0;
 };
 
 
@@ -42,7 +42,7 @@ public:
         m_shader.setUniform("texture", sf::Shader::CurrentTexture);
     }
 
-    void update(float /* time */, sf::Vector2f position) override
+    void update(sf::Time /* time */, sf::Vector2f position) override
     {
         m_shader.setUniform("pixel_threshold", (position.x + position.y) / 30);
     }
@@ -65,9 +65,9 @@ private:
 class WaveBlur : public Effect
 {
 public:
-    void update(float time, sf::Vector2f position) override
+    void update(sf::Time time, sf::Vector2f position) override
     {
-        m_shader.setUniform("wave_phase", time);
+        m_shader.setUniform("wave_phase", time.asSeconds());
         m_shader.setUniform("wave_amplitude", position * 40.f);
         m_shader.setUniform("blur_radius", (position.x + position.y) * 0.008f);
     }
@@ -116,14 +116,14 @@ private:
 class StormBlink : public Effect
 {
 public:
-    void update(float time, sf::Vector2f position) override
+    void update(sf::Time time, sf::Vector2f position) override
     {
-        const float radius = 200 + std::cos(time) * 150;
+        const float radius = 200 + std::cos(time.asSeconds()) * 150;
 
         m_shader.setUniform("storm_position", position.componentWiseMul({800, 600}));
         m_shader.setUniform("storm_inner_radius", radius / 3);
         m_shader.setUniform("storm_total_radius", radius);
-        m_shader.setUniform("blink_alpha", 0.5f + std::cos(time * 3) * 0.25f);
+        m_shader.setUniform("blink_alpha", 0.5f + std::cos(time.asSeconds() * 3) * 0.25f);
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override
@@ -166,7 +166,7 @@ private:
 class Edge : public Effect
 {
 public:
-    void update(float time, sf::Vector2f position) override
+    void update(sf::Time time, sf::Vector2f position) override
     {
         m_shader.setUniform("edge_threshold", 1 - (position.x + position.y) / 2);
 
@@ -185,8 +185,9 @@ public:
             sf::Sprite entity{m_entityTexture, sf::IntRect({96 * i, 0}, {96, 96})};
 
             entity.setPosition(
-                {std::cos(0.25f * (time * static_cast<float>(i) + static_cast<float>(numEntities - i))) * 300 + 350,
-                 std::sin(0.25f * (time * static_cast<float>(numEntities - i) + static_cast<float>(i))) * 200 + 250});
+                {std::cos(0.25f * (time.asSeconds() * static_cast<float>(i) + static_cast<float>(numEntities - i))) * 300 + 350,
+                 std::sin(0.25f * (time.asSeconds() * static_cast<float>(numEntities - i) + static_cast<float>(i))) * 200 +
+                     250});
 
             m_surface.draw(entity);
         }
@@ -222,7 +223,7 @@ private:
 class Geometry : public Effect
 {
 public:
-    void update(float /* time */, sf::Vector2f position) override
+    void update(sf::Time /* time */, sf::Vector2f position) override
     {
         // Reset our transformation matrix
         m_transform = sf::Transform::Identity;
@@ -488,7 +489,7 @@ int main()
         {
             // Update the current example
             const auto position = sf::Vector2f(sf::Mouse::getPosition(window)).componentWiseDiv(sf::Vector2f(window.getSize()));
-            currentEffect->update(clock.getElapsedTime().asSeconds(), position);
+            currentEffect->update(clock.getElapsedTime(), position);
 
             // Clear the window
             window.clear(currentEffect == &*edgeEffect ? sf::Color::White : sf::Color(50, 50, 50));

@@ -49,7 +49,7 @@ public:
         return m_name;
     }
 
-    void update(float time, sf::Vector2f position)
+    void update(sf::Time time, sf::Vector2f position)
     {
         onUpdate(time, position);
     }
@@ -87,7 +87,7 @@ protected:
 
 private:
     // Virtual functions to be implemented in derived effects
-    virtual void onUpdate(float time, sf::Vector2f position)                     = 0;
+    virtual void onUpdate(sf::Time time, sf::Vector2f position)                  = 0;
     virtual void onDraw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
     virtual void onStart()                                                       = 0;
     virtual void onStop()                                                        = 0;
@@ -128,7 +128,7 @@ public:
         m_music.setAttenuation(0.04f);
     }
 
-    void onUpdate(float /*time*/, sf::Vector2f position) override
+    void onUpdate(sf::Time /*time*/, sf::Vector2f position) override
     {
         m_position = sf::Vector2f(windowSize).componentWiseMul(position) - sf::Vector2f(10, 10);
         m_music.setPosition({m_position.x, m_position.y, 0.f});
@@ -199,7 +199,7 @@ public:
         m_volumeText.setPosition(sf::Vector2f(windowSize) / 2.f - sf::Vector2f(120, 30));
     }
 
-    void onUpdate(float /*time*/, sf::Vector2f position) override
+    void onUpdate(sf::Time /*time*/, sf::Vector2f position) override
     {
         m_pitch  = std::clamp(2.f * position.x, 0.f, 2.f);
         m_volume = std::clamp(100.f * (1.f - position.y), 0.f, 100.f);
@@ -311,7 +311,7 @@ public:
         m_text.setPosition({20.f, 20.f});
     }
 
-    void onUpdate(float /*time*/, sf::Vector2f position) override
+    void onUpdate(sf::Time /*time*/, sf::Vector2f position) override
     {
         m_position = sf::Vector2f(windowSize).componentWiseMul(position) - sf::Vector2f(10, 10);
         m_music.setPosition({m_position.x, m_position.y, 0.f});
@@ -378,7 +378,7 @@ public:
         sf::SoundStream::initialize(1, sampleRate, {sf::SoundChannel::Mono});
     }
 
-    void onUpdate(float /*time*/, sf::Vector2f position) override
+    void onUpdate(sf::Time /*time*/, sf::Vector2f position) override
     {
         m_amplitude = std::clamp(0.2f * (1.f - position.y), 0.f, 0.2f);
         m_frequency = std::clamp(500.f * position.x, 0.f, 500.f);
@@ -544,7 +544,7 @@ public:
         sf::SoundStream::initialize(1, sampleRate, {sf::SoundChannel::Mono});
     }
 
-    void onUpdate(float time, sf::Vector2f position) override
+    void onUpdate(sf::Time time, sf::Vector2f position) override
     {
         m_velocity = std::clamp(150.f * (1.f - position.y), 0.f, 150.f);
         m_factor   = std::clamp(position.x, 0.f, 1.f);
@@ -552,7 +552,7 @@ public:
         m_currentVelocity.setString("Velocity: " + std::to_string(m_velocity));
         m_currentFactor.setString("Doppler Factor: " + std::to_string(m_factor));
 
-        m_position.x = std::fmod(time, 8.f) * windowSize.x / 8.f;
+        m_position.x = (time % sf::seconds(8)).asSeconds() * windowSize.x / 8.f;
 
         setPosition({m_position.x, m_position.y, 0.f});
         setVelocity({m_velocity, 0.f, 0.f});
@@ -633,7 +633,7 @@ private:
 class Processing : public Effect
 {
 public:
-    void onUpdate([[maybe_unused]] float time, sf::Vector2f position) override
+    void onUpdate(sf::Time /*time*/, sf::Vector2f position) override
     {
         m_position = sf::Vector2f(windowSize).componentWiseMul(position) - sf::Vector2f(10, 10);
         m_music.setPosition({m_position.x, m_position.y, 0.f});
@@ -1212,7 +1212,7 @@ int main()
 
         // Update the current example
         const auto position = sf::Vector2f(sf::Mouse::getPosition(window)).componentWiseDiv(sf::Vector2f(window.getSize()));
-        effects[current]->update(clock.getElapsedTime().asSeconds(), position);
+        effects[current]->update(clock.getElapsedTime(), position);
 
         // Clear the window
         window.clear(sf::Color(50, 50, 50));
