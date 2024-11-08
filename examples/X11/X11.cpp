@@ -73,7 +73,7 @@
 /// \return True if operation was successful, false otherwise
 ///
 ////////////////////////////////////////////////////////////
-[[nodiscard]] bool draw(sf::Window& window, float elapsedTime)
+[[nodiscard]] bool draw(sf::Window& window, sf::Time elapsedTime)
 {
     // Activate the window
     if (!window.setActive())
@@ -89,9 +89,9 @@
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glTranslatef(0.f, 0.f, -200.f);
-    glRotatef(elapsedTime * 10.f, 1.f, 0.f, 0.f);
-    glRotatef(elapsedTime * 6.f, 0.f, 1.f, 0.f);
-    glRotatef(elapsedTime * 18.f, 0.f, 0.f, 1.f);
+    glRotatef(elapsedTime.asSeconds() * 10.f, 1.f, 0.f, 0.f);
+    glRotatef(elapsedTime.asSeconds() * 6.f, 0.f, 1.f, 0.f);
+    glRotatef(elapsedTime.asSeconds() * 18.f, 0.f, 0.f, 1.f);
 
     // Define a 3D cube (6 faces made of 2 triangles composed by 3 vertices)
     // clang-format off
@@ -273,13 +273,13 @@ int main()
         }
 
         // Draw something into our views
-        if (!draw(sfmlView1, clock.getElapsedTime().asSeconds()))
+        if (!draw(sfmlView1, clock.getElapsedTime()))
         {
             std::cerr << "Failed to draw on view 1" << std::endl;
             return EXIT_FAILURE;
         }
 
-        if (!draw(sfmlView2, clock.getElapsedTime().asSeconds() * 0.3f))
+        if (!draw(sfmlView2, clock.getElapsedTime() * 0.3f))
         {
             std::cerr << "Failed to draw on view 2" << std::endl;
             return EXIT_FAILURE;
