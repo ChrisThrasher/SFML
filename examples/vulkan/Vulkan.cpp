@@ -2360,7 +2360,7 @@ public:
     }
 
     // Update the matrices in our uniform buffer every frame
-    void updateUniformBuffer(float elapsed)
+    void updateUniformBuffer(sf::Time elapsed)
     {
         // Construct the model matrix
         // clang-format off
@@ -2372,9 +2372,9 @@ public:
         }};
         // clang-format on
 
-        matrixRotateX(model, sf::degrees(elapsed * 59.0f));
-        matrixRotateY(model, sf::degrees(elapsed * 83.0f));
-        matrixRotateZ(model, sf::degrees(elapsed * 109.0f));
+        matrixRotateX(model, sf::degrees(elapsed.asSeconds() * 59.0f));
+        matrixRotateY(model, sf::degrees(elapsed.asSeconds() * 83.0f));
+        matrixRotateZ(model, sf::degrees(elapsed.asSeconds() * 109.0f));
 
         // Translate the model based on the mouse position
         const sf::Vector2f mousePosition = sf::Vector2f(sf::Mouse::getPosition(window));
@@ -2533,7 +2533,7 @@ public:
             if (vulkanAvailable && window.isOpen())
             {
                 // Update the uniform buffer (matrices)
-                updateUniformBuffer(clock.getElapsedTime().asSeconds());
+                updateUniformBuffer(clock.getElapsedTime());
 
                 // Render the frame
                 draw();
