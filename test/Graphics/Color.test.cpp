@@ -3,8 +3,8 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <GraphicsUtil.hpp>
+#include <array>
 #include <type_traits>
-#include <vector>
 
 TEST_CASE("[Graphics] sf::Color")
 {
@@ -156,8 +156,8 @@ TEST_CASE("[Graphics] sf::Color")
         STATIC_CHECK(sizeof(sf::Color) == 4);
         STATIC_CHECK(alignof(sf::Color) == 1);
 
-        const std::vector<sf::Color> pixels = {{10, 11, 12, 13}, {14, 15, 16, 17}, {18, 19, 20, 21}};
-        const auto*                  begin  = reinterpret_cast<const std::uint8_t*>(pixels.data());
+        static constexpr std::array<sf::Color, 3> pixels = {{{10, 11, 12, 13}, {14, 15, 16, 17}, {18, 19, 20, 21}}};
+        const auto*                               begin  = reinterpret_cast<const std::uint8_t*>(pixels.data());
         CHECK(begin[0] == pixels[0].r);
         CHECK(begin[1] == pixels[0].g);
         CHECK(begin[2] == pixels[0].b);
