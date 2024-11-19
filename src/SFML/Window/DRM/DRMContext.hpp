@@ -29,6 +29,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/ContextSettings.hpp>
+#include <SFML/Window/DRM/FileDescriptor.hpp>
 #include <SFML/Window/EGLCheck.hpp>
 #include <SFML/Window/GlContext.hpp>
 #include <SFML/Window/VideoMode.hpp>
@@ -43,7 +44,7 @@ namespace sf::priv
 {
 struct Drm
 {
-    int fileDescriptor{};
+    FileDescriptor fileDescriptor;
 
     drmModeModeInfoPtr mode{};
     std::uint32_t      crtcId{};

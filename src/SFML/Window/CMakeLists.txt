@@ -96,6 +96,8 @@ elseif(SFML_OS_LINUX OR SFML_OS_FREEBSD OR SFML_OS_OPENBSD OR SFML_OS_NETBSD)
             ${SRCROOT}/DRM/CursorImpl.cpp
             ${SRCROOT}/DRM/ClipboardImpl.hpp
             ${SRCROOT}/DRM/ClipboardImpl.cpp
+            ${SRCROOT}/DRM/FileDescriptor.hpp
+            ${SRCROOT}/DRM/FileDescriptor.cpp
             ${SRCROOT}/Unix/SensorImpl.cpp
             ${SRCROOT}/Unix/SensorImpl.hpp
             ${SRCROOT}/DRM/InputImpl.cpp

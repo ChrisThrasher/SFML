@@ -25,6 +25,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+#include <SFML/Window/DRM/FileDescriptor.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/InputImpl.hpp>
 
@@ -62,7 +63,7 @@ struct TouchSlot
 std::recursive_mutex inputMutex; // threadsafe? maybe...
 sf::Vector2i         mousePos;   // current mouse position
 
-std::vector<int> fileDescriptors; // list of open file descriptors for /dev/input
+std::vector<sf::priv::FileDescriptor> fileDescriptors; // list of open file descriptors for /dev/input
 sf::priv::EnumArray<sf::Mouse::Button, bool, sf::Mouse::ButtonCount> mouseMap{}; // track whether mouse buttons are down
 sf::priv::EnumArray<sf::Keyboard::Key, bool, sf::Keyboard::KeyCount> keyMap{};   // track whether keys are down
 
@@ -92,12 +93,6 @@ bool systemDown()
     return keyMap[sf::Keyboard::Key::LSystem] || keyMap[sf::Keyboard::Key::RSystem];
 }
 
-void uninitFileDescriptors()
-{
-    for (const auto& fileDescriptor : fileDescriptors)
-        close(fileDescriptor);
-}
-
 #define BITS_PER_LONG        (sizeof(unsigned long) * 8)
 #define NBITS(x)             ((((x)-1) / BITS_PER_LONG) + 1)
 #define OFF(x)               ((x) % BITS_PER_LONG)
@@ -106,17 +101,17 @@ void uninitFileDescriptors()
 
 // Only keep fileDescriptors that we think are a keyboard, mouse or touchpad/touchscreen
 // Joysticks are handled in /src/SFML/Window/Unix/JoystickImpl.cpp
-bool keepFileDescriptor(int fileDesc)
+bool keepFileDescriptor(const sf::priv::FileDescriptor& fileDesc)
 {
     std::array<unsigned long, NBITS(EV_MAX)>  bitmaskEv{};
     std::array<unsigned long, NBITS(KEY_MAX)> bitmaskKey{};
     std::array<unsigned long, NBITS(ABS_MAX)> bitmaskAbs{};
     std::array<unsigned long, NBITS(REL_MAX)> bitmaskRel{};
 
-    ioctl(fileDesc, EVIOCGBIT(0, sizeof(bitmaskEv)), bitmaskEv.data());
-    ioctl(fileDesc, EVIOCGBIT(EV_KEY, sizeof(bitmaskKey)), bitmaskKey.data());
-    ioctl(fileDesc, EVIOCGBIT(EV_ABS, sizeof(bitmaskAbs)), bitmaskAbs.data());
-    ioctl(fileDesc, EVIOCGBIT(EV_REL, sizeof(bitmaskRel)), bitmaskRel.data());
+    ioctl(fileDesc.get(), EVIOCGBIT(0, sizeof(bitmaskEv)), bitmaskEv.data());
+    ioctl(fileDesc.get(), EVIOCGBIT(EV_KEY, sizeof(bitmaskKey)), bitmaskKey.data());
+    ioctl(fileDesc.get(), EVIOCGBIT(EV_ABS, sizeof(bitmaskAbs)), bitmaskAbs.data());
+    ioctl(fileDesc.get(), EVIOCGBIT(EV_REL, sizeof(bitmaskRel)), bitmaskRel.data());
 
     // This is the keyboard test used by SDL.
     // The first 32 bits are ESC, numbers and Q to D;  If we have any of those,
@@ -149,9 +144,9 @@ void initFileDescriptors()
         stream << i;
         name += stream.str();
 
-        const int tempFD = open(name.c_str(), O_RDONLY | O_NONBLOCK);
+        auto tempFD = sf::priv::FileDescriptor(name.c_str(), O_RDONLY | O_NONBLOCK);
 
-        if (tempFD < 0)
+        if (!tempFD)
         {
             if (errno != ENOENT)
                 sf::err() << "Error opening " << name << ": " << std::strerror(errno) << std::endl;
@@ -160,12 +155,10 @@ void initFileDescriptors()
         }
 
         if (keepFileDescriptor(tempFD))
-            fileDescriptors.push_back(tempFD);
+            fileDescriptors.push_back(std::move(tempFD));
         else
-            close(tempFD);
+            tempFD.reset();
     }
-
-    std::atexit(uninitFileDescriptors);
 }
 
 std::optional<sf::Mouse::Button> toMouseButton(int code)
@@ -366,7 +359,7 @@ std::optional<sf::Event> eventProcess()
     for (auto& fileDescriptor : fileDescriptors)
     {
         input_event inputEvent{};
-        bytesRead = read(fileDescriptor, &inputEvent, sizeof(inputEvent));
+        bytesRead = read(fileDescriptor.get(), &inputEvent, sizeof(inputEvent));
 
         while (bytesRead > 0)
         {
@@ -455,30 +448,30 @@ std::optional<sf::Event> eventProcess()
                 {
                     case ABS_MT_SLOT:
                         currentSlot = inputEvent.value;
-                        touchFd     = fileDescriptor;
+                        touchFd     = fileDescriptor.get();
                         break;
                     case ABS_MT_TRACKING_ID:
                         atSlot(currentSlot).id = inputEvent.value >= 0 ? std::optional(inputEvent.value) : std::nullopt;
-                        touchFd                = fileDescriptor;
+                        touchFd                = fileDescriptor.get();
                         break;
                     case ABS_MT_POSITION_X:
                         atSlot(currentSlot).pos.x = inputEvent.value;
-                        touchFd                   = fileDescriptor;
+                        touchFd                   = fileDescriptor.get();
                         break;
                     case ABS_MT_POSITION_Y:
                         atSlot(currentSlot).pos.y = inputEvent.value;
-                        touchFd                   = fileDescriptor;
+                        touchFd                   = fileDescriptor.get();
                         break;
                 }
             }
-            else if (inputEvent.type == EV_SYN && inputEvent.code == SYN_REPORT && fileDescriptor == touchFd)
+            else if (inputEvent.type == EV_SYN && inputEvent.code == SYN_REPORT && fileDescriptor.get() == touchFd)
             {
                 // This pushes events directly to the queue, because it
                 // can generate more than one event.
                 processSlots();
             }
 
-            bytesRead = read(fileDescriptor, &inputEvent, sizeof(inputEvent));
+            bytesRead = read(fileDescriptor.get(), &inputEvent, sizeof(inputEvent));
         }
 
         if ((bytesRead < 0) && (errno != EAGAIN))

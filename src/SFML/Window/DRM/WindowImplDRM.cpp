@@ -92,7 +92,7 @@ WindowImplDRM::~WindowImplDRM()
 WindowHandle WindowImplDRM::getNativeHandle() const
 {
     const Drm& drm = DRMContext::getDRM();
-    return static_cast<WindowHandle>(drm.fileDescriptor);
+    return static_cast<WindowHandle>(drm.fileDescriptor.get());
 }
 
 ////////////////////////////////////////////////////////////
