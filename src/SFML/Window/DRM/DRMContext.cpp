@@ -87,7 +87,7 @@ bool waitForFlip(int timeout)
 
         if (pollFD.revents & POLLIN)
         {
-            drmHandleEvent(drmNode.fileDescriptor, &drmEventCtx);
+            drmHandleEvent(drmNode.fileDescriptor.get(), &drmEventCtx);
         }
         else
         {
@@ -102,7 +102,7 @@ void cleanup()
     if (!initialized)
         return;
 
-    drmModeSetCrtc(drmNode.fileDescriptor,
+    drmModeSetCrtc(drmNode.fileDescriptor.get(),
                    drmNode.originalCrtc->crtc_id,
                    drmNode.originalCrtc->buffer_id,
                    drmNode.originalCrtc->x,
@@ -122,10 +122,9 @@ void cleanup()
     gbm_device_destroy(gbmDevice);
     gbmDevice = nullptr;
 
-    close(drmNode.fileDescriptor);
+    drmNode.fileDescriptor.reset();
 
-    drmNode.fileDescriptor = -1;
-    drmNode.mode           = nullptr;
+    drmNode.mode = nullptr;
 
     pollFD      = {};
     drmEventCtx = {};
@@ -231,7 +230,7 @@ std::uint32_t findCrtcForConnector(const sf::priv::Drm& drm, const drmModeRes& r
     for (int i = 0; i < connector.count_encoders; ++i)
     {
         const std::uint32_t encoderId = connector.encoders[i];
-        if (auto* encoder = drmModeGetEncoder(drm.fileDescriptor, encoderId))
+        if (auto* encoder = drmModeGetEncoder(drm.fileDescriptor.get(), encoderId))
         {
             const std::uint32_t crtcId = findCrtcForEncoder(resources, *encoder);
 
@@ -274,7 +273,7 @@ int hasMonitorConnected(int fd, drmModeRes& resources)
     return 0;
 }
 
-int findDrmDevice(drmModeResPtr& resources)
+sf::priv::FileDescriptor findDrmDevice(drmModeResPtr& resources)
 {
     std::array<drmDevicePtr, 64> devices{};
 
@@ -282,10 +281,10 @@ int findDrmDevice(drmModeResPtr& resources)
     if (numDevices < 0)
     {
         sf::err() << "drmGetDevices2 failed: " << std::strerror(-numDevices) << std::endl;
-        return -1;
+        return {};
     }
 
-    int fileDescriptor = -1;
+    sf::priv::FileDescriptor fileDescriptor;
     for (std::size_t i = 0; i < static_cast<std::size_t>(numDevices); ++i)
     {
         drmDevicePtr device = devices[i];
@@ -294,23 +293,22 @@ int findDrmDevice(drmModeResPtr& resources)
         if (!(device->available_nodes & (1 << DRM_NODE_PRIMARY)))
             continue;
         // OK, it's a primary device. If we can get the drmModeResources, it means it's also a KMS-capable device.
-        fileDescriptor = open(device->nodes[DRM_NODE_PRIMARY], O_RDWR);
-        if (fileDescriptor < 0)
+        fileDescriptor = sf::priv::FileDescriptor(device->nodes[DRM_NODE_PRIMARY], O_RDWR);
+        if (!fileDescriptor)
             continue;
-        result = getResources(fileDescriptor, resources);
-        if (!result && hasMonitorConnected(fileDescriptor, *resources) != 0)
+        result = getResources(fileDescriptor.get(), resources);
+        if (!result && hasMonitorConnected(fileDescriptor.get(), *resources) != 0)
         {
 #ifdef SFML_DEBUG
             sf::err() << "DRM device used: " << device->nodes[DRM_NODE_PRIMARY] << std::endl;
 #endif
             break;
         }
-        close(fileDescriptor);
-        fileDescriptor = -1;
+        fileDescriptor.reset();
     }
     drmFreeDevices(devices.data(), numDevices);
 
-    if (fileDescriptor < 0)
+    if (!fileDescriptor)
         sf::err() << "No drm device found!" << std::endl;
     return fileDescriptor;
 }
@@ -326,8 +324,8 @@ int initDrm()
     const char* deviceStr = std::getenv("SFML_DRM_DEVICE");
     if (deviceStr && *deviceStr)
     {
-        drmNode.fileDescriptor = open(deviceStr, O_RDWR);
-        const int ret          = getResources(drmNode.fileDescriptor, resources);
+        drmNode.fileDescriptor = sf::priv::FileDescriptor(deviceStr, O_RDWR);
+        const int ret          = getResources(drmNode.fileDescriptor.get(), resources);
         if (ret < 0 && errno == EOPNOTSUPP)
             sf::err() << deviceStr << " does not look like a modeset device" << std::endl;
     }
@@ -336,7 +334,7 @@ int initDrm()
         drmNode.fileDescriptor = findDrmDevice(resources);
     }
 
-    if (drmNode.fileDescriptor < 0)
+    if (!drmNode.fileDescriptor)
     {
         sf::err() << "Could not open drm device" << std::endl;
         return -1;
@@ -352,7 +350,7 @@ int initDrm()
     drmModeConnectorPtr connector = nullptr;
     for (int i = 0; i < resources->count_connectors; ++i)
     {
-        connector = drmModeGetConnector(drmNode.fileDescriptor, resources->connectors[i]);
+        connector = drmModeGetConnector(drmNode.fileDescriptor.get(), resources->connectors[i]);
         if (connector->connection == DRM_MODE_CONNECTED)
         {
             // It's connected, let's use this!
@@ -373,7 +371,7 @@ int initDrm()
     drmModeEncoderPtr encoder = nullptr;
     for (int i = 0; i < resources->count_encoders; ++i)
     {
-        encoder = drmModeGetEncoder(drmNode.fileDescriptor, resources->encoders[i]);
+        encoder = drmModeGetEncoder(drmNode.fileDescriptor.get(), resources->encoders[i]);
         if (encoder->encoder_id == connector->encoder_id)
             break;
         drmModeFreeEncoder(encoder);
@@ -404,14 +402,14 @@ int initDrm()
     drmNode.savedEncoder   = encoder;
 
     // Get original display mode so we can restore display mode after program exits
-    drmNode.originalCrtc = drmModeGetCrtc(drmNode.fileDescriptor, drmNode.crtcId);
+    drmNode.originalCrtc = drmModeGetCrtc(drmNode.fileDescriptor.get(), drmNode.crtcId);
 
-    gbmDevice = gbm_create_device(drmNode.fileDescriptor);
+    gbmDevice = gbm_create_device(drmNode.fileDescriptor.get());
 
     std::atexit(cleanup);
     initialized = true;
 
-    pollFD.fd                     = drmNode.fileDescriptor;
+    pollFD.fd                     = drmNode.fileDescriptor.get();
     pollFD.events                 = POLLIN;
     drmEventCtx.version           = 2;
     drmEventCtx.page_flip_handler = pageFlipHandler;
@@ -675,7 +673,14 @@ void DRMContext::display()
     // If first time, need to first call drmModeSetCrtc()
     if (!m_shown)
     {
-        if (drmModeSetCrtc(drmNode.fileDescriptor, drmNode.crtcId, fb->fbId, 0, 0, &drmNode.connectorId, 1, drmNode.mode))
+        if (drmModeSetCrtc(drmNode.fileDescriptor.get(),
+                           drmNode.crtcId,
+                           fb->fbId,
+                           0,
+                           0,
+                           &drmNode.connectorId,
+                           1,
+                           drmNode.mode))
         {
             err() << "Failed to set mode: " << std::strerror(errno) << std::endl;
             std::abort();
@@ -684,7 +689,7 @@ void DRMContext::display()
     }
 
     // Do page flip
-    if (!drmModePageFlip(drmNode.fileDescriptor, drmNode.crtcId, fb->fbId, DRM_MODE_PAGE_FLIP_EVENT, &waitingForFlip))
+    if (!drmModePageFlip(drmNode.fileDescriptor.get(), drmNode.crtcId, fb->fbId, DRM_MODE_PAGE_FLIP_EVENT, &waitingForFlip))
         waitingForFlip = 1;
 }
 
