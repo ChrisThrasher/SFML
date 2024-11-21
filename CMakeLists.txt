@@ -106,39 +106,6 @@ if(SFML_BUILD_GRAPHICS AND NOT SFML_BUILD_WINDOW)
     set(SFML_BUILD_WINDOW ON)
 endif()
 
-# allow not using bundled dependencies with a switch
-# (except for stb_image)
-# yes this is horrible, but GLOB_RECURSE sucks
-sfml_set_option(SFML_USE_SYSTEM_DEPS OFF BOOL "ON to use system dependencies, OFF to use the bundled ones.")
-if(SFML_USE_SYSTEM_DEPS)
-    if(SFML_INSTALL_XCODE_TEMPLATES)
-        message(FATAL_ERROR "XCode templates installation cannot be used with the SFML_USE_SYSTEM_DEPS option (the bundled frameworks are required.)")
-    endif()
-
-    file(GLOB_RECURSE DEP_LIBS    "${PROJECT_SOURCE_DIR}/extlibs/libs*/*")
-    file(GLOB_RECURSE DEP_BINS    "${PROJECT_SOURCE_DIR}/extlibs/bin*/*")
-    file(GLOB_RECURSE DEP_HEADERS "${PROJECT_SOURCE_DIR}/extlibs/headers/*")
-
-    foreach(DEP_FILE ${DEP_LIBS} ${DEP_BINS} ${DEP_HEADERS})
-        get_filename_component(DEP_DIR ${DEP_FILE} PATH)
-
-        if(NOT DEP_DIR MATCHES "/(stb_image|minimp3)(/|$)")
-            list(APPEND CMAKE_IGNORE_PATH "${DEP_DIR}")
-        endif()
-
-        get_filename_component(DEP_PARENT_DIR ${DEP_DIR} PATH)
-        while(NOT DEP_PARENT_DIR STREQUAL "${PROJECT_SOURCE_DIR}/extlibs")
-            if(NOT DEP_DIR MATCHES "/(stb_image|minimp3)(/|$)")
-                list(APPEND CMAKE_IGNORE_PATH "${DEP_PARENT_DIR}")
-            endif()
-
-            get_filename_component(DEP_PARENT_DIR ${DEP_PARENT_DIR} PATH)
-        endwhile()
-    endforeach()
-
-    list(REMOVE_DUPLICATES CMAKE_IGNORE_PATH)
-endif()
-
 if(SFML_COMPILER_MSVC)
     # add an option to choose whether PDB debug symbols should be generated (defaults to true when possible)
     sfml_set_option(SFML_GENERATE_PDB ON BOOL "True to generate PDB debug symbols, OFF otherwise.")
@@ -381,28 +348,7 @@ install(FILES license.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
 install(FILES readme.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
 # install 3rd-party libraries and tools
-if(SFML_OS_WINDOWS)
-
-    if(NOT SFML_USE_SYSTEM_DEPS)
-        # install the binaries of SFML dependencies
-        if(ARCH_ARM64)
-            install(DIRECTORY extlibs/libs-msvc-universal/ARM64/ DESTINATION ${CMAKE_INSTALL_LIBDIR})
-        elseif(ARCH_X86)
-            if(SFML_COMPILER_MSVC OR (SFML_COMPILER_CLANG AND NOT MINGW))
-                install(DIRECTORY extlibs/libs-msvc-universal/x86/ DESTINATION ${CMAKE_INSTALL_LIBDIR})
-            else()
-                install(DIRECTORY extlibs/libs-mingw/x86/ DESTINATION ${CMAKE_INSTALL_LIBDIR})
-            endif()
-        elseif(ARCH_X64)
-            if(SFML_COMPILER_MSVC OR (SFML_COMPILER_CLANG AND NOT MINGW))
-                install(DIRECTORY extlibs/libs-msvc-universal/x64/ DESTINATION ${CMAKE_INSTALL_LIBDIR})
-            else()
-                install(DIRECTORY extlibs/libs-mingw/x64/ DESTINATION ${CMAKE_INSTALL_LIBDIR})
-            endif()
-        endif()
-    endif()
-
-elseif(SFML_OS_MACOS)
+if(SFML_OS_MACOS)
     # install the Xcode templates if requested
     if(SFML_INSTALL_XCODE_TEMPLATES)
         # configure the templates plist files
@@ -417,14 +363,6 @@ elseif(SFML_OS_MACOS)
                 PATTERN "*.in" EXCLUDE
                 PATTERN ".DS_Store" EXCLUDE)
     endif()
-
-elseif(SFML_OS_ANDROID)
-
-    if(NOT SFML_USE_SYSTEM_DEPS)
-        # install extlibs
-        install(DIRECTORY extlibs/libs-android/${CMAKE_ANDROID_ARCH_ABI} DESTINATION extlibs/lib)
-    endif()
-
 endif()
 
 sfml_export_targets()
