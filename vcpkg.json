@@ -6,6 +6,7 @@
     "libflac",
     "libvorbis",
     "miniaudio",
-    "minimp3"
+    "minimp3",
+    "stb"
   ]
 }

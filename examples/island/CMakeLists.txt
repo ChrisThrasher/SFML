@@ -10,6 +10,7 @@ sfml_add_example(island GUI_APP
                  RESOURCES_DIR resources)
 
 # external dependency headers
-target_include_directories(island SYSTEM PRIVATE ${PROJECT_SOURCE_DIR}/examples/island)
+find_package(Stb REQUIRED)
+target_include_directories(island SYSTEM PRIVATE ${Stb_INCLUDE_DIR})
 
 target_link_libraries(island PRIVATE Threads::Threads)

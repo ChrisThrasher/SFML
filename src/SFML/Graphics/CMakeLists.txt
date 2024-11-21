@@ -91,9 +91,6 @@ sfml_add_library(Graphics
 # setup dependencies
 target_link_libraries(sfml-graphics PUBLIC SFML::Window)
 
-# stb_image sources
-target_include_directories(sfml-graphics SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/stb_image")
-
 # glad sources
 target_include_directories(sfml-graphics SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/glad/include")
 
@@ -106,6 +103,9 @@ endif()
 
 find_package(Freetype REQUIRED)
 target_link_libraries(sfml-graphics PRIVATE Freetype::Freetype)
+
+find_package(Stb REQUIRED)
+target_include_directories(sfml-graphics SYSTEM PRIVATE ${Stb_INCLUDE_DIR})
 
 # add preprocessor symbols
 target_compile_definitions(sfml-graphics PRIVATE "STBI_FAILURE_USERMSG")
