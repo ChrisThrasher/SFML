@@ -405,10 +405,6 @@ if(SFML_OS_WINDOWS)
 elseif(SFML_OS_MACOS)
     # install extlibs dependencies only when used
     if(SFML_BUILD_AUDIO)
-        if(FLAC_LIBRARY STREQUAL "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks/FLAC.framework")
-            install(DIRECTORY extlibs/libs-macos/Frameworks/FLAC.framework DESTINATION ${CMAKE_INSTALL_LIBDIR})
-        endif()
-
         if(OGG_LIBRARY STREQUAL "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks/ogg.framework")
             install(DIRECTORY extlibs/libs-macos/Frameworks/ogg.framework DESTINATION ${CMAKE_INSTALL_LIBDIR})
         endif()
@@ -445,8 +441,7 @@ elseif(SFML_OS_IOS)
 
     if(NOT SFML_USE_SYSTEM_DEPS)
         if(SFML_BUILD_AUDIO)
-            install(FILES extlibs/libs-ios/libflac.a
-                          extlibs/libs-ios/libvorbis.a
+            install(FILES extlibs/libs-ios/libvorbis.a
                           extlibs/libs-ios/libogg.a
                           DESTINATION lib)
         endif()

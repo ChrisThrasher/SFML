@@ -3,6 +3,10 @@
   "version-string": "3.0.0",
   "dependencies": [
     {
+      "name": "libflac",
+      "version>=": "1.4.3"
+    },
+    {
       "name": "freetype",
       "version>=": "2.13.3"
     }
