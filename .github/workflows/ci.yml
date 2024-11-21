@@ -305,6 +305,8 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        submodules: true
 
     - name: Get CMake and Ninja
       uses: lukka/get-cmake@latest
