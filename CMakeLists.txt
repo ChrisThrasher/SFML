@@ -403,25 +403,6 @@ if(SFML_OS_WINDOWS)
     endif()
 
 elseif(SFML_OS_MACOS)
-    # install extlibs dependencies only when used
-    if(SFML_BUILD_AUDIO)
-        if(OGG_LIBRARY STREQUAL "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks/ogg.framework")
-            install(DIRECTORY extlibs/libs-macos/Frameworks/ogg.framework DESTINATION ${CMAKE_INSTALL_LIBDIR})
-        endif()
-
-        if(VORBIS_LIBRARY STREQUAL "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks/vorbis.framework")
-            install(DIRECTORY extlibs/libs-macos/Frameworks/vorbis.framework DESTINATION ${CMAKE_INSTALL_LIBDIR})
-        endif()
-
-        if(VORBISENC_LIBRARY STREQUAL "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks/vorbisenc.framework")
-            install(DIRECTORY extlibs/libs-macos/Frameworks/vorbisenc.framework DESTINATION ${CMAKE_INSTALL_LIBDIR})
-        endif()
-
-        if(VORBISFILE_LIBRARY STREQUAL "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks/vorbisfile.framework")
-            install(DIRECTORY extlibs/libs-macos/Frameworks/vorbisfile.framework DESTINATION ${CMAKE_INSTALL_LIBDIR})
-        endif()
-    endif()
-
     # install the Xcode templates if requested
     if(SFML_INSTALL_XCODE_TEMPLATES)
         # configure the templates plist files
@@ -435,16 +416,6 @@ elseif(SFML_OS_MACOS)
                 DESTINATION /Library/Developer/Xcode/Templates
                 PATTERN "*.in" EXCLUDE
                 PATTERN ".DS_Store" EXCLUDE)
-    endif()
-
-elseif(SFML_OS_IOS)
-
-    if(NOT SFML_USE_SYSTEM_DEPS)
-        if(SFML_BUILD_AUDIO)
-            install(FILES extlibs/libs-ios/libvorbis.a
-                          extlibs/libs-ios/libogg.a
-                          DESTINATION lib)
-        endif()
     endif()
 
 elseif(SFML_OS_ANDROID)
