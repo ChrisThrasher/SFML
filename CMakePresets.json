@@ -4,7 +4,7 @@
     {
       "name": "dev",
       "binaryDir": "build",
-      "installDir": "${sourceDir}/build/install",
+      "installDir": "build/install",
       "cacheVariables": {
         "CMAKE_CXX_EXTENSIONS": "OFF",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
