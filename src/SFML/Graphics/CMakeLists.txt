@@ -97,18 +97,6 @@ target_include_directories(sfml-graphics SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/e
 # glad sources
 target_include_directories(sfml-graphics SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/glad/include")
 
-# let CMake know about our additional graphics libraries paths
-if(SFML_OS_WINDOWS)
-    list(APPEND CMAKE_INCLUDE_PATH "${PROJECT_SOURCE_DIR}/extlibs/headers/freetype2")
-elseif(SFML_OS_MACOS)
-    list(APPEND CMAKE_INCLUDE_PATH "${PROJECT_SOURCE_DIR}/extlibs/headers/freetype2")
-    list(APPEND CMAKE_LIBRARY_PATH "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks")
-elseif(SFML_OS_IOS)
-    list(APPEND CMAKE_INCLUDE_PATH "${PROJECT_SOURCE_DIR}/extlibs/headers/freetype2")
-elseif(SFML_OS_ANDROID)
-    list(APPEND CMAKE_INCLUDE_PATH "${PROJECT_SOURCE_DIR}/extlibs/headers/freetype2")
-endif()
-
 # find external libraries
 if(SFML_OS_ANDROID)
     target_link_libraries(sfml-graphics PRIVATE z)

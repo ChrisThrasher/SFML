@@ -404,12 +404,6 @@ if(SFML_OS_WINDOWS)
 
 elseif(SFML_OS_MACOS)
     # install extlibs dependencies only when used
-    if(SFML_BUILD_GRAPHICS)
-        if(FREETYPE_LIBRARY STREQUAL "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks/freetype.framework")
-            install(DIRECTORY extlibs/libs-macos/Frameworks/freetype.framework DESTINATION ${CMAKE_INSTALL_LIBDIR})
-        endif()
-    endif()
-
     if(SFML_BUILD_AUDIO)
         if(FLAC_LIBRARY STREQUAL "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks/FLAC.framework")
             install(DIRECTORY extlibs/libs-macos/Frameworks/FLAC.framework DESTINATION ${CMAKE_INSTALL_LIBDIR})
@@ -450,12 +444,6 @@ elseif(SFML_OS_MACOS)
 elseif(SFML_OS_IOS)
 
     if(NOT SFML_USE_SYSTEM_DEPS)
-        # since the iOS libraries are built as static, we must install the SFML dependencies
-        # too so that the end user can easily link them to its final application
-        if(SFML_BUILD_GRAPHICS)
-            install(FILES extlibs/libs-ios/libfreetype.a DESTINATION lib)
-        endif()
-
         if(SFML_BUILD_AUDIO)
             install(FILES extlibs/libs-ios/libflac.a
                           extlibs/libs-ios/libvorbis.a
