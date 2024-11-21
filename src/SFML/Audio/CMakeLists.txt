@@ -67,13 +67,6 @@ if(SFML_OS_IOS)
     set_source_files_properties(${SRCROOT}/Miniaudio.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()
 
-# let CMake know about our additional audio libraries paths (on Android and macOS)
-if(SFML_OS_MACOS)
-    list(APPEND CMAKE_LIBRARY_PATH "${PROJECT_SOURCE_DIR}/extlibs/libs-macos/Frameworks")
-elseif(SFML_OS_ANDROID)
-    list(APPEND CMAKE_INCLUDE_PATH "${PROJECT_SOURCE_DIR}/extlibs/android")
-endif()
-
 # find external libraries
 find_package(Vorbis REQUIRED)
 find_package(FLAC REQUIRED)
