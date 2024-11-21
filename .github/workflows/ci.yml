@@ -390,9 +390,11 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v4
+      with:
+        submodules: true
 
     - name: Configure
-      run: cmake -B build -DSFML_BUILD_DOC=ON
+      run: cmake --preset dev -DSFML_BUILD_DOC=ON
 
     - name: Build Doxygen Site
       run: cmake --build build --target doc
