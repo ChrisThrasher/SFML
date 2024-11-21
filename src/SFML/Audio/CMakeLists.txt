@@ -95,10 +95,12 @@ else()
 endif()
 
 # miniaudio sources
-target_include_directories(sfml-audio SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/miniaudio")
+find_path(MINIAUDIO_INCLUDE_DIRS miniaudio.h)
+target_include_directories(sfml-audio SYSTEM PRIVATE ${MINIAUDIO_INCLUDE_DIRS})
 
 # minimp3 sources
-target_include_directories(sfml-audio SYSTEM PRIVATE "${PROJECT_SOURCE_DIR}/extlibs/headers/minimp3")
+find_path(MINIMP3_INCLUDE_DIRS minimp3/minimp3.h)
+target_include_directories(sfml-audio SYSTEM PRIVATE ${MINIMP3_INCLUDE_DIRS})
 
 if(SFML_OS_ANDROID)
     target_link_libraries(sfml-audio PRIVATE android OpenSLES)

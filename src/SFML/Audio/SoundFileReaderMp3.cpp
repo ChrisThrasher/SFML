@@ -39,7 +39,7 @@
 #pragma GCC diagnostic ignored "-Wstringop-overflow"
 #endif
 
-#include <minimp3_ex.h>
+#include <minimp3/minimp3_ex.h>
 
 #ifdef _MSC_VER
 #pragma warning(pop)
