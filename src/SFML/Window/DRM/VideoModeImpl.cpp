@@ -40,7 +40,7 @@ std::vector<VideoMode> VideoModeImpl::getFullscreenModes()
 
     if (const auto* conn = DRMContext::getDRM().savedConnector)
     {
-        for (int i = 0; i < conn->count_modes; i++)
+        for (int i = 0; i < conn->count_modes; ++i)
             modes.push_back(VideoMode({conn->modes[i].hdisplay, conn->modes[i].vdisplay}));
     }
     else
