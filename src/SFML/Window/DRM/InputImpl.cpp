@@ -142,7 +142,7 @@ void initFileDescriptors()
 
     initialized = true;
 
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < 32; ++i)
     {
         std::string        name("/dev/input/event");
         std::ostringstream stream;
