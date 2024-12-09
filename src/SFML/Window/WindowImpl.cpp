@@ -177,8 +177,7 @@ WindowImpl::WindowImpl() : m_joystickStatesImpl(std::make_unique<JoystickStatesI
     }
 
     // Get the initial sensor states
-    for (Vector3f& vec : m_sensorValue)
-        vec = Vector3f(0, 0, 0);
+    m_sensorValue.fill({});
 }
 
 
