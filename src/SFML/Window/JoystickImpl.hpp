@@ -33,6 +33,8 @@
 
 #include <SFML/System/EnumArray.hpp>
 
+#include <bitset>
+
 
 namespace sf::priv
 {
@@ -55,7 +57,7 @@ struct JoystickState
 {
     bool                                                  connected{}; //!< Is the joystick currently connected?
     EnumArray<Joystick::Axis, float, Joystick::AxisCount> axes{};      //!< Position of each axis, in range [-100, 100]
-    std::array<bool, Joystick::ButtonCount>               buttons{};   //!< Status of each button (true = pressed)
+    std::bitset<Joystick::ButtonCount>                    buttons;     //!< Status of each button (true = pressed)
 };
 
 } // namespace sf::priv
