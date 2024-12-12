@@ -40,6 +40,13 @@ TEST_CASE("[Window] sf::VideoMode", runDisplayTests())
         }
     }
 
+    SECTION("getDesktopMode()")
+    {
+        const auto desktopMode = sf::VideoMode::getDesktopMode();
+        CHECK(desktopMode.size != sf::Vector2u());
+        CHECK(desktopMode.bitsPerPixel != 0);
+    }
+
     SECTION("getFullscreenModes()")
     {
         const auto& modes = sf::VideoMode::getFullscreenModes();
