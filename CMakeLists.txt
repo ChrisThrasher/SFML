@@ -409,6 +409,12 @@ if(SFML_BUILD_DOC)
     add_subdirectory(doc)
 endif()
 
+# add an option for building the benchmarks
+sfml_set_option(SFML_BUILD_BENCHMARKS OFF BOOL "ON to build the SFML benchmarks, OFF to ignore them")
+if(SFML_BUILD_BENCHMARKS)
+    add_subdirectory(benchmarks)
+endif()
+
 # add an option for building the examples
 sfml_set_option(SFML_BUILD_EXAMPLES OFF BOOL "ON to build the SFML examples, OFF to ignore them")
 if(SFML_BUILD_EXAMPLES AND NOT SFML_OS_ANDROID)
