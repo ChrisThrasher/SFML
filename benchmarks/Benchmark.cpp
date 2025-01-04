@@ -2,9 +2,24 @@
 
 #include <catch2/benchmark/catch_benchmark_all.hpp>
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/reporters/catch_reporter_event_listener.hpp>
+#include <catch2/reporters/catch_reporter_registrars.hpp>
 
 #include <iostream>
 #include <random>
+
+struct EventListener : Catch::EventListenerBase
+{
+    using Catch::EventListenerBase::EventListenerBase;
+
+    void benchmarkEnded(const Catch::BenchmarkStats<>& stats) override
+    {
+        benchmarkStats = stats;
+    }
+
+    static inline Catch::BenchmarkStats<> benchmarkStats;
+};
+CATCH_REGISTER_LISTENER(EventListener)
 
 TEST_CASE("Benchmark")
 {
@@ -49,7 +64,10 @@ TEST_CASE("Benchmark")
     CHECK(eventCount < frameCount); // Fewer than 1 event per frame is to be expected
 
     // Show results
+    const auto fps = 1.f /
+                     std::chrono::duration_cast<std::chrono::duration<float>>(EventListener::benchmarkStats.mean.point).count();
     std::cout << '\n';
-    std::cout << "Event count: " << eventCount << "\n";
-    std::cout << "Frame count: " << frameCount << "\n";
+    std::cout << "Event count:\t" << eventCount << "\n";
+    std::cout << "Frame count:\t" << frameCount << "\n";
+    std::cout << "Avg fps:\t" << fps << "\n";
 }
