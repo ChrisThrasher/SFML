@@ -3,24 +3,7 @@ include(FetchContent)
 add_subdirectory(install)
 set_target_warnings(test-sfml-install)
 
-set(CATCH_CONFIG_FAST_COMPILE ON CACHE BOOL "")
-set(CATCH_CONFIG_NO_EXPERIMENTAL_STATIC_ANALYSIS_SUPPORT ON CACHE BOOL "")
-FetchContent_Declare(Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG v3.8.0
-    GIT_SHALLOW ON)
-FetchContent_MakeAvailable(Catch2)
-include(Catch)
-
-# Build Catch2 in C++17 mode to enable C++17 features
-target_compile_features(Catch2 PRIVATE cxx_std_17)
-
-# Ensure that Catch2 sources and headers are not analyzed by any tools
-set_target_properties(Catch2 PROPERTIES COMPILE_OPTIONS "" EXPORT_COMPILE_COMMANDS OFF)
-set_target_properties(Catch2WithMain PROPERTIES EXPORT_COMPILE_COMMANDS OFF)
-set_target_properties(Catch2 Catch2WithMain PROPERTIES FOLDER "Dependencies")
-get_target_property(CATCH2_INCLUDE_DIRS Catch2 INTERFACE_INCLUDE_DIRECTORIES)
-target_include_directories(Catch2 SYSTEM INTERFACE ${CATCH2_INCLUDE_DIRS})
+find_package(Catch2)
 
 add_library(sfml-test-main STATIC
     TestUtilities/SystemUtil.hpp

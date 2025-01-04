@@ -403,6 +403,8 @@ set(CPACK_NSIS_INSTALLER_MUI_ICON_CODE "!define MUI_WELCOMEFINISHPAGE_BITMAP \\\
 
 include(CPack)
 
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
 # add an option for building the API documentation
 sfml_set_option(SFML_BUILD_DOC OFF BOOL "ON to generate the API documentation, OFF to ignore it")
 if(SFML_BUILD_DOC)
