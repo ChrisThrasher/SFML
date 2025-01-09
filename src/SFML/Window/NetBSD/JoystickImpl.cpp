@@ -198,7 +198,7 @@ void JoystickImpl::cleanup()
 ////////////////////////////////////////////////////////////
 bool JoystickImpl::isConnected(unsigned int index)
 {
-    return plugged.find(index) != plugged.end();
+    return plugged.contains(index);
 }
 
 

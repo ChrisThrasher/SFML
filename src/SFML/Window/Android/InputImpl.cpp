@@ -219,7 +219,7 @@ bool isTouchDown(unsigned int finger)
     ActivityStates&       states = getActivity();
     const std::lock_guard lock(states.mutex);
 
-    return states.touchEvents.find(static_cast<int>(finger)) != states.touchEvents.end();
+    return states.touchEvents.contains(static_cast<int>(finger));
 }
 
 
