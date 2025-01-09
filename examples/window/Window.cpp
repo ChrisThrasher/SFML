@@ -77,7 +77,7 @@ int main()
 
     // Define a 3D cube (6 faces made of 2 triangles composed by 3 vertices)
     // clang-format off
-    constexpr std::array<GLfloat, 252> cube =
+    constexpr std::array cube = std::to_array<GLfloat>(
     {
         // positions    // colors (r, g, b, a)
         -50, -50, -50,  0, 0, 1, 1,
@@ -121,7 +121,7 @@ int main()
         -50,  50,  50,  1, 1, 0, 1,
          50, -50,  50,  1, 1, 0, 1,
          50,  50,  50,  1, 1, 0, 1,
-    };
+    });
     // clang-format on
 
     // Enable position and color vertex components

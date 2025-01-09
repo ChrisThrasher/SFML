@@ -366,27 +366,27 @@ TEST_CASE("[Audio] sf::InputSoundFile")
             {
                 inputSoundFile = sf::InputSoundFile("Audio/ding.flac");
                 CHECK(inputSoundFile.read(samples.data(), samples.size()) == 4);
-                CHECK(samples == std::array<std::int16_t, 4>{0, 1, -1, 4});
+                CHECK(samples == std::to_array<std::int16_t>({0, 1, -1, 4}));
                 CHECK(inputSoundFile.read(samples.data(), samples.size()) == 4);
-                CHECK(samples == std::array<std::int16_t, 4>{1, 4, 9, 6});
+                CHECK(samples == std::to_array<std::int16_t>({1, 4, 9, 6}));
             }
 
             SECTION("mp3")
             {
                 inputSoundFile = sf::InputSoundFile("Audio/ding.mp3");
                 CHECK(inputSoundFile.read(samples.data(), samples.size()) == 4);
-                CHECK(samples == std::array<std::int16_t, 4>{0, -2, 0, 2});
+                CHECK(samples == std::to_array<std::int16_t>({0, -2, 0, 2}));
                 CHECK(inputSoundFile.read(samples.data(), samples.size()) == 4);
-                CHECK(samples == std::array<std::int16_t, 4>{1, 4, 6, 8});
+                CHECK(samples == std::to_array<std::int16_t, 4>({1, 4, 6, 8}));
             }
 
             SECTION("ogg")
             {
                 inputSoundFile = sf::InputSoundFile("Audio/doodle_pop.ogg");
                 CHECK(inputSoundFile.read(samples.data(), samples.size()) == 4);
-                CHECK(samples == std::array<std::int16_t, 4>{-827, -985, -1168, -1319});
+                CHECK(samples == std::to_array<std::int16_t>({-827, -985, -1168, -1319}));
                 CHECK(inputSoundFile.read(samples.data(), samples.size()) == 4);
-                CHECK(samples == std::array<std::int16_t, 4>{-1738, -1883, -2358, -2497});
+                CHECK(samples == std::to_array<std::int16_t>({-1738, -1883, -2358, -2497}));
             }
 
             SECTION("wav")
