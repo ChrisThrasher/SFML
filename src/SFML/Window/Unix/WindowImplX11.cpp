@@ -363,7 +363,7 @@ bool isWMAbsolutePositionGood()
     if (!ewmhSupported())
         return false;
 
-    static const std::array<sf::String, 3> wmAbsPosGood = {"Enlightenment", "FVWM", "i3"};
+    static const std::array wmAbsPosGood = std::to_array<sf::String>({"Enlightenment", "FVWM", "i3"});
     return std::ranges::any_of(wmAbsPosGood, [](const sf::String& name) { return name == windowManagerName; });
 }
 

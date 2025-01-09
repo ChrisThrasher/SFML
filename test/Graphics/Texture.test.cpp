@@ -274,7 +274,7 @@ TEST_CASE("[Graphics] sf::Texture", runDisplayTests())
 
     SECTION("Copy semantics")
     {
-        static constexpr std::array<std::uint8_t, 8> red = {0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF};
+        static constexpr std::array red = std::to_array<std::uint8_t>({0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF});
 
         sf::Texture texture(sf::Vector2u(1, 2));
         texture.update(red.data());
@@ -297,8 +297,8 @@ TEST_CASE("[Graphics] sf::Texture", runDisplayTests())
 
     SECTION("update()")
     {
-        static constexpr std::array<std::uint8_t, 4> yellow = {0xFF, 0xFF, 0x00, 0xFF};
-        static constexpr std::array<std::uint8_t, 4> cyan   = {0x00, 0xFF, 0xFF, 0xFF};
+        static constexpr std::array yellow = std::to_array<std::uint8_t>({0xFF, 0xFF, 0x00, 0xFF});
+        static constexpr std::array cyan   = std::to_array<std::uint8_t>({0x00, 0xFF, 0xFF, 0xFF});
 
         SECTION("Pixels")
         {
@@ -387,8 +387,8 @@ TEST_CASE("[Graphics] sf::Texture", runDisplayTests())
 
     SECTION("swap()")
     {
-        static constexpr std::array<std::uint8_t, 4> blue  = {0x00, 0x00, 0xFF, 0xFF};
-        static constexpr std::array<std::uint8_t, 8> green = {0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF};
+        static constexpr std::array blue = std::to_array<std::uint8_t>({0x00, 0x00, 0xFF, 0xFF});
+        static constexpr std::array green = std::to_array<std::uint8_t>({0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF});
 
         sf::Texture texture1(sf::Vector2u(1, 1), true);
         texture1.update(blue.data());

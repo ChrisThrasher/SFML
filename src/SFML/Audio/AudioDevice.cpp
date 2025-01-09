@@ -89,11 +89,11 @@ AudioDevice::AudioDevice()
     // Create the context
     m_context.emplace();
 
-    auto contextConfig                                 = ma_context_config_init();
-    contextConfig.pLog                                 = &*m_log;
-    std::uint32_t                          deviceCount = 0;
-    const auto                             nullBackend = ma_backend_null;
-    const std::array<const ma_backend*, 2> backendLists{nullptr, &nullBackend};
+    auto contextConfig            = ma_context_config_init();
+    contextConfig.pLog            = &*m_log;
+    std::uint32_t    deviceCount  = 0;
+    const auto       nullBackend  = ma_backend_null;
+    const std::array backendLists = std::to_array<const ma_backend*>({nullptr, &nullBackend});
 
     for (const auto* backendList : backendLists)
     {

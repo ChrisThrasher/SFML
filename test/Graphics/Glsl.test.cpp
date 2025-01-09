@@ -258,8 +258,8 @@ TEST_CASE("[Graphics] sf::Glsl")
 
         SECTION("Array constructor")
         {
-            static constexpr std::array<float, 9> data = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-            const sf::Glsl::Mat3                  mat(data.data());
+            static constexpr std::array data = std::to_array<float>({1, 2, 3, 4, 5, 6, 7, 8, 9});
+            const sf::Glsl::Mat3        mat(data.data());
             CHECK(mat.array[0] == 1);
             CHECK(mat.array[1] == 2);
             CHECK(mat.array[2] == 3);
@@ -297,8 +297,8 @@ TEST_CASE("[Graphics] sf::Glsl")
             STATIC_CHECK(std::is_trivially_move_assignable_v<sf::Glsl::Mat4>);
         }
 
-        static constexpr std::array<float, 16> data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-        const sf::Glsl::Mat4                   mat(data.data());
+        static constexpr std::array data = std::to_array<float>({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
+        const sf::Glsl::Mat4 mat(data.data());
         CHECK(mat.array[0] == 1);
         CHECK(mat.array[1] == 2);
         CHECK(mat.array[2] == 3);

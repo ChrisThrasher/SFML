@@ -52,7 +52,7 @@
     {
         for (unsigned int x = 0; x < size.width; ++x, pixels += 4)
         {
-            std::array<NSUInteger, 4> pixel = {pixels[0], pixels[1], pixels[2], pixels[3]};
+            std::array pixel = std::to_array<NSUInteger>({pixels[0], pixels[1], pixels[2], pixels[3]});
             [bitmap setPixel:pixel.data() atX:x y:y];
         }
     }

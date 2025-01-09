@@ -1093,15 +1093,16 @@ int main()
     Echo           echoEffect;
     Reverb         reverbEffect;
 
-    const std::array<Effect*, 9> effects{&surroundEffect,
-                                         &pitchVolumeEffect,
-                                         &attenuationEffect,
-                                         &toneEffect,
-                                         &dopplerEffect,
-                                         &highPassFilterEffect,
-                                         &lowPassFilterEffect,
-                                         &echoEffect,
-                                         &reverbEffect};
+    const std::array effects = std::to_array<Effect*>(
+        {&surroundEffect,
+         &pitchVolumeEffect,
+         &attenuationEffect,
+         &toneEffect,
+         &dopplerEffect,
+         &highPassFilterEffect,
+         &lowPassFilterEffect,
+         &echoEffect,
+         &reverbEffect});
 
     std::size_t current = 0;
 

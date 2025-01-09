@@ -95,7 +95,7 @@
 
     // Define a 3D cube (6 faces made of 2 triangles composed by 3 vertices)
     // clang-format off
-    constexpr std::array<GLfloat, 216> cube =
+    constexpr std::array cube = std::to_array<GLfloat>(
     {
         // positions    // colors
         -50, -50, -50,  1, 1, 0,
@@ -139,7 +139,7 @@
         -50,  50,  50,  0, 1, 1,
          50, -50,  50,  0, 1, 1,
          50,  50,  50,  0, 1, 1
-    };
+    });
     // clang-format on
 
     // Draw the cube
