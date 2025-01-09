@@ -318,7 +318,7 @@ public:
             {
                 for (const auto& [scancode, size, marginRight] : cells)
                 {
-                    assert(scancodesInMatrix.count(scancode) == 0);
+                    assert(!scancodesInMatrix.contains(scancode));
                     scancodesInMatrix.insert(scancode);
                 }
             }
