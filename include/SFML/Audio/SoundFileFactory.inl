@@ -66,7 +66,7 @@ void SoundFileFactory::unregisterReader()
 template <typename T>
 bool SoundFileFactory::isReaderRegistered()
 {
-    return getReaderFactoryMap().count(&priv::createReader<T>) == 1;
+    return getReaderFactoryMap().contains(&priv::createReader<T>);
 }
 
 
@@ -90,7 +90,7 @@ void SoundFileFactory::unregisterWriter()
 template <typename T>
 bool SoundFileFactory::isWriterRegistered()
 {
-    return getWriterFactoryMap().count(&priv::createWriter<T>) == 1;
+    return getWriterFactoryMap().contains(&priv::createWriter<T>);
 }
 
 } // namespace sf
