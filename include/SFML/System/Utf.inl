@@ -83,7 +83,7 @@ In Utf<8>::decode(In begin, In end, char32_t& output, char32_t replacement)
 
     // clang-format off
     // Some useful precomputed data
-    static constexpr std::array<std::uint8_t, 256> trailing =
+    static constexpr std::array trailing = std::to_array<std::uint8_t>(
     {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -93,12 +93,12 @@ In Utf<8>::decode(In begin, In end, char32_t& output, char32_t replacement)
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5
-    };
+    });
 
-    static constexpr std::array<std::uint32_t, 6> offsets =
+    static constexpr std::array offsets = std::to_array<std::uint32_t>(
     {
         0x00000000, 0x00003080, 0x000E2080, 0x03C82080, 0xFA082080, 0x82082080
-    };
+    });
     // clang-format on
 
     // decode the character
@@ -137,7 +137,7 @@ template <typename Out>
 Out Utf<8>::encode(char32_t input, Out output, std::uint8_t replacement)
 {
     // Some useful precomputed data
-    static constexpr std::array<std::uint8_t, 7> firstBytes = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
+    static constexpr std::array firstBytes = std::to_array<std::uint8_t>({0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC});
 
     // encode the character
     if ((input > 0x0010FFFF) || ((input >= 0xD800) && (input <= 0xDBFF)))

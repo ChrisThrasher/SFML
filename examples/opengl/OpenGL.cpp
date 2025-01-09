@@ -130,7 +130,7 @@ int main()
 
         // Define a 3D cube (6 faces made of 2 triangles composed by 3 vertices)
         // clang-format off
-        constexpr std::array<GLfloat, 180> cube =
+        constexpr std::array cube = std::to_array<GLfloat>(
         {
             // positions    // texture coordinates
             -20, -20, -20,  0, 0,
@@ -174,7 +174,7 @@ int main()
             -20,  20,  20,  0, 1,
              20, -20,  20,  1, 0,
              20,  20,  20,  1, 1
-        };
+        });
         // clang-format on
 
         // Enable position and texture coordinates vertex components

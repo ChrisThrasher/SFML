@@ -1487,7 +1487,7 @@ public:
     void setupIndexBuffer()
     {
         // clang-format off
-        constexpr std::array<std::uint16_t, 36> indexData = {
+        constexpr std::array indexData = std::to_array<std::uint16_t>({
             0,  1,  2,
             2,  3,  0,
 
@@ -1505,7 +1505,7 @@ public:
 
             20, 21, 22,
             22, 23, 20
-        };
+        });
         // clang-format on
 
         // Create a staging buffer that is writable by the CPU

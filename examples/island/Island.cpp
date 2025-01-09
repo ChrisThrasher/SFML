@@ -494,7 +494,7 @@ int main()
     statusText.setPosition((sf::Vector2f(windowSize) - statusText.getLocalBounds().size) / 2.f);
 
     // Set up an array of pointers to our settings for arrow navigation
-    constexpr std::array<Setting, 9> settings = {
+    constexpr std::array settings = std::to_array<Setting>(
         {{"perlinFrequency", &perlinFrequency},
          {"perlinFrequencyBase", &perlinFrequencyBase},
          {"heightBase", &heightBase},
@@ -503,7 +503,7 @@ int main()
          {"snowcapHeight", &snowcapHeight},
          {"heightFactor", &heightFactor},
          {"heightFlatten", &heightFlatten},
-         {"lightFactor", &lightFactor}}};
+         {"lightFactor", &lightFactor}});
 
     std::size_t currentSetting = 0;
 

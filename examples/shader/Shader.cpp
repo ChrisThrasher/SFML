@@ -400,14 +400,14 @@ int main()
 
     const auto optionalToPtr = [](auto& effect) -> Effect* { return effect.has_value() ? &*effect : nullptr; };
 
-    const std::array<Effect*, 5> effects{optionalToPtr(pixelateEffect),
-                                         optionalToPtr(waveBlurEffect),
-                                         optionalToPtr(stormBlinkEffect),
-                                         optionalToPtr(edgeEffect),
-                                         optionalToPtr(geometryEffect)};
+    const std::array effects = {optionalToPtr(pixelateEffect),
+                                optionalToPtr(waveBlurEffect),
+                                optionalToPtr(stormBlinkEffect),
+                                optionalToPtr(edgeEffect),
+                                optionalToPtr(geometryEffect)};
 
-    const std::array<std::string, 5>
-        effectNames{"Pixelate", "Wave + Blur", "Storm + Blink", "Edge Post-effect", "Geometry Shader Billboards"};
+    const std::array effectNames = std::to_array<std::string>(
+        {"Pixelate", "Wave + Blur", "Storm + Blink", "Edge Post-effect", "Geometry Shader Billboards"});
 
     // Index of currently selected effect
     std::size_t current = 0;
