@@ -34,6 +34,7 @@
 #include <filesystem>
 #include <memory>
 #include <optional>
+#include <span>
 
 #include <cstddef>
 #include <cstdint>
@@ -108,15 +109,14 @@ public:
     /// the `sf::Music` object loads a new music or is destroyed. That is,
     /// you can't deallocate the buffer right after calling this function.
     ///
-    /// \param data        Pointer to the file data in memory
-    /// \param sizeInBytes Size of the data to load, in bytes
+    /// \param buffer File data in memory
     ///
     /// \throws sf::Exception if loading was unsuccessful
     ///
     /// \see `openFromFile`, `openFromStream`
     ///
     ////////////////////////////////////////////////////////////
-    Music(const void* data, std::size_t sizeInBytes);
+    Music(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Construct a music from an audio file in a custom stream
@@ -191,15 +191,14 @@ public:
     /// the `sf::Music` object loads a new music or is destroyed. That is,
     /// you can't deallocate the buffer right after calling this function.
     ///
-    /// \param data        Pointer to the file data in memory
-    /// \param sizeInBytes Size of the data to load, in bytes
+    /// \param buffer File data in memory
     ///
     /// \return `true` if loading succeeded, `false` if it failed
     ///
     /// \see `openFromFile`, `openFromStream`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool openFromMemory(const void* data, std::size_t sizeInBytes);
+    [[nodiscard]] bool openFromMemory(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Open a music from an audio file in a custom stream

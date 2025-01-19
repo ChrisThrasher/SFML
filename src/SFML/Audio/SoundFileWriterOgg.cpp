@@ -54,10 +54,10 @@ SoundFileWriterOgg::~SoundFileWriterOgg()
 
 
 ////////////////////////////////////////////////////////////
-bool SoundFileWriterOgg::open(const std::filesystem::path&     filename,
-                              unsigned int                     sampleRate,
-                              unsigned int                     channelCount,
-                              const std::vector<SoundChannel>& channelMap)
+bool SoundFileWriterOgg::open(const std::filesystem::path&  filename,
+                              unsigned int                  sampleRate,
+                              unsigned int                  channelCount,
+                              std::span<const SoundChannel> channelMap)
 {
     std::vector<SoundChannel> targetChannelMap;
 

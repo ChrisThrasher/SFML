@@ -35,23 +35,21 @@
 namespace sf
 {
 ////////////////////////////////////////////////////////////
-MemoryInputStream::MemoryInputStream(const void* data, std::size_t sizeInBytes) :
-m_data(static_cast<const std::byte*>(data)),
-m_size(sizeInBytes)
+MemoryInputStream::MemoryInputStream(std::span<const std::byte> buffer) : m_data(buffer.data()), m_size(buffer.size())
 {
 }
 
 
 ////////////////////////////////////////////////////////////
-std::optional<std::size_t> MemoryInputStream::read(void* data, std::size_t size)
+std::optional<std::size_t> MemoryInputStream::read(std::span<std::byte> buffer)
 {
     if (!m_data)
         return std::nullopt;
 
-    const std::size_t count = std::min(size, m_size - m_offset);
+    const std::size_t count = std::min(buffer.size(), m_size - m_offset);
     if (count > 0)
     {
-        std::memcpy(data, m_data + m_offset, static_cast<std::size_t>(count));
+        std::memcpy(buffer.data(), m_data + m_offset, static_cast<std::size_t>(count));
         m_offset += count;
     }
 

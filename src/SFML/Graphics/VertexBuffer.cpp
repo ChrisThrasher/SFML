@@ -153,21 +153,21 @@ std::size_t VertexBuffer::getVertexCount() const
 ////////////////////////////////////////////////////////////
 bool VertexBuffer::update(const Vertex* vertices)
 {
-    return update(vertices, m_size, 0);
+    return update({vertices, m_size}, 0);
 }
 
 
 ////////////////////////////////////////////////////////////
-bool VertexBuffer::update(const Vertex* vertices, std::size_t vertexCount, unsigned int offset)
+bool VertexBuffer::update(std::span<const Vertex> vertices, unsigned int offset)
 {
     // Sanity checks
     if (!m_buffer)
         return false;
 
-    if (!vertices)
+    if (!vertices.data())
         return false;
 
-    if (offset && (offset + vertexCount > m_size))
+    if (offset && (offset + vertices.size() > m_size))
         return false;
 
     const TransientContextLock contextLock;
@@ -175,20 +175,20 @@ bool VertexBuffer::update(const Vertex* vertices, std::size_t vertexCount, unsig
     glCheck(GLEXT_glBindBuffer(GLEXT_GL_ARRAY_BUFFER, m_buffer));
 
     // Check if we need to resize or orphan the buffer
-    if (vertexCount >= m_size)
+    if (vertices.size() >= m_size)
     {
         glCheck(GLEXT_glBufferData(GLEXT_GL_ARRAY_BUFFER,
-                                   static_cast<GLsizeiptrARB>(sizeof(Vertex) * vertexCount),
+                                   static_cast<GLsizeiptrARB>(sizeof(Vertex) * vertices.size()),
                                    nullptr,
                                    VertexBufferImpl::usageToGlEnum(m_usage)));
 
-        m_size = vertexCount;
+        m_size = vertices.size();
     }
 
     glCheck(GLEXT_glBufferSubData(GLEXT_GL_ARRAY_BUFFER,
                                   static_cast<GLintptrARB>(sizeof(Vertex) * offset),
-                                  static_cast<GLsizeiptrARB>(sizeof(Vertex) * vertexCount),
-                                  vertices));
+                                  static_cast<GLsizeiptrARB>(sizeof(Vertex) * vertices.size()),
+                                  vertices.data()));
 
     glCheck(GLEXT_glBindBuffer(GLEXT_GL_ARRAY_BUFFER, 0));
 

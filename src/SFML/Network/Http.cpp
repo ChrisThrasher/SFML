@@ -373,13 +373,13 @@ Http::Response Http::sendRequest(const Http::Request& request, Time timeout)
         if (!requestStr.empty())
         {
             // Send it through the socket
-            if (m_connection.send(requestStr.c_str(), requestStr.size()) == Socket::Status::Done)
+            if (m_connection.send(std::as_bytes(std::span(requestStr))) == Socket::Status::Done)
             {
                 // Wait for the server's response
                 std::string            receivedStr;
                 std::size_t            size = 0;
                 std::array<char, 1024> buffer{};
-                while (m_connection.receive(buffer.data(), buffer.size(), size) == Socket::Status::Done)
+                while (m_connection.receive(std::as_writable_bytes(std::span(buffer)), size) == Socket::Status::Done)
                 {
                     receivedStr.append(buffer.data(), buffer.data() + size);
                 }

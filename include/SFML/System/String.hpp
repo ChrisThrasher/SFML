@@ -462,7 +462,7 @@ public:
     /// \return Read-only pointer to the array of characters
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] const char32_t* getData() const;
+    [[nodiscard]] std::u32string_view getData() const;
 
     ////////////////////////////////////////////////////////////
     /// \brief Return an iterator to the beginning of the string

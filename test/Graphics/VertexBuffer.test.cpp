@@ -127,10 +127,10 @@ TEST_CASE("[Graphics] sf::VertexBuffer", "[.display]")
 
             SECTION("Count + offset too large")
             {
-                CHECK(!vertexBuffer.update(vertices.data(), 100, 100));
+                CHECK(!vertexBuffer.update(std::span(vertices).subspan<100>(), 100));
             }
 
-            CHECK(vertexBuffer.update(vertices.data(), 128, 0));
+            CHECK(vertexBuffer.update(std::span(vertices).subspan<128>(), 0));
             CHECK(vertexBuffer.getVertexCount() == 128);
         }
 

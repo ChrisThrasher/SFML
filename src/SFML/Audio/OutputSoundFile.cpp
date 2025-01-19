@@ -38,10 +38,10 @@
 namespace sf
 {
 ////////////////////////////////////////////////////////////
-OutputSoundFile::OutputSoundFile(const std::filesystem::path&     filename,
-                                 unsigned int                     sampleRate,
-                                 unsigned int                     channelCount,
-                                 const std::vector<SoundChannel>& channelMap)
+OutputSoundFile::OutputSoundFile(const std::filesystem::path&  filename,
+                                 unsigned int                  sampleRate,
+                                 unsigned int                  channelCount,
+                                 std::span<const SoundChannel> channelMap)
 {
     if (!openFromFile(filename, sampleRate, channelCount, channelMap))
         throw Exception("Failed to open output sound file");
@@ -49,10 +49,10 @@ OutputSoundFile::OutputSoundFile(const std::filesystem::path&     filename,
 
 
 ////////////////////////////////////////////////////////////
-bool OutputSoundFile::openFromFile(const std::filesystem::path&     filename,
-                                   unsigned int                     sampleRate,
-                                   unsigned int                     channelCount,
-                                   const std::vector<SoundChannel>& channelMap)
+bool OutputSoundFile::openFromFile(const std::filesystem::path&  filename,
+                                   unsigned int                  sampleRate,
+                                   unsigned int                  channelCount,
+                                   std::span<const SoundChannel> channelMap)
 {
     // If the file is already open, first close it
     close();

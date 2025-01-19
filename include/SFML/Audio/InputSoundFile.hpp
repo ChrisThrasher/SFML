@@ -33,6 +33,7 @@
 
 #include <filesystem>
 #include <memory>
+#include <span>
 #include <vector>
 
 #include <cstddef>
@@ -84,13 +85,12 @@ public:
     /// The supported audio formats are: WAV (PCM only), OGG/Vorbis, FLAC.
     /// The supported sample sizes for FLAC and WAV are 8, 16, 24 and 32 bit.
     ///
-    /// \param data        Pointer to the file data in memory
-    /// \param sizeInBytes Size of the data to load, in bytes
+    /// \param buffer File data in memory
     ///
     /// \throws sf::Exception if opening the file was unsuccessful
     ///
     ////////////////////////////////////////////////////////////
-    InputSoundFile(const void* data, std::size_t sizeInBytes);
+    InputSoundFile(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Construct a sound file from a custom stream for reading
@@ -129,13 +129,12 @@ public:
     /// The supported audio formats are: WAV (PCM only), OGG/Vorbis, FLAC.
     /// The supported sample sizes for FLAC and WAV are 8, 16, 24 and 32 bit.
     ///
-    /// \param data        Pointer to the file data in memory
-    /// \param sizeInBytes Size of the data to load, in bytes
+    /// \param buffer File data in memory
     ///
     /// \return `true` if the file was successfully opened
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool openFromMemory(const void* data, std::size_t sizeInBytes);
+    [[nodiscard]] bool openFromMemory(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Open a sound file from a custom stream for reading

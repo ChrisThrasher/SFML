@@ -56,7 +56,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32().empty());
             CHECK(string.getSize() == 0);
             CHECK(string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData().empty());
         }
 
         SECTION("ANSI character constructor")
@@ -71,7 +71,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"a"s);
             CHECK(string.getSize() == 1);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"a"sv);
         }
 
         SECTION("ANSI C string constructor")
@@ -87,7 +87,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32().empty());
                 CHECK(string.getSize() == 0);
                 CHECK(string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData().empty());
             }
             {
                 const sf::String string = "Escargot";
@@ -100,7 +100,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32() == U"Escargot"s);
                 CHECK(string.getSize() == 8);
                 CHECK(!string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData() == U"Escargot"sv);
             }
         }
 
@@ -116,7 +116,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"Csiga"s);
             CHECK(string.getSize() == 5);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"Csiga"sv);
         }
 
         SECTION("Wide character constructor")
@@ -132,7 +132,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32() == U"ú"s);
                 CHECK(string.getSize() == 1);
                 CHECK(!string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData() == U"ú"sv);
             }
             {
                 const sf::String string = L'Ǻ';
@@ -145,7 +145,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32() == U"Ǻ"s);
                 CHECK(string.getSize() == 1);
                 CHECK(!string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData() == U"Ǻ"sv);
             }
         }
 
@@ -162,7 +162,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32().empty());
                 CHECK(string.getSize() == 0);
                 CHECK(string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData().empty());
             }
             {
                 const sf::String string = L"Улитка";
@@ -175,7 +175,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32() == U"Улитка"s);
                 CHECK(string.getSize() == 6);
                 CHECK(!string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData() == U"Улитка"sv);
             }
         }
 
@@ -191,7 +191,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"Полжав"s);
             CHECK(string.getSize() == 6);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"Полжав"sv);
         }
 
         SECTION("UTF-32 character constructor")
@@ -206,7 +206,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"🐌"s);
             CHECK(string.getSize() == 1);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"🐌"sv);
         }
 
         SECTION("UTF-32 C string constructor")
@@ -222,7 +222,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32().empty());
                 CHECK(string.getSize() == 0);
                 CHECK(string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData().empty());
             }
             {
                 const sf::String string = U"カタツムリ";
@@ -235,7 +235,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32() == U"カタツムリ"s);
                 CHECK(string.getSize() == 5);
                 CHECK(!string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData() == U"カタツムリ"sv);
             }
             {
                 const sf::String string = U"🐌🐚";
@@ -248,7 +248,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(string.toUtf32() == U"🐌🐚"s);
                 CHECK(string.getSize() == 2);
                 CHECK(!string.isEmpty());
-                CHECK(string.getData() != nullptr);
+                CHECK(string.getData() == U"🐌🐚"sv);
             }
         }
 
@@ -264,7 +264,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"گھونگا"s);
             CHECK(string.getSize() == 6);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"گھونگا"sv);
         }
     }
 
@@ -288,7 +288,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"wxyz"s);
             CHECK(string.getSize() == 4);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"wxyz"sv);
         }
         {
             constexpr std::array<std::uint8_t, 4> characters{0xF0, 0x9F, 0x90, 0x8C};
@@ -302,7 +302,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"🐌"s);
             CHECK(string.getSize() == 1);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"🐌"sv);
         }
     }
 
@@ -320,7 +320,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"SFML!"s);
             CHECK(string.getSize() == 5);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"SFML!"sv);
         }
         {
             constexpr std::u16string_view characters = u"piñata"sv;
@@ -338,7 +338,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"piñata"s);
             CHECK(string.getSize() == 6);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"piñata"sv);
         }
         {
             constexpr std::u16string_view characters = u"달팽이"sv;
@@ -352,7 +352,7 @@ TEST_CASE("[System] sf::String")
             CHECK(string.toUtf32() == U"달팽이"s);
             CHECK(string.getSize() == 3);
             CHECK(!string.isEmpty());
-            CHECK(string.getData() != nullptr);
+            CHECK(string.getData() == U"달팽이"sv);
         }
     }
 
@@ -369,7 +369,7 @@ TEST_CASE("[System] sf::String")
         CHECK(string.toUtf32() == U"👍+👎=🤷"s);
         CHECK(string.getSize() == 5);
         CHECK(!string.isEmpty());
-        CHECK(string.getData() != nullptr);
+        CHECK(string.getData() == U"👍+👎=🤷"sv);
     }
 
     SECTION("clear()")

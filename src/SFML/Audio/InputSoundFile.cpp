@@ -76,9 +76,9 @@ InputSoundFile::InputSoundFile(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-InputSoundFile::InputSoundFile(const void* data, std::size_t sizeInBytes)
+InputSoundFile::InputSoundFile(std::span<const std::byte> buffer)
 {
-    if (!openFromMemory(data, sizeInBytes))
+    if (!openFromMemory(buffer))
         throw Exception("Failed to open input sound file from memory");
 }
 
@@ -138,13 +138,13 @@ bool InputSoundFile::openFromFile(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-bool InputSoundFile::openFromMemory(const void* data, std::size_t sizeInBytes)
+bool InputSoundFile::openFromMemory(std::span<const std::byte> buffer)
 {
     // If the file is already open, first close it
     close();
 
     // Find a suitable reader for the file type
-    auto reader = SoundFileFactory::createReaderFromMemory(data, sizeInBytes);
+    auto reader = SoundFileFactory::createReaderFromMemory(buffer);
     if (!reader)
     {
         // Error message generated in called function.
@@ -152,7 +152,7 @@ bool InputSoundFile::openFromMemory(const void* data, std::size_t sizeInBytes)
     }
 
     // Wrap the memory file into a stream
-    auto memory = std::make_unique<MemoryInputStream>(data, sizeInBytes);
+    auto memory = std::make_unique<MemoryInputStream>(buffer);
 
     // Pass the stream to the reader
     const auto info = reader->open(*memory);

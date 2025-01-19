@@ -377,7 +377,7 @@ public:
         m_currentAmplitude.setPosition({windowWidth / 2.f - 150.f, windowHeight / 2.f - 50.f});
         m_currentFrequency.setPosition({windowWidth / 2.f - 150.f, windowHeight / 2.f});
 
-        sf::SoundStream::initialize(1, sampleRate, {sf::SoundChannel::Mono});
+        sf::SoundStream::initialize(1, sampleRate, std::array{sf::SoundChannel::Mono});
     }
 
     void onUpdate(float /*time*/, float x, float y) override
@@ -543,7 +543,7 @@ public:
         // Set attenuation to a nice value
         setAttenuation(0.05f);
 
-        sf::SoundStream::initialize(1, sampleRate, {sf::SoundChannel::Mono});
+        sf::SoundStream::initialize(1, sampleRate, std::array{sf::SoundChannel::Mono});
     }
 
     void onUpdate(float time, float x, float y) override

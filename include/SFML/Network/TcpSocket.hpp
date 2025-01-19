@@ -34,6 +34,7 @@
 #include <SFML/System/Time.hpp>
 
 #include <optional>
+#include <span>
 #include <vector>
 
 #include <cstddef>
@@ -132,35 +133,33 @@ public:
     /// \brief Send raw data to the remote peer
     ///
     /// To be able to handle partial sends over non-blocking
-    /// sockets, use the `send(const void*, std::size_t, std::size_t&)`
+    /// sockets, use the `send(std::span<const std::byte>, std::size_t&)`
     /// overload instead.
     /// This function will fail if the socket is not connected.
     ///
-    /// \param data Pointer to the sequence of bytes to send
-    /// \param size Number of bytes to send
+    /// \param buffer The sequence of bytes to send
     ///
     /// \return Status code
     ///
     /// \see `receive`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] Status send(const void* data, std::size_t size);
+    [[nodiscard]] Status send(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Send raw data to the remote peer
     ///
     /// This function will fail if the socket is not connected.
     ///
-    /// \param data Pointer to the sequence of bytes to send
-    /// \param size Number of bytes to send
-    /// \param sent The number of bytes sent will be written here
+    /// \param buffer The sequence of bytes to send
+    /// \param sent   The number of bytes sent will be written here
     ///
     /// \return Status code
     ///
     /// \see `receive`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] Status send(const void* data, std::size_t size, std::size_t& sent);
+    [[nodiscard]] Status send(std::span<const std::byte> buffer, std::size_t& sent);
 
     ////////////////////////////////////////////////////////////
     /// \brief Receive raw data from the remote peer
@@ -169,8 +168,7 @@ public:
     /// bytes are actually received.
     /// This function will fail if the socket is not connected.
     ///
-    /// \param data     Pointer to the array to fill with the received bytes
-    /// \param size     Maximum number of bytes that can be received
+    /// \param buffer   View to the array to fill with the received bytes
     /// \param received This variable is filled with the actual number of bytes received
     ///
     /// \return Status code
@@ -178,7 +176,7 @@ public:
     /// \see `send`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] Status receive(void* data, std::size_t size, std::size_t& received);
+    [[nodiscard]] Status receive(std::span<std::byte> buffer, std::size_t& received);
 
     ////////////////////////////////////////////////////////////
     /// \brief Send a formatted packet of data to the remote peer
