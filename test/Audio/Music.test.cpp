@@ -74,18 +74,16 @@ TEST_CASE("[Audio] sf::Music", runAudioDeviceTests())
 
         SECTION("Memory")
         {
-            std::vector<std::byte> memory(10, std::byte{0xCA});
-
             SECTION("Invalid buffer")
             {
-                CHECK_THROWS_AS(sf::Music(memory.data(), memory.size()), sf::Exception);
+                const std::vector<std::byte> memory(10, std::byte{0xCA});
+                CHECK_THROWS_AS(sf::Music(memory), sf::Exception);
             }
 
             SECTION("Valid buffer")
             {
-                memory = loadIntoMemory("Audio/ding.flac");
-
-                const sf::Music music(memory.data(), memory.size());
+                const auto      memory = loadIntoMemory("Audio/ding.flac");
+                const sf::Music music(memory);
                 CHECK(music.getDuration() == sf::microseconds(1990884));
                 const auto [offset, length] = music.getLoopPoints();
                 CHECK(offset == sf::Time::Zero);
@@ -158,7 +156,7 @@ TEST_CASE("[Audio] sf::Music", runAudioDeviceTests())
 
         SECTION("Invalid buffer")
         {
-            REQUIRE(!music.openFromMemory(memory.data(), memory.size()));
+            REQUIRE(!music.openFromMemory(memory));
             CHECK(music.getDuration() == sf::Time::Zero);
             const auto [offset, length] = music.getLoopPoints();
             CHECK(offset == sf::Time::Zero);
@@ -173,7 +171,7 @@ TEST_CASE("[Audio] sf::Music", runAudioDeviceTests())
         SECTION("Valid buffer")
         {
             memory = loadIntoMemory("Audio/ding.flac");
-            REQUIRE(music.openFromMemory(memory.data(), memory.size()));
+            REQUIRE(music.openFromMemory(memory));
             CHECK(music.getDuration() == sf::microseconds(1990884));
             const auto [offset, length] = music.getLoopPoints();
             CHECK(offset == sf::Time::Zero);

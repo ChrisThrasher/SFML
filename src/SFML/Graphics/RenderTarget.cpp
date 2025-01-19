@@ -686,7 +686,7 @@ void RenderTarget::applyCurrentView()
 
     // Set the projection matrix
     glCheck(glMatrixMode(GL_PROJECTION));
-    glCheck(glLoadMatrixf(m_view.getTransform().getMatrix()));
+    glCheck(glLoadMatrixf(m_view.getTransform().getMatrix().data()));
 
     // Go back to model-view mode
     glCheck(glMatrixMode(GL_MODELVIEW));
@@ -793,7 +793,7 @@ void RenderTarget::applyTransform(const Transform& transform)
     if (transform == Transform::Identity)
         glCheck(glLoadIdentity());
     else
-        glCheck(glLoadMatrixf(transform.getMatrix()));
+        glCheck(glLoadMatrixf(transform.getMatrix().data()));
 }
 
 

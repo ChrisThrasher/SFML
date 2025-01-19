@@ -44,7 +44,7 @@ namespace
 ma_result onRead(ma_decoder* decoder, void* buffer, size_t bytesToRead, size_t* bytesRead)
 {
     auto*               stream = static_cast<sf::InputStream*>(decoder->pUserData);
-    const std::optional count  = stream->read(buffer, bytesToRead);
+    const std::optional count  = stream->read({static_cast<std::byte*>(buffer), bytesToRead});
 
     if (!count.has_value())
         return MA_ERROR;

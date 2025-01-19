@@ -73,7 +73,7 @@ private:
         // Pack the audio samples into a network packet
         sf::Packet packet;
         packet << clientAudioData;
-        packet.append(samples, sampleCount * sizeof(std::int16_t));
+        packet.append(std::as_bytes(std::span(samples, sampleCount)));
 
         // Send the audio packet to the server
         return m_socket.send(packet) == sf::Socket::Status::Done;

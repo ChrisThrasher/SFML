@@ -41,14 +41,9 @@
 namespace sf
 {
 ////////////////////////////////////////////////////////////
-void Packet::append(const void* data, std::size_t sizeInBytes)
+void Packet::append(std::span<const std::byte> buffer)
 {
-    if (data && (sizeInBytes > 0))
-    {
-        const auto* begin = reinterpret_cast<const std::byte*>(data);
-        const auto* end   = begin + sizeInBytes;
-        m_data.insert(m_data.end(), begin, end);
-    }
+    m_data.insert(m_data.end(), buffer.begin(), buffer.end());
 }
 
 
@@ -69,16 +64,9 @@ void Packet::clear()
 
 
 ////////////////////////////////////////////////////////////
-const void* Packet::getData() const
+std::span<const std::byte> Packet::getData() const
 {
-    return !m_data.empty() ? m_data.data() : nullptr;
-}
-
-
-////////////////////////////////////////////////////////////
-std::size_t Packet::getDataSize() const
-{
-    return m_data.size();
+    return m_data;
 }
 
 
@@ -379,7 +367,7 @@ Packet& Packet::operator<<(bool data)
 ////////////////////////////////////////////////////////////
 Packet& Packet::operator<<(std::int8_t data)
 {
-    append(&data, sizeof(data));
+    append(std::as_bytes(std::span(&data, 1)));
     return *this;
 }
 
@@ -387,7 +375,7 @@ Packet& Packet::operator<<(std::int8_t data)
 ////////////////////////////////////////////////////////////
 Packet& Packet::operator<<(std::uint8_t data)
 {
-    append(&data, sizeof(data));
+    append(std::as_bytes(std::span(&data, 1)));
     return *this;
 }
 
@@ -396,7 +384,7 @@ Packet& Packet::operator<<(std::uint8_t data)
 Packet& Packet::operator<<(std::int16_t data)
 {
     const auto toWrite = static_cast<std::int16_t>(htons(static_cast<std::uint16_t>(data)));
-    append(&toWrite, sizeof(toWrite));
+    append(std::as_bytes(std::span(&toWrite, 1)));
     return *this;
 }
 
@@ -405,7 +393,7 @@ Packet& Packet::operator<<(std::int16_t data)
 Packet& Packet::operator<<(std::uint16_t data)
 {
     const std::uint16_t toWrite = htons(data);
-    append(&toWrite, sizeof(toWrite));
+    append(std::as_bytes(std::span(&toWrite, 1)));
     return *this;
 }
 
@@ -414,7 +402,7 @@ Packet& Packet::operator<<(std::uint16_t data)
 Packet& Packet::operator<<(std::int32_t data)
 {
     const auto toWrite = static_cast<std::int32_t>(htonl(static_cast<std::uint32_t>(data)));
-    append(&toWrite, sizeof(toWrite));
+    append(std::as_bytes(std::span(&toWrite, 1)));
     return *this;
 }
 
@@ -423,7 +411,7 @@ Packet& Packet::operator<<(std::int32_t data)
 Packet& Packet::operator<<(std::uint32_t data)
 {
     const std::uint32_t toWrite = htonl(data);
-    append(&toWrite, sizeof(toWrite));
+    append(std::as_bytes(std::span(&toWrite, 1)));
     return *this;
 }
 
@@ -443,7 +431,7 @@ Packet& Packet::operator<<(std::int64_t data)
                                 static_cast<std::uint8_t>((data >> 8) & 0xFF),
                                 static_cast<std::uint8_t>((data) & 0xFF)};
 
-    append(toWrite.data(), toWrite.size());
+    append(std::as_bytes(std::span(toWrite)));
     return *this;
 }
 
@@ -463,7 +451,7 @@ Packet& Packet::operator<<(std::uint64_t data)
                                 static_cast<std::uint8_t>((data >> 8) & 0xFF),
                                 static_cast<std::uint8_t>((data) & 0xFF)};
 
-    append(toWrite.data(), toWrite.size());
+    append(std::as_bytes(std::span(toWrite)));
     return *this;
 }
 
@@ -471,7 +459,7 @@ Packet& Packet::operator<<(std::uint64_t data)
 ////////////////////////////////////////////////////////////
 Packet& Packet::operator<<(float data)
 {
-    append(&data, sizeof(data));
+    append(std::as_bytes(std::span(&data, 1)));
     return *this;
 }
 
@@ -479,7 +467,7 @@ Packet& Packet::operator<<(float data)
 ////////////////////////////////////////////////////////////
 Packet& Packet::operator<<(double data)
 {
-    append(&data, sizeof(data));
+    append(std::as_bytes(std::span(&data, 1)));
     return *this;
 }
 
@@ -494,7 +482,7 @@ Packet& Packet::operator<<(const char* data)
     *this << length;
 
     // Then insert characters
-    append(data, length * sizeof(char));
+    append(std::as_bytes(std::span(data, length * sizeof(char))));
 
     return *this;
 }
@@ -509,7 +497,7 @@ Packet& Packet::operator<<(const std::string& data)
 
     // Then insert characters
     if (length > 0)
-        append(data.c_str(), length * sizeof(std::string::value_type));
+        append(std::as_bytes(std::span(data.c_str(), length * sizeof(std::string::value_type))));
 
     return *this;
 }
@@ -580,17 +568,16 @@ bool Packet::checkSize(std::size_t size)
 
 
 ////////////////////////////////////////////////////////////
-const void* Packet::onSend(std::size_t& size)
+std::span<const std::byte> Packet::onSend()
 {
-    size = getDataSize();
     return getData();
 }
 
 
 ////////////////////////////////////////////////////////////
-void Packet::onReceive(const void* data, std::size_t size)
+void Packet::onReceive(std::span<const std::byte> buffer)
 {
-    append(data, size);
+    append(buffer);
 }
 
 } // namespace sf

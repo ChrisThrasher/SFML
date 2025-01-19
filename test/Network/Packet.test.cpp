@@ -19,40 +19,40 @@
         sf::Packet packet;                                   \
         packet << (expected);                                \
         CHECK(packet.getReadPosition() == 0);                \
-        CHECK(packet.getData() != nullptr);                  \
-        CHECK(packet.getDataSize() == sizeof(expected));     \
+        CHECK(packet.getData().data() != nullptr);           \
+        CHECK(packet.getData().size() == sizeof(expected));  \
         CHECK(!packet.endOfPacket());                        \
         CHECK(bool{packet});                                 \
                                                              \
         decltype(expected) received;                         \
         packet >> received;                                  \
         CHECK(packet.getReadPosition() == sizeof(expected)); \
-        CHECK(packet.getData() != nullptr);                  \
-        CHECK(packet.getDataSize() == sizeof(expected));     \
+        CHECK(packet.getData().data() != nullptr);           \
+        CHECK(packet.getData().size() == sizeof(expected));  \
         CHECK(packet.endOfPacket());                         \
         CHECK(bool{packet});                                 \
         CHECK((expected) == received);                       \
     } while (false)
 
-#define CHECK_PACKET_STRING_STREAM_OPERATORS(expected, size) \
-    do                                                       \
-    {                                                        \
-        sf::Packet packet;                                   \
-        packet << (expected);                                \
-        CHECK(packet.getReadPosition() == 0);                \
-        CHECK(packet.getData() != nullptr);                  \
-        CHECK(packet.getDataSize() == (size));               \
-        CHECK(!packet.endOfPacket());                        \
-        CHECK(bool{packet});                                 \
-                                                             \
-        std::remove_const_t<decltype(expected)> received;    \
-        packet >> received;                                  \
-        CHECK(packet.getReadPosition() == (size));           \
-        CHECK(packet.getData() != nullptr);                  \
-        CHECK(packet.getDataSize() == (size));               \
-        CHECK(packet.endOfPacket());                         \
-        CHECK(bool{packet});                                 \
-        CHECK(sf::String(expected) == sf::String(received)); \
+#define CHECK_PACKET_STRING_STREAM_OPERATORS(expected, expectedSize) \
+    do                                                               \
+    {                                                                \
+        sf::Packet packet;                                           \
+        packet << (expected);                                        \
+        CHECK(packet.getReadPosition() == 0);                        \
+        CHECK(packet.getData().data() != nullptr);                   \
+        CHECK(packet.getData().size() == (expectedSize));            \
+        CHECK(!packet.endOfPacket());                                \
+        CHECK(bool{packet});                                         \
+                                                                     \
+        std::remove_const_t<decltype(expected)> received;            \
+        packet >> received;                                          \
+        CHECK(packet.getReadPosition() == (expectedSize));           \
+        CHECK(packet.getData().data() != nullptr);                   \
+        CHECK(packet.getData().size() == (expectedSize));            \
+        CHECK(packet.endOfPacket());                                 \
+        CHECK(bool{packet});                                         \
+        CHECK(sf::String(expected) == sf::String(received));         \
     } while (false)
 
 struct Packet : sf::Packet
@@ -75,8 +75,8 @@ TEST_CASE("[Network] sf::Packet")
     {
         const sf::Packet packet;
         CHECK(packet.getReadPosition() == 0);
-        CHECK(packet.getData() == nullptr);
-        CHECK(packet.getDataSize() == 0);
+        CHECK(packet.getData().data() == nullptr);
+        CHECK(packet.getData().empty());
         CHECK(packet.endOfPacket());
         CHECK(bool{packet});
     }
@@ -86,17 +86,16 @@ TEST_CASE("[Network] sf::Packet")
     SECTION("Append and clear")
     {
         sf::Packet packet;
-        packet.append(data.data(), data.size());
+        packet.append(std::as_bytes(std::span(data)));
         CHECK(packet.getReadPosition() == 0);
-        CHECK(packet.getData() != nullptr);
-        CHECK(packet.getDataSize() == data.size());
+        CHECK(packet.getData().data() != nullptr);
+        CHECK(packet.getData().size() == sizeof(data));
         CHECK(!packet.endOfPacket());
         CHECK(bool{packet});
 
         packet.clear();
         CHECK(packet.getReadPosition() == 0);
-        CHECK(packet.getData() == nullptr);
-        CHECK(packet.getDataSize() == 0);
+        CHECK(packet.getData().empty());
         CHECK(packet.endOfPacket());
         CHECK(bool{packet});
     }
@@ -108,8 +107,8 @@ TEST_CASE("[Network] sf::Packet")
         SECTION("16 bit int")
         {
             packet << std::uint16_t{12'345};
-            const auto*       dataPtr = static_cast<const std::byte*>(packet.getData());
-            const std::vector bytes(dataPtr, dataPtr + packet.getDataSize());
+            const auto        buffer = packet.getData();
+            const std::vector bytes(buffer.begin(), buffer.end());
             const std::vector expectedBytes{std::byte{0x30}, std::byte{0x39}};
             CHECK(bytes == expectedBytes);
         }
@@ -117,8 +116,8 @@ TEST_CASE("[Network] sf::Packet")
         SECTION("32 bit int")
         {
             packet << std::uint32_t{1'234'567'890};
-            const auto*       dataPtr = static_cast<const std::byte*>(packet.getData());
-            const std::vector bytes(dataPtr, dataPtr + packet.getDataSize());
+            const auto        buffer = packet.getData();
+            const std::vector bytes(buffer.begin(), buffer.end());
             const std::vector expectedBytes{std::byte{0x49}, std::byte{0x96}, std::byte{0x02}, std::byte{0xD2}};
             CHECK(bytes == expectedBytes);
         }
@@ -126,8 +125,8 @@ TEST_CASE("[Network] sf::Packet")
         SECTION("float")
         {
             packet << 123.456f;
-            const auto*       dataPtr = static_cast<const std::byte*>(packet.getData());
-            const std::vector bytes(dataPtr, dataPtr + packet.getDataSize());
+            const auto        buffer = packet.getData();
+            const std::vector bytes(buffer.begin(), buffer.end());
             const std::vector expectedBytes{std::byte{0x79}, std::byte{0xe9}, std::byte{0xf6}, std::byte{0x42}};
             CHECK(bytes == expectedBytes);
         }
@@ -135,8 +134,8 @@ TEST_CASE("[Network] sf::Packet")
         SECTION("double")
         {
             packet << 789.123;
-            const auto*       dataPtr = static_cast<const std::byte*>(packet.getData());
-            const std::vector bytes(dataPtr, dataPtr + packet.getDataSize());
+            const auto        buffer = packet.getData();
+            const std::vector bytes(buffer.begin(), buffer.end());
             const std::vector expectedBytes{std::byte{0x44},
                                             std::byte{0x8b},
                                             std::byte{0x6c},
@@ -270,23 +269,24 @@ TEST_CASE("[Network] sf::Packet")
 
     SECTION("onSend")
     {
-        Packet      packet;
-        std::size_t size = 0;
-        CHECK(packet.onSend(size) == nullptr);
-        CHECK(size == 0);
+        Packet packet;
+        auto   buffer = packet.onSend();
+        CHECK(buffer.data() == nullptr);
+        CHECK(buffer.empty());
 
-        packet.append(data.data(), data.size());
-        CHECK(packet.onSend(size) != nullptr);
-        CHECK(size == data.size());
+        packet.append(std::as_bytes(std::span(data)));
+        buffer = packet.onSend();
+        CHECK(buffer.data() != nullptr);
+        CHECK(buffer.size() == sizeof(data));
     }
 
     SECTION("onReceive")
     {
         Packet packet;
-        packet.onReceive(data.data(), data.size());
+        packet.onReceive(std::as_bytes(std::span(data)));
         CHECK(packet.getReadPosition() == 0);
-        CHECK(packet.getData() != nullptr);
-        CHECK(packet.getDataSize() == data.size());
+        CHECK(packet.getData().data() != nullptr);
+        CHECK(packet.getData().size() == sizeof(data));
     }
 
     SECTION("Attempt overflow")
@@ -298,7 +298,7 @@ TEST_CASE("[Network] sf::Packet")
         } string;
 
         sf::Packet packet;
-        packet.append(&string, sizeof(string));
+        packet.append(std::as_bytes(std::span(&string, 1)));
 
         std::string out;
         packet >> out; // Ensure this does not trigger a crash

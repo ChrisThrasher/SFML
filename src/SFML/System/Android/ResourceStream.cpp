@@ -46,9 +46,9 @@ ResourceStream::ResourceStream(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-std::optional<std::size_t> ResourceStream::read(void* data, std::size_t size)
+std::optional<std::size_t> ResourceStream::read(std::span<std::byte> buffer)
 {
-    const auto numBytesRead = AAsset_read(m_file.get(), data, size);
+    const auto numBytesRead = AAsset_read(m_file.get(), buffer.data(), buffer.size());
     if (numBytesRead < 0)
         return std::nullopt;
     return numBytesRead;

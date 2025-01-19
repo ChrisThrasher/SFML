@@ -37,6 +37,7 @@
 
 #include <filesystem>
 #include <memory>
+#include <span>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -103,19 +104,17 @@ public:
     /// OpenType, SFNT, X11 PCF, Windows FNT, BDF, PFR and Type 42.
     ///
     /// \warning SFML cannot preload all the font data in this
-    /// function, so the buffer pointed by `data` has to remain
-    /// valid until the `sf::Font` object opens a new font or
-    /// is destroyed.
+    /// function, so the buffer has to remain valid until the
+    /// `sf::Font` object opens a new font or is destroyed.
     ///
-    /// \param data        Pointer to the file data in memory
-    /// \param sizeInBytes Size of the data to load, in bytes
+    /// \param buffer File data in memory
     ///
     /// \throws sf::Exception if loading was unsuccessful
     ///
     /// \see `openFromFile`, `openFromMemory`, `openFromStream`
     ///
     ////////////////////////////////////////////////////////////
-    Font(const void* data, std::size_t sizeInBytes);
+    Font(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Construct the font from a custom stream
@@ -172,15 +171,14 @@ public:
     /// valid until the `sf::Font` object opens a new font or
     /// is destroyed.
     ///
-    /// \param data        Pointer to the file data in memory
-    /// \param sizeInBytes Size of the data to load, in bytes
+    /// \param buffer File data in memory
     ///
     /// \return `true` if opening succeeded, `false` if it failed
     ///
     /// \see `openFromFile`, `openFromStream`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool openFromMemory(const void* data, std::size_t sizeInBytes);
+    [[nodiscard]] bool openFromMemory(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Open the font from a custom stream

@@ -69,7 +69,7 @@ namespace
 std::size_t readCallback(void* ptr, std::size_t size, void* data)
 {
     auto* stream = static_cast<sf::InputStream*>(data);
-    return stream->read(ptr, size).value_or(-1);
+    return stream->read({static_cast<std::byte*>(ptr), size}).value_or(-1);
 }
 
 int seekCallback(std::uint64_t offset, void* data)
@@ -91,15 +91,15 @@ namespace sf::priv
 ////////////////////////////////////////////////////////////
 bool SoundFileReaderMp3::check(InputStream& stream)
 {
-    std::array<std::uint8_t, 10> header{};
+    std::array<std::byte, 10> header{};
 
-    if (stream.read(header.data(), header.size()) != header.size())
+    if (stream.read(header) != header.size())
         return false;
 
-    if (hasValidId3Tag(header.data()))
+    if (hasValidId3Tag(reinterpret_cast<std::uint8_t*>(header.data())))
         return true;
 
-    if (hdr_valid(header.data()))
+    if (hdr_valid(reinterpret_cast<std::uint8_t*>(header.data())))
         return true;
 
     return false;

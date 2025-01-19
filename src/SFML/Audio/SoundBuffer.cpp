@@ -49,9 +49,9 @@ SoundBuffer::SoundBuffer(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-SoundBuffer::SoundBuffer(const void* data, std::size_t sizeInBytes)
+SoundBuffer::SoundBuffer(std::span<const std::byte> buffer)
 {
-    if (!loadFromMemory(data, sizeInBytes))
+    if (!loadFromMemory(buffer))
         throw Exception("Failed to open sound buffer from memory");
 }
 
@@ -65,11 +65,11 @@ SoundBuffer::SoundBuffer(InputStream& stream)
 
 
 ////////////////////////////////////////////////////////////
-SoundBuffer::SoundBuffer(const std::int16_t*              samples,
-                         std::uint64_t                    sampleCount,
-                         unsigned int                     channelCount,
-                         unsigned int                     sampleRate,
-                         const std::vector<SoundChannel>& channelMap)
+SoundBuffer::SoundBuffer(const std::int16_t*           samples,
+                         std::uint64_t                 sampleCount,
+                         unsigned int                  channelCount,
+                         unsigned int                  sampleRate,
+                         std::span<const SoundChannel> channelMap)
 {
     if (!loadFromSamples(samples, sampleCount, channelCount, sampleRate, channelMap))
         throw Exception("Failed to open sound buffer from samples");
@@ -117,10 +117,10 @@ bool SoundBuffer::loadFromFile(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-bool SoundBuffer::loadFromMemory(const void* data, std::size_t sizeInBytes)
+bool SoundBuffer::loadFromMemory(std::span<const std::byte> buffer)
 {
     InputSoundFile file;
-    if (file.openFromMemory(data, sizeInBytes))
+    if (file.openFromMemory(buffer))
         return initialize(file);
 
     err() << "Failed to open sound buffer from memory" << std::endl;
@@ -141,11 +141,11 @@ bool SoundBuffer::loadFromStream(InputStream& stream)
 
 
 ////////////////////////////////////////////////////////////
-bool SoundBuffer::loadFromSamples(const std::int16_t*              samples,
-                                  std::uint64_t                    sampleCount,
-                                  unsigned int                     channelCount,
-                                  unsigned int                     sampleRate,
-                                  const std::vector<SoundChannel>& channelMap)
+bool SoundBuffer::loadFromSamples(const std::int16_t*           samples,
+                                  std::uint64_t                 sampleCount,
+                                  unsigned int                  channelCount,
+                                  unsigned int                  sampleRate,
+                                  std::span<const SoundChannel> channelMap)
 {
     if (samples && sampleCount && channelCount && sampleRate && !channelMap.empty())
     {
@@ -185,16 +185,9 @@ bool SoundBuffer::saveToFile(const std::filesystem::path& filename) const
 
 
 ////////////////////////////////////////////////////////////
-const std::int16_t* SoundBuffer::getSamples() const
+std::span<const std::int16_t> SoundBuffer::getSamples() const
 {
-    return m_samples.empty() ? nullptr : m_samples.data();
-}
-
-
-////////////////////////////////////////////////////////////
-std::uint64_t SoundBuffer::getSampleCount() const
-{
-    return m_samples.size();
+    return m_samples;
 }
 
 
@@ -266,14 +259,14 @@ bool SoundBuffer::initialize(InputSoundFile& file)
 
 
 ////////////////////////////////////////////////////////////
-bool SoundBuffer::update(unsigned int channelCount, unsigned int sampleRate, const std::vector<SoundChannel>& channelMap)
+bool SoundBuffer::update(unsigned int channelCount, unsigned int sampleRate, std::span<const SoundChannel> channelMap)
 {
     // Check parameters
     if (!channelCount || !sampleRate || (channelMap.size() != channelCount))
         return false;
 
     m_sampleRate = sampleRate;
-    m_channelMap = channelMap;
+    m_channelMap = {channelMap.begin(), channelMap.end()};
 
     // First make a copy of the list of sounds so we can reattach later
     const SoundList sounds(m_sounds);

@@ -32,13 +32,13 @@ void runUdpServer(unsigned short port)
     std::size_t                  received = 0;
     std::optional<sf::IpAddress> sender;
     unsigned short               senderPort = 0;
-    if (socket.receive(in.data(), in.size(), received, sender, senderPort) != sf::Socket::Status::Done)
+    if (socket.receive(std::as_writable_bytes(std::span(in)), received, sender, senderPort) != sf::Socket::Status::Done)
         return;
     std::cout << "Message received from client " << sender.value() << ": " << std::quoted(in.data()) << std::endl;
 
     // Send an answer to the client
     static constexpr std::string_view out = "Hi, I'm the server";
-    if (socket.send(out.data(), out.size(), sender.value(), senderPort) != sf::Socket::Status::Done)
+    if (socket.send(std::as_bytes(std::span(out)), sender.value(), senderPort) != sf::Socket::Status::Done)
         return;
     std::cout << "Message sent to the client: " << std::quoted(out.data()) << std::endl;
 }
@@ -63,7 +63,7 @@ void runUdpClient(unsigned short port)
 
     // Send a message to the server
     static constexpr std::string_view out = "Hi, I'm a client";
-    if (socket.send(out.data(), out.size(), server.value(), port) != sf::Socket::Status::Done)
+    if (socket.send(std::as_bytes(std::span(out)), server.value(), port) != sf::Socket::Status::Done)
         return;
     std::cout << "Message sent to the server: " << std::quoted(out.data()) << std::endl;
 
@@ -72,7 +72,7 @@ void runUdpClient(unsigned short port)
     std::size_t                  received = 0;
     std::optional<sf::IpAddress> sender;
     unsigned short               senderPort = 0;
-    if (socket.receive(in.data(), in.size(), received, sender, senderPort) != sf::Socket::Status::Done)
+    if (socket.receive(std::as_writable_bytes(std::span(in)), received, sender, senderPort) != sf::Socket::Status::Done)
         return;
     std::cout << "Message received from " << sender.value() << ": " << std::quoted(in.data()) << std::endl;
 }

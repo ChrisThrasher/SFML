@@ -74,9 +74,9 @@ Music::Music(const std::filesystem::path& filename) : Music()
 
 
 ////////////////////////////////////////////////////////////
-Music::Music(const void* data, std::size_t sizeInBytes) : Music()
+Music::Music(std::span<const std::byte> buffer) : Music()
 {
-    if (!openFromMemory(data, sizeInBytes))
+    if (!openFromMemory(buffer))
         throw Exception("Failed to open music from memory");
 }
 
@@ -132,13 +132,13 @@ bool Music::openFromFile(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-bool Music::openFromMemory(const void* data, std::size_t sizeInBytes)
+bool Music::openFromMemory(std::span<const std::byte> buffer)
 {
     // First stop the music if it was already running
     stop();
 
     // Open the underlying sound file
-    if (!m_impl->file.openFromMemory(data, sizeInBytes))
+    if (!m_impl->file.openFromMemory(buffer))
     {
         err() << "Failed to open music from memory" << std::endl;
         return false;

@@ -90,7 +90,7 @@ TEST_CASE("[Audio] sf::InputSoundFile")
         SECTION("Memory")
         {
             const auto               memory = loadIntoMemory("Audio/killdeer.wav");
-            const sf::InputSoundFile inputSoundFile(memory.data(), memory.size());
+            const sf::InputSoundFile inputSoundFile(memory);
             CHECK(inputSoundFile.getSampleCount() == 112'941);
             CHECK(inputSoundFile.getChannelCount() == 1);
             CHECK(inputSoundFile.getSampleRate() == 22'050);
@@ -226,7 +226,7 @@ TEST_CASE("[Audio] sf::InputSoundFile")
     {
         const auto         memory = loadIntoMemory("Audio/killdeer.wav");
         sf::InputSoundFile inputSoundFile;
-        REQUIRE(inputSoundFile.openFromMemory(memory.data(), memory.size()));
+        REQUIRE(inputSoundFile.openFromMemory(memory));
         CHECK(inputSoundFile.getSampleCount() == 112'941);
         CHECK(inputSoundFile.getChannelCount() == 1);
         CHECK(inputSoundFile.getSampleRate() == 22'050);

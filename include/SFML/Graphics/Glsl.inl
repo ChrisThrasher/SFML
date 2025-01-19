@@ -31,6 +31,7 @@
 #include <SFML/Graphics/Glsl.hpp> // NOLINT(misc-header-include-cycle)
 
 #include <array>
+#include <span>
 
 #include <cstddef>
 
@@ -56,7 +57,7 @@ void SFML_GRAPHICS_API copyMatrix(const Transform& source, Matrix<4, 4>& dest);
 /// <algorithm> and MSVC's annoying 4996 warning in header
 ///
 ////////////////////////////////////////////////////////////
-void SFML_GRAPHICS_API copyMatrix(const float* source, std::size_t elements, float* dest);
+void SFML_GRAPHICS_API copyMatrix(std::span<const float> array, float* dest);
 
 
 ////////////////////////////////////////////////////////////
@@ -76,7 +77,7 @@ struct Matrix
     ////////////////////////////////////////////////////////////
     explicit Matrix(const float* pointer)
     {
-        copyMatrix(pointer, Columns * Rows, array.data());
+        copyMatrix({pointer, Columns * Rows}, array.data());
     }
 
     ////////////////////////////////////////////////////////////

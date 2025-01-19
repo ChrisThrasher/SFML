@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <array>
 #include <ostream>
+#include <vector>
 
 #include <cassert>
 #include <cstddef>
@@ -85,10 +86,10 @@ SoundFileWriterWav::~SoundFileWriterWav()
 
 
 ////////////////////////////////////////////////////////////
-bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
-                              unsigned int                     sampleRate,
-                              unsigned int                     channelCount,
-                              const std::vector<SoundChannel>& channelMap)
+bool SoundFileWriterWav::open(const std::filesystem::path&  filename,
+                              unsigned int                  sampleRate,
+                              unsigned int                  channelCount,
+                              std::span<const SoundChannel> channelMap)
 {
     auto channelMask = 0u;
 
@@ -157,7 +158,7 @@ bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
 
         // Check for duplicate channel entries
         {
-            auto sortedChannelMap = channelMap;
+            std::vector<SoundChannel> sortedChannelMap(channelMap.begin(), channelMap.end());
             std::ranges::sort(sortedChannelMap);
 
             if (std::ranges::adjacent_find(sortedChannelMap) != sortedChannelMap.end())

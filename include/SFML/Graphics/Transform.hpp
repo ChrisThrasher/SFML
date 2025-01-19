@@ -34,6 +34,7 @@
 #include <SFML/System/Vector2.hpp>
 
 #include <array>
+#include <span>
 
 
 namespace sf
@@ -74,7 +75,7 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Return the transform as a 4x4 matrix
     ///
-    /// This function returns a pointer to an array of 16 floats
+    /// This function returns a view to an array of 16 floats
     /// containing the transform elements as a 4x4 matrix, which
     /// is directly compatible with OpenGL functions.
     ///
@@ -83,10 +84,10 @@ public:
     /// glLoadMatrixf(transform.getMatrix());
     /// \endcode
     ///
-    /// \return Pointer to a 4x4 matrix
+    /// \return View to a 4x4 matrix
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] constexpr const float* getMatrix() const;
+    [[nodiscard]] constexpr std::span<const float, 16> getMatrix() const;
 
     ////////////////////////////////////////////////////////////
     /// \brief Return the inverse of the transform

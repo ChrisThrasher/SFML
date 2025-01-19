@@ -121,13 +121,12 @@ public:
     /// After reading, the stream's reading position must be
     /// advanced by the amount of bytes read.
     ///
-    /// \param data Buffer where to copy the read data
-    /// \param size Desired number of bytes to read
+    /// \param buffer Buffer where to copy the read data
     ///
     /// \return The number of bytes actually read, or `std::nullopt` on error
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] std::optional<std::size_t> read(void* data, std::size_t size) override;
+    [[nodiscard]] std::optional<std::size_t> read(std::span<std::byte> buffer) override;
 
     ////////////////////////////////////////////////////////////
     /// \brief Change the current reading position

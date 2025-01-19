@@ -917,7 +917,7 @@ public:
             const auto                 fileSize = file.getSize().value();
             std::vector<std::uint32_t> buffer(fileSize / sizeof(std::uint32_t));
 
-            if (file.read(buffer.data(), fileSize) != file.getSize())
+            if (file.read(std::as_writable_bytes(std::span(buffer))) != file.getSize())
             {
                 vulkanAvailable = false;
                 return;
@@ -945,7 +945,7 @@ public:
             const auto                 fileSize = file.getSize().value();
             std::vector<std::uint32_t> buffer(fileSize / sizeof(std::uint32_t));
 
-            if (file.read(buffer.data(), fileSize) != file.getSize())
+            if (file.read(std::as_writable_bytes(std::span(buffer))) != file.getSize())
             {
                 vulkanAvailable = false;
                 return;
@@ -1794,7 +1794,7 @@ public:
         }
 
         // Create a staging buffer to transfer the data with
-        const VkDeviceSize imageSize = imageData.getSize().x * imageData.getSize().y * 4;
+        const VkDeviceSize imageSize = imageData.getPixels().size();
 
         VkBuffer       stagingBuffer       = {};
         VkDeviceMemory stagingBufferMemory = {};
@@ -1817,7 +1817,7 @@ public:
         }
 
         // Copy the image data into the buffer
-        std::memcpy(ptr, imageData.getPixelsPtr(), static_cast<std::size_t>(imageSize));
+        std::memcpy(ptr, imageData.getPixels().data(), imageData.getPixels().size());
 
         // Unmap the buffer
         vkUnmapMemory(device, stagingBufferMemory);

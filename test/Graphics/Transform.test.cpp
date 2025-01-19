@@ -31,7 +31,7 @@ TEST_CASE("[Graphics] sf::Transform")
         SECTION("3x3 matrix constructor")
         {
             constexpr sf::Transform transform(10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f, 17.0f, 18.0f);
-            const std::vector       matrix(transform.getMatrix(), transform.getMatrix() + 16);
+            const std::vector       matrix(transform.getMatrix().begin(), transform.getMatrix().end());
             CHECK(matrix ==
                   std::vector{10.0f, 13.0f, 0.0f, 16.0f, 11.0f, 14.0f, 0.0f, 17.0f, 0.0f, 0.0f, 1.0f, 0.0f, 12.0f, 15.0f, 0.0f, 18.0f});
         }
@@ -39,7 +39,7 @@ TEST_CASE("[Graphics] sf::Transform")
 
     SECTION("Identity matrix")
     {
-        const std::vector matrix(sf::Transform::Identity.getMatrix(), sf::Transform::Identity.getMatrix() + 16);
+        const std::vector matrix(sf::Transform::Identity.getMatrix().begin(), sf::Transform::Identity.getMatrix().end());
         CHECK(matrix ==
               std::vector{1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f});
     }

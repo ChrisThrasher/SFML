@@ -288,9 +288,9 @@ String String::substring(std::size_t position, std::size_t length) const
 
 
 ////////////////////////////////////////////////////////////
-const char32_t* String::getData() const
+std::u32string_view String::getData() const
 {
-    return m_string.c_str();
+    return m_string;
 }
 
 

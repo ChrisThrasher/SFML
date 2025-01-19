@@ -36,14 +36,14 @@ void runTcpServer(unsigned short port)
 
     // Send a message to the connected client
     static constexpr std::string_view out = "Hi, I'm the server";
-    if (socket.send(out.data(), out.size()) != sf::Socket::Status::Done)
+    if (socket.send(std::as_bytes(std::span(out))) != sf::Socket::Status::Done)
         return;
     std::cout << "Message sent to the client: " << std::quoted(out.data()) << std::endl;
 
     // Receive a message back from the client
     std::array<char, 128> in{};
     std::size_t           received = 0;
-    if (socket.receive(in.data(), in.size(), received) != sf::Socket::Status::Done)
+    if (socket.receive(std::as_writable_bytes(std::span(in)), received) != sf::Socket::Status::Done)
         return;
     std::cout << "Answer received from the client: " << std::quoted(in.data()) << std::endl;
 }
@@ -75,13 +75,13 @@ void runTcpClient(unsigned short port)
     // Receive a message from the server
     std::array<char, 128> in{};
     std::size_t           received = 0;
-    if (socket.receive(in.data(), in.size(), received) != sf::Socket::Status::Done)
+    if (socket.receive(std::as_writable_bytes(std::span(in)), received) != sf::Socket::Status::Done)
         return;
     std::cout << "Message received from the server: " << std::quoted(in.data()) << std::endl;
 
     // Send an answer to the server
     static constexpr std::string_view out = "Hi, I'm a client";
-    if (socket.send(out.data(), out.size()) != sf::Socket::Status::Done)
+    if (socket.send(std::as_bytes(std::span(out))) != sf::Socket::Status::Done)
         return;
     std::cout << "Message sent to the server: " << std::quoted(out.data()) << std::endl;
 }

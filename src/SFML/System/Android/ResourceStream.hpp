@@ -57,13 +57,12 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Read data from the asset
     ///
-    /// \param data Buffer where the asset data is copied
-    /// \param size Number of bytes read
+    /// \param buffer Buffer where the asset data is copied
     ///
     /// \return The number of bytes actually read, or `std::nullopt` on error
     ///
     ////////////////////////////////////////////////////////////
-    std::optional<std::size_t> read(void* data, std::size_t size) override;
+    std::optional<std::size_t> read(std::span<std::byte> buffer) override;
 
     ////////////////////////////////////////////////////////////
     /// \brief Change the current reading position in the asset file

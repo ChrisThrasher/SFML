@@ -36,6 +36,7 @@
 
 #include <filesystem>
 #include <optional>
+#include <span>
 #include <string_view>
 #include <vector>
 
@@ -78,13 +79,13 @@ public:
     ///
     /// The pixel array is assumed to contain 32-bits RGBA pixels,
     /// and have the given `size`. If not, this is an undefined behavior.
-    /// If `pixels` is `nullptr`, an empty image is created.
+    /// If `pixels` points to nothing, an empty image is created.
     ///
     /// \param size   Width and height of the image
     /// \param pixels Array of pixels to copy to the image
     ///
     ////////////////////////////////////////////////////////////
-    Image(Vector2u size, const std::uint8_t* pixels);
+    Image(Vector2u size, std::span<const std::uint8_t> pixels);
 
     ////////////////////////////////////////////////////////////
     /// \brief Construct the image from a file on disk
@@ -109,15 +110,14 @@ public:
     /// psd, hdr, pic and pnm. Some format options are not supported,
     /// like jpeg with arithmetic coding or ASCII pnm.
     ///
-    /// \param data Pointer to the file data in memory
-    /// \param size Size of the data to load, in bytes
+    /// \param buffer File data in memory
     ///
     /// \throws sf::Exception if loading was unsuccessful
     ///
     /// \see `loadFromFile`, `loadFromMemory`, `loadFromStream`
     ///
     ////////////////////////////////////////////////////////////
-    Image(const void* data, std::size_t size);
+    Image(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Construct the image from a custom stream
@@ -149,13 +149,13 @@ public:
     ///
     /// The pixel array is assumed to contain 32-bits RGBA pixels,
     /// and have the given `size`. If not, this is an undefined behavior.
-    /// If `pixels` is `nullptr`, an empty image is created.
+    /// If `pixels` points to nothing, an empty image is created.
     ///
     /// \param size   Width and height of the image
     /// \param pixels Array of pixels to copy to the image
     ///
     ////////////////////////////////////////////////////////////
-    void resize(Vector2u size, const std::uint8_t* pixels);
+    void resize(Vector2u size, std::span<const std::uint8_t> pixels);
 
     ////////////////////////////////////////////////////////////
     /// \brief Load the image from a file on disk
@@ -182,15 +182,14 @@ public:
     /// like jpeg with arithmetic coding or ASCII pnm.
     /// If this function fails, the image is left unchanged.
     ///
-    /// \param data Pointer to the file data in memory
-    /// \param size Size of the data to load, in bytes
+    /// \param buffer File data in memory
     ///
     /// \return `true` if loading was successful
     ///
     /// \see `loadFromFile`, `loadFromStream`, `saveToMemory`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool loadFromMemory(const void* data, std::size_t size);
+    [[nodiscard]] bool loadFromMemory(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Load the image from a custom stream
@@ -242,7 +241,7 @@ public:
     /// \see `saveToFile`, `loadFromMemory`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] std::optional<std::vector<std::uint8_t>> saveToMemory(std::string_view format) const;
+    [[nodiscard]] std::optional<std::vector<std::byte>> saveToMemory(std::string_view format) const;
 
     ////////////////////////////////////////////////////////////
     /// \brief Return the size (width and height) of the image
@@ -331,19 +330,19 @@ public:
     [[nodiscard]] Color getPixel(Vector2u coords) const;
 
     ////////////////////////////////////////////////////////////
-    /// \brief Get a read-only pointer to the array of pixels
+    /// \brief Get a read-only view to the array of pixels
     ///
-    /// The returned value points to an array of RGBA pixels made of
+    /// The returned value views an array of RGBA pixels made of
     /// 8 bit integer components. The size of the array is
     /// `width * height * 4 (getSize().x * getSize().y * 4)`.
-    /// Warning: the returned pointer may become invalid if you
+    /// Warning: the returned span may become invalid if you
     /// modify the image, so you should never store it for too long.
-    /// If the image is empty, a null pointer is returned.
+    /// If the image is empty, an empty is returned.
     ///
-    /// \return Read-only pointer to the array of pixels
+    /// \return Read-only view to the array of pixels
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] const std::uint8_t* getPixelsPtr() const;
+    [[nodiscard]] std::span<const std::uint8_t> getPixels() const;
 
     ////////////////////////////////////////////////////////////
     /// \brief Flip the image horizontally (left <-> right)
