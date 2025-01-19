@@ -31,6 +31,7 @@
 
 #include <filesystem>
 #include <memory>
+#include <span>
 #include <unordered_map>
 
 #include <cstddef>
@@ -114,15 +115,14 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Instantiate the right codec for the given file in memory
     ///
-    /// \param data        Pointer to the file data in memory
-    /// \param sizeInBytes Total size of the file data, in bytes
+    /// \param buffer File data in memory
     ///
     /// \return A new sound file codec that can read the given file, or `nullptr` if no codec can handle it
     ///
     /// \see `createReaderFromFilename`, `createReaderFromStream`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] static std::unique_ptr<SoundFileReader> createReaderFromMemory(const void* data, std::size_t sizeInBytes);
+    [[nodiscard]] static std::unique_ptr<SoundFileReader> createReaderFromMemory(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Instantiate the right codec for the given file in stream

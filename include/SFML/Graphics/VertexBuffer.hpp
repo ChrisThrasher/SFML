@@ -35,6 +35,8 @@
 
 #include <SFML/Window/GlResource.hpp>
 
+#include <span>
+
 #include <cstddef>
 
 
@@ -191,14 +193,13 @@ public:
     /// array. Passing invalid arguments will lead to undefined
     /// behavior.
     ///
-    /// \param vertices    Array of vertices to copy to the buffer
-    /// \param vertexCount Number of vertices to copy
-    /// \param offset      Offset in the buffer to copy to
+    /// \param vertices Array of vertices to copy to the buffer
+    /// \param offset   Offset in the buffer to copy to
     ///
     /// \return `true` if the update was successful
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool update(const Vertex* vertices, std::size_t vertexCount, unsigned int offset);
+    [[nodiscard]] bool update(std::span<const Vertex> vertices, unsigned int offset);
 
     ////////////////////////////////////////////////////////////
     /// \brief Copy the contents of another buffer into this buffer

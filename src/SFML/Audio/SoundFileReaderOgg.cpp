@@ -42,7 +42,7 @@ namespace
 std::size_t read(void* ptr, std::size_t size, std::size_t nmemb, void* data)
 {
     auto* stream = static_cast<sf::InputStream*>(data);
-    return stream->read(ptr, size * nmemb).value_or(-1);
+    return stream->read({static_cast<std::byte*>(ptr), size * nmemb}).value_or(-1);
 }
 
 int seek(void* data, ogg_int64_t signedOffset, int whence)

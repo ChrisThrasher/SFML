@@ -47,7 +47,7 @@ struct NoopSoundFileWriter : sf::SoundFileWriter
         return false;
     }
 
-    bool open(const std::filesystem::path&, unsigned int, unsigned int, const std::vector<sf::SoundChannel>&) override
+    bool open(const std::filesystem::path&, unsigned int, unsigned int, std::span<const sf::SoundChannel>) override
     {
         return false;
     }

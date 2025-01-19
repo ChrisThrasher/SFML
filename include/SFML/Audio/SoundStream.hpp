@@ -36,6 +36,7 @@
 
 #include <memory>
 #include <optional>
+#include <span>
 #include <vector>
 
 #include <cstddef>
@@ -241,7 +242,7 @@ protected:
     /// \param channelMap   Map of position in sample frame to sound channel
     ///
     ////////////////////////////////////////////////////////////
-    void initialize(unsigned int channelCount, unsigned int sampleRate, const std::vector<SoundChannel>& channelMap);
+    void initialize(unsigned int channelCount, unsigned int sampleRate, std::span<const SoundChannel> channelMap);
 
     ////////////////////////////////////////////////////////////
     /// \brief Request a new chunk of audio samples from the stream source

@@ -61,7 +61,7 @@ unsigned long read(FT_Stream rec, unsigned long offset, unsigned char* buffer, u
     if (stream->seek(offset) == offset)
     {
         if (count > 0)
-            return static_cast<unsigned long>(stream->read(reinterpret_cast<char*>(buffer), count).value());
+            return static_cast<unsigned long>(stream->read(std::as_writable_bytes(std::span(buffer, count))).value());
 
         return 0;
     }
@@ -123,9 +123,9 @@ Font::Font(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-Font::Font(const void* data, std::size_t sizeInBytes)
+Font::Font(std::span<const std::byte> buffer)
 {
-    if (!openFromMemory(data, sizeInBytes))
+    if (!openFromMemory(buffer))
         throw Exception("Failed to open font from memory");
 }
 
@@ -179,19 +179,19 @@ bool Font::openFromFile(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-bool Font::openFromMemory(const void* data, std::size_t sizeInBytes)
+bool Font::openFromMemory(std::span<const std::byte> buffer)
 {
     // Cleanup the previous resources
     cleanup();
 
-    if (!data)
+    if (!buffer.data())
     {
         err() << "Failed to load font from memory (provided data pointer is null)" << std::endl;
         return false;
     }
 
     // Create memory stream - the memory is owned by the user
-    const auto memoryStream = std::make_shared<MemoryInputStream>(data, sizeInBytes);
+    const auto memoryStream = std::make_shared<MemoryInputStream>(buffer);
 
     // Open the font, and if succesful save the stream to keep it alive
     if (openFromStreamImpl(*memoryStream, "memory"))
@@ -611,7 +611,7 @@ Glyph Font::loadGlyph(char32_t codePoint, unsigned int characterSize, bool bold,
         // Write the pixels to the texture
         const auto dest       = Vector2u(glyph.textureRect.position) - Vector2u(padding, padding);
         const auto updateSize = Vector2u(glyph.textureRect.size) + 2u * Vector2u(padding, padding);
-        page.texture.update(m_pixelBuffer.data(), updateSize, dest);
+        page.texture.update(m_pixelBuffer, updateSize, dest);
     }
 
     // Delete the FT glyph

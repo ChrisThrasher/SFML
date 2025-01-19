@@ -27,7 +27,7 @@ TEST_CASE("[System] sf::FileInputStream")
         SECTION("Default constructor")
         {
             sf::FileInputStream fileInputStream;
-            CHECK(fileInputStream.read(nullptr, 0) == std::nullopt);
+            CHECK(fileInputStream.read({}) == std::nullopt);
             CHECK(fileInputStream.seek(0) == std::nullopt);
             CHECK(fileInputStream.tell() == std::nullopt);
             CHECK(fileInputStream.getSize() == std::nullopt);
@@ -36,7 +36,7 @@ TEST_CASE("[System] sf::FileInputStream")
         SECTION("File path constructor")
         {
             sf::FileInputStream fileInputStream("System/test.txt");
-            CHECK(fileInputStream.read(buffer.data(), 5) == 5);
+            CHECK(fileInputStream.read(std::as_writable_bytes(std::span(buffer).first<5>())) == 5);
             CHECK(fileInputStream.tell() == 5);
             CHECK(fileInputStream.getSize() == 12);
             CHECK(std::string_view(buffer.data(), 5) == "Hello"sv);
@@ -51,7 +51,7 @@ TEST_CASE("[System] sf::FileInputStream")
         {
             sf::FileInputStream movedFileInputStream("System/test.txt");
             sf::FileInputStream fileInputStream = std::move(movedFileInputStream);
-            CHECK(fileInputStream.read(buffer.data(), 6) == 6);
+            CHECK(fileInputStream.read(std::as_writable_bytes(std::span(buffer).first<6>())) == 6);
             CHECK(fileInputStream.tell() == 6);
             CHECK(fileInputStream.getSize() == 12);
             CHECK(std::string_view(buffer.data(), 6) == "Hello "sv);
@@ -62,7 +62,7 @@ TEST_CASE("[System] sf::FileInputStream")
             sf::FileInputStream movedFileInputStream("System/test.txt");
             sf::FileInputStream fileInputStream("System/test2.txt");
             fileInputStream = std::move(movedFileInputStream);
-            CHECK(fileInputStream.read(buffer.data(), 6) == 6);
+            CHECK(fileInputStream.read(std::as_writable_bytes(std::span(buffer).first<6>())) == 6);
             CHECK(fileInputStream.tell() == 6);
             CHECK(fileInputStream.getSize() == 12);
             CHECK(std::string_view(buffer.data(), 6) == "Hello "sv);
@@ -73,7 +73,7 @@ TEST_CASE("[System] sf::FileInputStream")
     {
         sf::FileInputStream fileInputStream;
         REQUIRE(fileInputStream.open("System/test.txt"));
-        CHECK(fileInputStream.read(buffer.data(), 5) == 5);
+        CHECK(fileInputStream.read(std::as_writable_bytes(std::span(buffer).first<5>())) == 5);
         CHECK(fileInputStream.tell() == 5);
         CHECK(fileInputStream.getSize() == 12);
         CHECK(std::string_view(buffer.data(), 5) == "Hello"sv);
@@ -84,7 +84,7 @@ TEST_CASE("[System] sf::FileInputStream")
     SECTION("Temporary file stream create")
     {
         sf::FileInputStream fileInputStream("System/test.txt");
-        CHECK(fileInputStream.read(buffer.data(), 5) == 5);
+        CHECK(fileInputStream.read(std::as_writable_bytes(std::span(buffer).first<5>())) == 5);
         CHECK(fileInputStream.tell() == 5);
         CHECK(fileInputStream.getSize() == 12);
         CHECK(std::string_view(buffer.data(), 5) == "Hello"sv);
@@ -101,7 +101,7 @@ TEST_CASE("[System] sf::FileInputStream")
         sf::FileInputStream fileInputStream;
         CHECK(fileInputStream.open(filename));
 
-        CHECK(fileInputStream.read(buffer.data(), 5) == 5);
+        CHECK(fileInputStream.read(std::as_writable_bytes(std::span(buffer).first<5>())) == 5);
         CHECK(fileInputStream.tell() == 5);
         CHECK(fileInputStream.getSize() == 12);
         CHECK(std::string_view(buffer.data(), 5) == "Hello"sv);

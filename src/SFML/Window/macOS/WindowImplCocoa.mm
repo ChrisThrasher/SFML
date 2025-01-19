@@ -59,7 +59,7 @@ bool isCursorHidden = false; // initially, the cursor is visible
 NSString* sfStringToNSString(const sf::String& string)
 {
     const auto  length = static_cast<std::uint32_t>(string.getSize() * sizeof(std::uint32_t));
-    const void* data   = reinterpret_cast<const void*>(string.getData());
+    const void* data   = string.getData().data();
 
     NSStringEncoding encoding = 0;
     if (std::endian::native == std::endian::little)

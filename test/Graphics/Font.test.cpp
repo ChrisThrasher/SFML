@@ -74,15 +74,14 @@ TEST_CASE("[Graphics] sf::Font", runDisplayTests())
         {
             SECTION("Invalid data and size")
             {
-                CHECK_THROWS_AS(sf::Font(nullptr, 1), sf::Exception);
                 const std::byte testByte{0xCD};
-                CHECK_THROWS_AS(sf::Font(&testByte, 0), sf::Exception);
+                CHECK_THROWS_AS(sf::Font({&testByte, 0}), sf::Exception);
             }
 
             SECTION("Successful load")
             {
                 const auto     memory = loadIntoMemory("Graphics/tuffy.ttf");
-                const sf::Font font(memory.data(), memory.size());
+                const sf::Font font(memory);
                 CHECK(font.getInfo().family == "Tuffy");
                 const auto& glyph = font.getGlyph(0x45, 16, false);
                 CHECK(glyph.advance == 9);
@@ -181,15 +180,14 @@ TEST_CASE("[Graphics] sf::Font", runDisplayTests())
 
         SECTION("Invalid data and size")
         {
-            CHECK(!font.openFromMemory(nullptr, 1));
             const std::byte testByte{0xCD};
-            CHECK(!font.openFromMemory(&testByte, 0));
+            CHECK(!font.openFromMemory({&testByte, 0}));
         }
 
         SECTION("Successful load")
         {
             const auto memory = loadIntoMemory("Graphics/tuffy.ttf");
-            REQUIRE(font.openFromMemory(memory.data(), memory.size()));
+            REQUIRE(font.openFromMemory(memory));
             CHECK(font.getInfo().family == "Tuffy");
             const auto& glyph = font.getGlyph(0x45, 16, false);
             CHECK(glyph.advance == 9);

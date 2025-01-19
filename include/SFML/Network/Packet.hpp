@@ -29,6 +29,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Network/Export.hpp>
 
+#include <span>
 #include <string>
 #include <vector>
 
@@ -89,14 +90,13 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Append data to the end of the packet
     ///
-    /// \param data        Pointer to the sequence of bytes to append
-    /// \param sizeInBytes Number of bytes to append
+    /// \param buffer The sequence of bytes to append
     ///
     /// \see `clear`
     /// \see `getReadPosition`
     ///
     ////////////////////////////////////////////////////////////
-    void append(const void* data, std::size_t sizeInBytes);
+    void append(std::span<const std::byte> buffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Get the current reading position in the packet
@@ -121,32 +121,16 @@ public:
     void clear();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Get a pointer to the data contained in the packet
+    /// \brief Get a view to the data contained in the packet
     ///
-    /// Warning: the returned pointer may become invalid after
+    /// Warning: the returned view may become invalid after
     /// you append data to the packet, therefore it should never
     /// be stored.
-    /// The return pointer is a `nullptr` if the packet is empty.
     ///
-    /// \return Pointer to the data
-    ///
-    /// \see `getDataSize`
+    /// \return View of the data
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] const void* getData() const;
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Get the size of the data contained in the packet
-    ///
-    /// This function returns the number of bytes pointed to by
-    /// what `getData` returns.
-    ///
-    /// \return Data size, in bytes
-    ///
-    /// \see `getData`
-    ///
-    ////////////////////////////////////////////////////////////
-    [[nodiscard]] std::size_t getDataSize() const;
+    [[nodiscard]] std::span<const std::byte> getData() const;
 
     ////////////////////////////////////////////////////////////
     /// \brief Tell if the reading position has reached the
@@ -379,14 +363,12 @@ protected:
     /// The default implementation provides the packet's data
     /// without transforming it.
     ///
-    /// \param size Variable to fill with the size of data to send
-    ///
-    /// \return Pointer to the array of bytes to send
+    /// \return View of the array of bytes to send
     ///
     /// \see `onReceive`
     ///
     ////////////////////////////////////////////////////////////
-    virtual const void* onSend(std::size_t& size);
+    virtual std::span<const std::byte> onSend();
 
     ////////////////////////////////////////////////////////////
     /// \brief Called after the packet is received over the network
@@ -399,13 +381,12 @@ protected:
     /// The default implementation fills the packet directly
     /// without transforming the data.
     ///
-    /// \param data Pointer to the received bytes
-    /// \param size Number of bytes
+    /// \param buffer The received bytes
     ///
     /// \see `onSend`
     ///
     ////////////////////////////////////////////////////////////
-    virtual void onReceive(const void* data, std::size_t size);
+    virtual void onReceive(std::span<const std::byte> buffer);
 
 private:
     ////////////////////////////////////////////////////////////
@@ -524,20 +505,14 @@ private:
 /// \code
 /// class ZipPacket : public sf::Packet
 /// {
-///     const void* onSend(std::size_t& size) override
+///     std::span<const std::byte> onSend() override
 ///     {
-///         const void* srcData = getData();
-///         std::size_t srcSize = getDataSize();
-///
-///         return MySuperZipFunction(srcData, srcSize, &size);
+///         return MySuperZipFunction(getData());
 ///     }
 ///
-///     void onReceive(const void* data, std::size_t size) override
+///     void onReceive(std::span<const std::byte> buffer) override
 ///     {
-///         std::size_t dstSize;
-///         const void* dstData = MySuperUnzipFunction(data, size, &dstSize);
-///
-///         append(dstData, dstSize);
+///         append(MySuperUnzipFunction(data, size, &dstSize));
 ///     }
 /// };
 ///

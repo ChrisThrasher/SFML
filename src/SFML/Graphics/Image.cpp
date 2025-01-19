@@ -59,7 +59,7 @@ namespace
 int read(void* user, char* data, int size)
 {
     auto&               stream = *static_cast<sf::InputStream*>(user);
-    const std::optional count  = stream.read(data, static_cast<std::size_t>(size));
+    const std::optional count  = stream.read(std::as_writable_bytes(std::span(data, static_cast<std::size_t>(size))));
     return count ? static_cast<int>(*count) : -1;
 }
 
@@ -79,9 +79,9 @@ int eof(void* user)
 // stb_image callback for constructing a buffer
 void bufferFromCallback(void* context, void* data, int size)
 {
-    const auto* source = static_cast<std::uint8_t*>(data);
-    auto*       dest   = static_cast<std::vector<std::uint8_t>*>(context);
-    std::ranges::copy(source, source + size, std::back_inserter(*dest));
+    const auto buffer = std::span(static_cast<std::uint8_t*>(data), static_cast<std::size_t>(size));
+    auto&      dest   = *static_cast<std::vector<std::uint8_t>*>(context);
+    std::ranges::copy(buffer, std::back_inserter(dest));
 }
 
 // Deleter for STB pointers
@@ -106,7 +106,7 @@ Image::Image(Vector2u size, Color color)
 
 
 ////////////////////////////////////////////////////////////
-Image::Image(Vector2u size, const std::uint8_t* pixels)
+Image::Image(Vector2u size, std::span<const std::uint8_t> pixels)
 {
     resize(size, pixels);
 }
@@ -121,9 +121,9 @@ Image::Image(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-Image::Image(const void* data, std::size_t size)
+Image::Image(std::span<const std::byte> buffer)
 {
-    if (!loadFromMemory(data, size))
+    if (!loadFromMemory(buffer))
         throw Exception("Failed to open image from memory");
 }
 
@@ -173,12 +173,15 @@ void Image::resize(Vector2u size, Color color)
 
 
 ////////////////////////////////////////////////////////////
-void Image::resize(Vector2u size, const std::uint8_t* pixels)
+void Image::resize(Vector2u size, std::span<const std::uint8_t> pixels)
 {
-    if (pixels && size.x && size.y)
+    const auto pixelCount = std::size_t{size.x} * std::size_t{size.y} * 4;
+    assert(pixels.size() >= pixelCount);
+
+    if (pixels.data() && size.x && size.y)
     {
         // Create a new pixel buffer first for exception safety's sake
-        std::vector<std::uint8_t> newPixels(pixels, pixels + size.x * size.y * 4);
+        std::vector newPixels(pixels.data(), pixels.data() + pixelCount);
 
         // Commit the new pixel buffer
         m_pixels = std::move(newPixels);
@@ -246,7 +249,8 @@ bool Image::loadFromFile(const std::filesystem::path& filename)
     if (const auto ptr = StbPtr(
             stbi_load_from_callbacks(&callbacks, &file, &imageSize.x, &imageSize.y, &channels, STBI_rgb_alpha)))
     {
-        resize(Vector2u(imageSize), ptr.get());
+        resize(Vector2u(imageSize),
+               {ptr.get(), static_cast<std::size_t>(imageSize.x) * static_cast<std::size_t>(imageSize.y) * 4});
         return true;
     }
 
@@ -259,19 +263,20 @@ bool Image::loadFromFile(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-bool Image::loadFromMemory(const void* data, std::size_t size)
+bool Image::loadFromMemory(std::span<const std::byte> buffer)
 {
     // Check input parameters
-    if (data && size)
+    if (buffer.data() && !buffer.empty())
     {
         // Load the image and get a pointer to the pixels in memory
         Vector2i    imageSize;
         int         channels = 0;
-        const auto* buffer   = static_cast<const unsigned char*>(data);
+        const auto* data     = reinterpret_cast<const unsigned char*>(buffer.data());
         if (const auto ptr = StbPtr(
-                stbi_load_from_memory(buffer, static_cast<int>(size), &imageSize.x, &imageSize.y, &channels, STBI_rgb_alpha)))
+                stbi_load_from_memory(data, static_cast<int>(buffer.size()), &imageSize.x, &imageSize.y, &channels, STBI_rgb_alpha)))
         {
-            resize(Vector2u(imageSize), ptr.get());
+            resize(Vector2u(imageSize),
+                   {ptr.get(), static_cast<std::size_t>(imageSize.x) * static_cast<std::size_t>(imageSize.y) * 4});
             return true;
         }
 
@@ -308,7 +313,8 @@ bool Image::loadFromStream(InputStream& stream)
     if (const auto ptr = StbPtr(
             stbi_load_from_callbacks(&callbacks, &stream, &imageSize.x, &imageSize.y, &channels, STBI_rgb_alpha)))
     {
-        resize(Vector2u(imageSize), ptr.get());
+        resize(Vector2u(imageSize),
+               {ptr.get(), static_cast<std::size_t>(imageSize.x) * static_cast<std::size_t>(imageSize.y) * 4});
         return true;
     }
 
@@ -380,7 +386,7 @@ bool Image::saveToFile(const std::filesystem::path& filename) const
 
 
 ////////////////////////////////////////////////////////////
-std::optional<std::vector<std::uint8_t>> Image::saveToMemory(std::string_view format) const
+std::optional<std::vector<std::byte>> Image::saveToMemory(std::string_view format) const
 {
     // Make sure the image is not empty
     if (!m_pixels.empty() && m_size.x > 0 && m_size.y > 0)
@@ -389,7 +395,7 @@ std::optional<std::vector<std::uint8_t>> Image::saveToMemory(std::string_view fo
         const std::string specified     = toLower(std::string(format));
         const Vector2i    convertedSize = Vector2i(m_size);
 
-        std::vector<std::uint8_t> buffer;
+        std::vector<std::byte> buffer;
 
         if (specified == "bmp")
         {
@@ -564,15 +570,15 @@ Color Image::getPixel(Vector2u coords) const
 
 
 ////////////////////////////////////////////////////////////
-const std::uint8_t* Image::getPixelsPtr() const
+std::span<const std::uint8_t> Image::getPixels() const
 {
     if (!m_pixels.empty())
     {
-        return m_pixels.data();
+        return m_pixels;
     }
 
     err() << "Trying to access the pixels of an empty image" << std::endl;
-    return nullptr;
+    return {};
 }
 
 

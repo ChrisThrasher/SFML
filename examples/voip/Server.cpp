@@ -34,7 +34,7 @@ public:
     NetworkAudioStream()
     {
         // Set the sound parameters
-        initialize(1, 44100, {sf::SoundChannel::Mono});
+        initialize(1, 44100, std::array{sf::SoundChannel::Mono});
     }
 
     ////////////////////////////////////////////////////////////
@@ -130,13 +130,13 @@ private:
             if (id == serverAudioData)
             {
                 // Extract audio samples from the packet, and append it to our samples buffer
-                const std::size_t sampleCount = (packet.getDataSize() - 1) / sizeof(std::int16_t);
+                const std::size_t sampleCount = (packet.getData().size() - 1) / sizeof(std::int16_t);
 
                 // Don't forget that the other thread can access the sample array at any time
                 // (so we protect any operation on it with the mutex)
                 {
                     const std::lock_guard lock(m_mutex);
-                    const auto*           begin = static_cast<const char*>(packet.getData()) + 1;
+                    const auto*           begin = reinterpret_cast<const char*>(packet.getData().data()) + 1;
                     const auto*           end   = begin + sampleCount * sizeof(std::int16_t);
                     m_samples.insert(m_samples.end(), begin, end);
                 }

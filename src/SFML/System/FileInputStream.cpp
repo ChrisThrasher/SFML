@@ -85,19 +85,19 @@ bool FileInputStream::open(const std::filesystem::path& filename)
 
 
 ////////////////////////////////////////////////////////////
-std::optional<std::size_t> FileInputStream::read(void* data, std::size_t size)
+std::optional<std::size_t> FileInputStream::read(std::span<std::byte> buffer)
 {
 #ifdef SFML_SYSTEM_ANDROID
     if (priv::getActivityStatesPtr() != nullptr)
     {
         if (!m_androidFile)
             return std::nullopt;
-        return m_androidFile->read(data, size);
+        return m_androidFile->read(buffer);
     }
 #endif
     if (!m_file)
         return std::nullopt;
-    return std::fread(data, 1, size, m_file.get());
+    return std::fread(buffer.data(), 1, buffer.size(), m_file.get());
 }
 
 

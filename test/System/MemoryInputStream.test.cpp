@@ -22,8 +22,8 @@ TEST_CASE("[System] sf::MemoryInputStream")
     {
         SECTION("Null data")
         {
-            sf::MemoryInputStream memoryInputStream(nullptr, 0);
-            CHECK(memoryInputStream.read(nullptr, 0) == std::nullopt);
+            sf::MemoryInputStream memoryInputStream({});
+            CHECK(memoryInputStream.read({}) == std::nullopt);
             CHECK(memoryInputStream.seek(0) == std::nullopt);
             CHECK(memoryInputStream.tell() == std::nullopt);
             CHECK(memoryInputStream.getSize() == std::nullopt);
@@ -33,14 +33,14 @@ TEST_CASE("[System] sf::MemoryInputStream")
 
         SECTION("Zero length")
         {
-            sf::MemoryInputStream memoryInputStream(input.data(), 0);
+            sf::MemoryInputStream memoryInputStream(std::as_bytes(std::span(input.data(), 0)));
             CHECK(memoryInputStream.tell().value() == 0);
             CHECK(memoryInputStream.getSize().value() == 0);
         }
 
         SECTION("Full length")
         {
-            sf::MemoryInputStream memoryInputStream(input.data(), input.size());
+            sf::MemoryInputStream memoryInputStream(std::as_bytes(std::span(input)));
             CHECK(memoryInputStream.tell().value() == 0);
             CHECK(memoryInputStream.getSize().value() == input.size());
         }
@@ -49,19 +49,19 @@ TEST_CASE("[System] sf::MemoryInputStream")
     SECTION("read()")
     {
         static constexpr auto input = "hello world"sv;
-        sf::MemoryInputStream memoryInputStream(input.data(), input.size());
+        sf::MemoryInputStream memoryInputStream(std::as_bytes(std::span(input)));
         CHECK(memoryInputStream.tell().value() == 0);
         CHECK(memoryInputStream.getSize().value() == input.size());
 
         // Read within input
         std::array<char, 32> output{};
-        CHECK(memoryInputStream.read(output.data(), 5).value() == 5);
+        CHECK(memoryInputStream.read(std::as_writable_bytes(std::span(output).first<5>())).value() == 5);
         CHECK(std::string_view(output.data(), 5) == "hello"sv);
         CHECK(memoryInputStream.tell().value() == 5);
         CHECK(memoryInputStream.getSize().value() == input.size());
 
         // Read beyond input
-        CHECK(memoryInputStream.read(output.data(), 100).value() == 6);
+        CHECK(memoryInputStream.read(std::as_writable_bytes(std::span(output.data(), 100))).value() == 6);
         CHECK(std::string_view(output.data(), 6) == " world"sv);
         CHECK(memoryInputStream.tell().value() == 11);
         CHECK(memoryInputStream.getSize().value() == input.size());
@@ -70,7 +70,7 @@ TEST_CASE("[System] sf::MemoryInputStream")
     SECTION("seek()")
     {
         static constexpr auto input = "We Love SFML!"sv;
-        sf::MemoryInputStream memoryInputStream(input.data(), input.size());
+        sf::MemoryInputStream memoryInputStream(std::as_bytes(std::span(input)));
         CHECK(memoryInputStream.tell().value() == 0);
         CHECK(memoryInputStream.getSize().value() == input.size());
 

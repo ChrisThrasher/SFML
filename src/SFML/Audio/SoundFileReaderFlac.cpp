@@ -48,7 +48,7 @@ FLAC__StreamDecoderReadStatus streamRead(
 {
     auto* data = static_cast<sf::priv::SoundFileReaderFlac::ClientData*>(clientData);
 
-    if (const std::optional count = data->stream->read(buffer, *bytes))
+    if (const std::optional count = data->stream->read(std::as_writable_bytes(std::span(buffer, *bytes))))
     {
         if (*count > 0)
         {

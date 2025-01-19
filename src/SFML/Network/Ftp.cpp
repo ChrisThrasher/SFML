@@ -361,7 +361,7 @@ Ftp::Response Ftp::sendCommand(const std::string& command, const std::string& pa
     const std::string commandStr = parameter.empty() ? command + "\r\n" : command + " " + parameter + "\r\n";
 
     // Send it to the server
-    if (m_commandSocket.send(commandStr.c_str(), commandStr.length()) != Socket::Status::Done)
+    if (m_commandSocket.send(std::as_bytes(std::span(commandStr))) != Socket::Status::Done)
         return Response(Response::Status::ConnectionClosed);
 
     // Get the response
@@ -387,7 +387,7 @@ Ftp::Response Ftp::getResponse()
 
         if (m_receiveBuffer.empty())
         {
-            if (m_commandSocket.receive(buffer.data(), buffer.size(), length) != Socket::Status::Done)
+            if (m_commandSocket.receive(std::as_writable_bytes(std::span(buffer)), length) != Socket::Status::Done)
                 return Response(Response::Status::ConnectionClosed);
         }
         else
@@ -587,7 +587,7 @@ void Ftp::DataChannel::receive(std::ostream& stream)
     // Receive data
     std::array<char, 1024> buffer{};
     std::size_t            received = 0;
-    while (m_dataSocket.receive(buffer.data(), buffer.size(), received) == Socket::Status::Done)
+    while (m_dataSocket.receive(std::as_writable_bytes(std::span(buffer)), received) == Socket::Status::Done)
     {
         stream.write(buffer.data(), static_cast<std::streamsize>(received));
 
@@ -626,7 +626,7 @@ void Ftp::DataChannel::send(std::istream& stream)
         if (count > 0)
         {
             // we could read more data from the stream: send them
-            if (m_dataSocket.send(buffer.data(), count) != Socket::Status::Done)
+            if (m_dataSocket.send(std::as_bytes(std::span(buffer.data(), count))) != Socket::Status::Done)
                 break;
         }
         else

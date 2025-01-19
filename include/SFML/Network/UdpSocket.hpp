@@ -33,6 +33,7 @@
 #include <SFML/Network/Socket.hpp>
 
 #include <optional>
+#include <span>
 #include <vector>
 
 #include <cstddef>
@@ -120,8 +121,7 @@ public:
     /// `UdpSocket::MaxDatagramSize`, otherwise this function will
     /// fail and no data will be sent.
     ///
-    /// \param data          Pointer to the sequence of bytes to send
-    /// \param size          Number of bytes to send
+    /// \param buffer        The sequence of bytes to send
     /// \param remoteAddress Address of the receiver
     /// \param remotePort    Port of the receiver to send the data to
     ///
@@ -130,7 +130,7 @@ public:
     /// \see `receive`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] Status send(const void* data, std::size_t size, IpAddress remoteAddress, unsigned short remotePort);
+    [[nodiscard]] Status send(std::span<const std::byte> buffer, IpAddress remoteAddress, unsigned short remotePort);
 
     ////////////////////////////////////////////////////////////
     /// \brief Receive raw data from a remote peer
@@ -142,8 +142,7 @@ public:
     /// then an error will be returned and *all* the data will
     /// be lost.
     ///
-    /// \param data          Pointer to the array to fill with the received bytes
-    /// \param size          Maximum number of bytes that can be received
+    /// \param buffer        View to the array to fill with the received bytes
     /// \param received      This variable is filled with the actual number of bytes received
     /// \param remoteAddress Address of the peer that sent the data
     /// \param remotePort    Port of the peer that sent the data
@@ -153,8 +152,7 @@ public:
     /// \see `send`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] Status receive(void*                     data,
-                                 std::size_t               size,
+    [[nodiscard]] Status receive(std::span<std::byte>      buffer,
                                  std::size_t&              received,
                                  std::optional<IpAddress>& remoteAddress,
                                  unsigned short&           remotePort);

@@ -92,19 +92,20 @@ struct Sound::Impl : priv::MiniaudioUtils::SoundBase
             return MA_NO_DATA_AVAILABLE;
 
         // Determine how many frames we can read
-        *framesRead = std::min(frameCount, (buffer->getSampleCount() - impl.cursor) / buffer->getChannelCount());
+        *framesRead = std::min(frameCount,
+                               std::uint64_t{(buffer->getSamples().size() - impl.cursor) / buffer->getChannelCount()});
 
         // Copy the samples to the output
         const auto sampleCount = *framesRead * buffer->getChannelCount();
 
         std::memcpy(framesOut,
-                    buffer->getSamples() + impl.cursor,
+                    buffer->getSamples().data() + impl.cursor,
                     static_cast<std::size_t>(sampleCount) * sizeof(buffer->getSamples()[0]));
 
         impl.cursor += static_cast<std::size_t>(sampleCount);
 
         // If we are looping and at the end of the sound, set the cursor back to the start
-        if (impl.looping && (impl.cursor >= buffer->getSampleCount()))
+        if (impl.looping && (impl.cursor >= buffer->getSamples().size()))
             impl.cursor = 0;
 
         return MA_SUCCESS;
@@ -162,7 +163,7 @@ struct Sound::Impl : priv::MiniaudioUtils::SoundBase
         if (buffer == nullptr)
             return MA_NO_DATA_AVAILABLE;
 
-        *length = buffer->getSampleCount() / buffer->getChannelCount();
+        *length = buffer->getSamples().size() / buffer->getChannelCount();
 
         return MA_SUCCESS;
     }

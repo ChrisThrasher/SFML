@@ -89,17 +89,17 @@ Texture::Texture(const std::filesystem::path& filename, bool sRgb, const IntRect
 
 
 ////////////////////////////////////////////////////////////
-Texture::Texture(const void* data, std::size_t size, bool sRgb) : Texture()
+Texture::Texture(std::span<const std::byte> buffer, bool sRgb) : Texture()
 {
-    if (!loadFromMemory(data, size, sRgb))
+    if (!loadFromMemory(buffer, sRgb))
         throw Exception("Failed to load texture from memory");
 }
 
 
 ////////////////////////////////////////////////////////////
-Texture::Texture(const void* data, std::size_t size, bool sRgb, const IntRect& area) : Texture()
+Texture::Texture(std::span<const std::byte> buffer, bool sRgb, const IntRect& area) : Texture()
 {
-    if (!loadFromMemory(data, size, sRgb, area))
+    if (!loadFromMemory(buffer, sRgb, area))
         throw Exception("Failed to load texture from memory");
 }
 
@@ -357,10 +357,10 @@ bool Texture::loadFromFile(const std::filesystem::path& filename, bool sRgb, con
 
 
 ////////////////////////////////////////////////////////////
-bool Texture::loadFromMemory(const void* data, std::size_t size, bool sRgb, const IntRect& area)
+bool Texture::loadFromMemory(std::span<const std::byte> buffer, bool sRgb, const IntRect& area)
 {
     Image image;
-    return image.loadFromMemory(data, size) && loadFromImage(image, sRgb, area);
+    return image.loadFromMemory(buffer) && loadFromImage(image, sRgb, area);
 }
 
 
@@ -411,7 +411,7 @@ bool Texture::loadFromImage(const Image& image, bool sRgb, const IntRect& area)
         const priv::TextureSaver save;
 
         // Copy the pixels to the texture, row by row
-        const std::uint8_t* pixels = image.getPixelsPtr() + 4 * (rectangle.position.x + (size.x * rectangle.position.y));
+        const std::uint8_t* pixels = image.getPixels().data() + 4 * (rectangle.position.x + (size.x * rectangle.position.y));
         glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
         for (int i = 0; i < rectangle.size.y; ++i)
         {
@@ -537,12 +537,12 @@ Image Texture::copyToImage() const
 
 #endif // SFML_OPENGL_ES
 
-    return {m_size, pixels.data()};
+    return {m_size, pixels};
 }
 
 
 ////////////////////////////////////////////////////////////
-void Texture::update(const std::uint8_t* pixels)
+void Texture::update(std::span<const std::uint8_t> pixels)
 {
     // Update the whole texture
     update(pixels, m_size, {0, 0});
@@ -550,12 +550,14 @@ void Texture::update(const std::uint8_t* pixels)
 
 
 ////////////////////////////////////////////////////////////
-void Texture::update(const std::uint8_t* pixels, Vector2u size, Vector2u dest)
+void Texture::update(std::span<const std::uint8_t> pixels, Vector2u size, Vector2u dest)
 {
     assert(dest.x + size.x <= m_size.x && "Destination x coordinate is outside of texture");
     assert(dest.y + size.y <= m_size.y && "Destination y coordinate is outside of texture");
 
-    if (pixels && m_texture)
+    assert(pixels.size() >= size.x * size.y * 4);
+
+    if (pixels.data() && m_texture)
     {
         const TransientContextLock lock;
 
@@ -572,7 +574,7 @@ void Texture::update(const std::uint8_t* pixels, Vector2u size, Vector2u dest)
                                 static_cast<GLsizei>(size.y),
                                 GL_RGBA,
                                 GL_UNSIGNED_BYTE,
-                                pixels));
+                                pixels.data()));
         glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_isSmooth ? GL_LINEAR : GL_NEAREST));
         m_hasMipmap     = false;
         m_pixelsFlipped = false;
@@ -718,14 +720,14 @@ void Texture::update(const Texture& texture, Vector2u dest)
 void Texture::update(const Image& image)
 {
     // Update the whole texture
-    update(image.getPixelsPtr(), image.getSize(), {0, 0});
+    update(image.getPixels(), image.getSize(), {0, 0});
 }
 
 
 ////////////////////////////////////////////////////////////
 void Texture::update(const Image& image, Vector2u dest)
 {
-    update(image.getPixelsPtr(), image.getSize(), dest);
+    update(image.getPixels(), image.getSize(), dest);
 }
 
 

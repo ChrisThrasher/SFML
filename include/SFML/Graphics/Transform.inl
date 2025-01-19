@@ -49,9 +49,9 @@ constexpr Transform::Transform(float a00, float a01, float a02,
 
 
 ////////////////////////////////////////////////////////////
-constexpr const float* Transform::getMatrix() const
+constexpr std::span<const float, 16> Transform::getMatrix() const
 {
-    return m_matrix.data();
+    return m_matrix;
 }
 
 
@@ -186,8 +186,8 @@ constexpr Transform& Transform::scale(Vector2f factors, Vector2f center)
 ////////////////////////////////////////////////////////////
 constexpr bool Transform::operator==(const Transform& transform) const
 {
-    const float* a = getMatrix();
-    const float* b = transform.getMatrix();
+    const auto a = getMatrix();
+    const auto b = transform.getMatrix();
 
     // clang-format off
     return ((a[0]  == b[0])  && (a[1]  == b[1])  && (a[3]  == b[3]) &&

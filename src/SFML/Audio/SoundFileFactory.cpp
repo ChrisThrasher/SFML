@@ -75,10 +75,10 @@ std::unique_ptr<SoundFileReader> SoundFileFactory::createReaderFromFilename(cons
 
 
 ////////////////////////////////////////////////////////////
-std::unique_ptr<SoundFileReader> SoundFileFactory::createReaderFromMemory(const void* data, std::size_t sizeInBytes)
+std::unique_ptr<SoundFileReader> SoundFileFactory::createReaderFromMemory(std::span<const std::byte> buffer)
 {
     // Wrap the memory file into a file stream
-    MemoryInputStream stream(data, sizeInBytes);
+    MemoryInputStream stream(buffer);
 
     // Test the stream for all the registered factories
     for (const auto& [fpCreate, fpCheck] : getReaderFactoryMap())

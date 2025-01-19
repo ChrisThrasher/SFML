@@ -34,6 +34,7 @@
 #include <SFML/Window/GlResource.hpp>
 
 #include <filesystem>
+#include <span>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -722,61 +723,55 @@ public:
     /// \brief Specify values for \p float[] array uniform
     ///
     /// \param name        Name of the uniform variable in GLSL
-    /// \param scalarArray pointer to array of \p float values
-    /// \param length      Number of elements in the array
+    /// \param scalarArray Array of \p float values
     ///
     ////////////////////////////////////////////////////////////
-    void setUniformArray(const std::string& name, const float* scalarArray, std::size_t length);
+    void setUniformArray(const std::string& name, std::span<const float> scalarArray);
 
     ////////////////////////////////////////////////////////////
     /// \brief Specify values for \p vec2[] array uniform
     ///
     /// \param name        Name of the uniform variable in GLSL
-    /// \param vectorArray pointer to array of \p vec2 values
-    /// \param length      Number of elements in the array
+    /// \param vectorArray Array of \p vec2 values
     ///
     ////////////////////////////////////////////////////////////
-    void setUniformArray(const std::string& name, const Glsl::Vec2* vectorArray, std::size_t length);
+    void setUniformArray(const std::string& name, std::span<const Glsl::Vec2> vectorArray);
 
     ////////////////////////////////////////////////////////////
     /// \brief Specify values for \p vec3[] array uniform
     ///
     /// \param name        Name of the uniform variable in GLSL
-    /// \param vectorArray pointer to array of \p vec3 values
-    /// \param length      Number of elements in the array
+    /// \param vectorArray Array of \p vec3 values
     ///
     ////////////////////////////////////////////////////////////
-    void setUniformArray(const std::string& name, const Glsl::Vec3* vectorArray, std::size_t length);
+    void setUniformArray(const std::string& name, std::span<const Glsl::Vec3> vectorArray);
 
     ////////////////////////////////////////////////////////////
     /// \brief Specify values for \p vec4[] array uniform
     ///
     /// \param name        Name of the uniform variable in GLSL
-    /// \param vectorArray pointer to array of \p vec4 values
-    /// \param length      Number of elements in the array
+    /// \param vectorArray Array of \p vec4 values
     ///
     ////////////////////////////////////////////////////////////
-    void setUniformArray(const std::string& name, const Glsl::Vec4* vectorArray, std::size_t length);
+    void setUniformArray(const std::string& name, std::span<const Glsl::Vec4> vectorArray);
 
     ////////////////////////////////////////////////////////////
     /// \brief Specify values for \p mat3[] array uniform
     ///
     /// \param name        Name of the uniform variable in GLSL
-    /// \param matrixArray pointer to array of \p mat3 values
-    /// \param length      Number of elements in the array
+    /// \param matrixArray Array of \p mat3 values
     ///
     ////////////////////////////////////////////////////////////
-    void setUniformArray(const std::string& name, const Glsl::Mat3* matrixArray, std::size_t length);
+    void setUniformArray(const std::string& name, std::span<const Glsl::Mat3> matrixArray);
 
     ////////////////////////////////////////////////////////////
     /// \brief Specify values for \p mat4[] array uniform
     ///
     /// \param name        Name of the uniform variable in GLSL
-    /// \param matrixArray pointer to array of \p mat4 values
-    /// \param length      Number of elements in the array
+    /// \param matrixArray Array of \p mat4 values
     ///
     ////////////////////////////////////////////////////////////
-    void setUniformArray(const std::string& name, const Glsl::Mat4* matrixArray, std::size_t length);
+    void setUniformArray(const std::string& name, std::span<const Glsl::Mat4> matrixArray);
 
     ////////////////////////////////////////////////////////////
     /// \brief Get the underlying OpenGL handle of the shader.

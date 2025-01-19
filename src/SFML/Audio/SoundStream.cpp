@@ -257,11 +257,11 @@ SoundStream& SoundStream::operator=(SoundStream&& rhs) noexcept
 
 
 ////////////////////////////////////////////////////////////
-void SoundStream::initialize(unsigned int channelCount, unsigned int sampleRate, const std::vector<SoundChannel>& channelMap)
+void SoundStream::initialize(unsigned int channelCount, unsigned int sampleRate, std::span<const SoundChannel> channelMap)
 {
     m_impl->channelCount     = channelCount;
     m_impl->sampleRate       = sampleRate;
-    m_impl->channelMap       = channelMap;
+    m_impl->channelMap       = {channelMap.begin(), channelMap.end()};
     m_impl->samplesProcessed = 0;
 
     m_impl->deinitialize();

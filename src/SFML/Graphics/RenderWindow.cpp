@@ -70,7 +70,7 @@ Vector2u RenderWindow::getSize() const
 ////////////////////////////////////////////////////////////
 void RenderWindow::setIcon(const Image& icon)
 {
-    setIcon(icon.getSize(), icon.getPixelsPtr());
+    setIcon(icon.getSize(), icon.getPixels().data());
 }
 
 

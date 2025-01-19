@@ -74,10 +74,10 @@ public:
     /// \return `true` if the file was successfully opened
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool open(const std::filesystem::path&     filename,
-                            unsigned int                     sampleRate,
-                            unsigned int                     channelCount,
-                            const std::vector<SoundChannel>& channelMap) override;
+    [[nodiscard]] bool open(const std::filesystem::path&  filename,
+                            unsigned int                  sampleRate,
+                            unsigned int                  channelCount,
+                            std::span<const SoundChannel> channelMap) override;
 
     ////////////////////////////////////////////////////////////
     /// \brief Write audio samples to the open file

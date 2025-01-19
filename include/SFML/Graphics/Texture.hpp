@@ -37,6 +37,7 @@
 #include <SFML/System/Vector2.hpp>
 
 #include <filesystem>
+#include <span>
 
 #include <cstddef>
 #include <cstdint>
@@ -142,16 +143,15 @@ public:
     /// The maximum size for a texture depends on the graphics
     /// driver and can be retrieved with the `getMaximumSize` function.
     ///
-    /// \param data Pointer to the file data in memory
-    /// \param size Size of the data to load, in bytes
-    /// \param sRgb `true` to enable sRGB conversion, `false` to disable it
+    /// \param buffer File data in memory
+    /// \param sRgb   `true` to enable sRGB conversion, `false` to disable it
     ///
     /// \throws sf::Exception if loading was unsuccessful
     ///
     /// \see `loadFromFile`, `loadFromMemory`, `loadFromStream`, `loadFromImage`
     ///
     ////////////////////////////////////////////////////////////
-    Texture(const void* data, std::size_t size, bool sRgb = false);
+    Texture(std::span<const std::byte> buffer, bool sRgb = false);
 
     ////////////////////////////////////////////////////////////
     /// \brief Construct the texture from a sub-rectangle of a file in memory
@@ -165,17 +165,16 @@ public:
     /// The maximum size for a texture depends on the graphics
     /// driver and can be retrieved with the `getMaximumSize` function.
     ///
-    /// \param data Pointer to the file data in memory
-    /// \param size Size of the data to load, in bytes
-    /// \param sRgb `true` to enable sRGB conversion, `false` to disable it
-    /// \param area Area of the image to load
+    /// \param buffer File data in memory
+    /// \param sRgb   `true` to enable sRGB conversion, `false` to disable it
+    /// \param area   Area of the image to load
     ///
     /// \throws sf::Exception if loading was unsuccessful
     ///
     /// \see `loadFromFile`, `loadFromMemory`, `loadFromStream`, `loadFromImage`
     ///
     ////////////////////////////////////////////////////////////
-    Texture(const void* data, std::size_t size, bool sRgb, const IntRect& area);
+    Texture(std::span<const std::byte> buffer, bool sRgb, const IntRect& area);
 
     ////////////////////////////////////////////////////////////
     /// \brief Construct the texture from a custom stream
@@ -317,17 +316,16 @@ public:
     ///
     /// If this function fails, the texture is left unchanged.
     ///
-    /// \param data Pointer to the file data in memory
-    /// \param size Size of the data to load, in bytes
-    /// \param sRgb `true` to enable sRGB conversion, `false` to disable it
-    /// \param area Area of the image to load
+    /// \param buffer File data in memory
+    /// \param sRgb   `true` to enable sRGB conversion, `false` to disable it
+    /// \param area   Area of the image to load
     ///
     /// \return `true` if loading was successful, `false` if it failed
     ///
     /// \see `loadFromFile`, `loadFromStream`, `loadFromImage`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool loadFromMemory(const void* data, std::size_t size, bool sRgb = false, const IntRect& area = {});
+    [[nodiscard]] bool loadFromMemory(std::span<const std::byte> buffer, bool sRgb = false, const IntRect& area = {});
 
     ////////////////////////////////////////////////////////////
     /// \brief Load the texture from a custom stream
@@ -418,7 +416,7 @@ public:
     /// \param pixels Array of pixels to copy to the texture
     ///
     ////////////////////////////////////////////////////////////
-    void update(const std::uint8_t* pixels);
+    void update(std::span<const std::uint8_t> pixels);
 
     ////////////////////////////////////////////////////////////
     /// \brief Update a part of the texture from an array of pixels
@@ -438,7 +436,7 @@ public:
     /// \param dest   Coordinates of the destination position
     ///
     ////////////////////////////////////////////////////////////
-    void update(const std::uint8_t* pixels, Vector2u size, Vector2u dest);
+    void update(std::span<const std::uint8_t> pixels, Vector2u size, Vector2u dest);
 
     ////////////////////////////////////////////////////////////
     /// \brief Update a part of this texture from another texture

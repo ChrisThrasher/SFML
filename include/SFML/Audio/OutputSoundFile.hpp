@@ -34,7 +34,7 @@
 
 #include <filesystem>
 #include <memory>
-#include <vector>
+#include <span>
 
 #include <cstdint>
 
@@ -70,10 +70,10 @@ public:
     /// \throws sf::Exception if the file could not be opened successfully
     ///
     ////////////////////////////////////////////////////////////
-    OutputSoundFile(const std::filesystem::path&     filename,
-                    unsigned int                     sampleRate,
-                    unsigned int                     channelCount,
-                    const std::vector<SoundChannel>& channelMap);
+    OutputSoundFile(const std::filesystem::path&  filename,
+                    unsigned int                  sampleRate,
+                    unsigned int                  channelCount,
+                    std::span<const SoundChannel> channelMap);
 
     ////////////////////////////////////////////////////////////
     /// \brief Open the sound file from the disk for writing
@@ -88,10 +88,10 @@ public:
     /// \return `true` if the file was successfully opened
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool openFromFile(const std::filesystem::path&     filename,
-                                    unsigned int                     sampleRate,
-                                    unsigned int                     channelCount,
-                                    const std::vector<SoundChannel>& channelMap);
+    [[nodiscard]] bool openFromFile(const std::filesystem::path&  filename,
+                                    unsigned int                  sampleRate,
+                                    unsigned int                  channelCount,
+                                    std::span<const SoundChannel> channelMap);
 
     ////////////////////////////////////////////////////////////
     /// \brief Write audio samples to the file
