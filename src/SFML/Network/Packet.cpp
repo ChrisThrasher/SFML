@@ -45,7 +45,7 @@ void Packet::append(const void* data, std::size_t sizeInBytes)
 {
     if (data && (sizeInBytes > 0))
     {
-        const auto* begin = reinterpret_cast<const std::byte*>(data);
+        const auto* begin = static_cast<const std::byte*>(data);
         const auto* end   = begin + sizeInBytes;
         m_data.insert(m_data.end(), begin, end);
     }
