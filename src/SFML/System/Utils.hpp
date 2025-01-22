@@ -29,6 +29,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/System/Export.hpp>
 
+#include <concepts>
 #include <filesystem>
 #include <string>
 #include <string_view>
@@ -44,7 +45,7 @@ namespace sf
 
 // Convert byte sequence into integer
 // toInteger<int>(0x12, 0x34, 0x56) == 0x563412
-template <typename IntegerType, typename... Bytes>
+template <std::integral IntegerType, typename... Bytes>
 [[nodiscard]] constexpr IntegerType toInteger(Bytes... byte)
 {
     static_assert(sizeof(IntegerType) >= sizeof...(Bytes), "IntegerType not large enough to contain bytes");

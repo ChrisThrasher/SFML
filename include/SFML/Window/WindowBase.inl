@@ -28,7 +28,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/WindowBase.hpp> // NOLINT(misc-header-include-cycle)
 
-#include <type_traits>
+#include <concepts>
 #include <utility>
 
 
@@ -69,7 +69,8 @@ template <typename Handler>
 struct Caller<Handler&>
 {
     // Use SFINAE so that the call operator exists only for arguments the captured handler accepts
-    template <typename Argument, std::enable_if_t<std::is_invocable_v<Handler&, Argument>, int> = 0>
+    template <typename Argument>
+        requires std::invocable<Handler&, Argument>
     decltype(auto) operator()(Argument&& argument)
     {
         return handler(std::forward<Argument>(argument));
