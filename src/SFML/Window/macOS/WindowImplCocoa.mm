@@ -38,6 +38,7 @@
 #include <SFML/System/Err.hpp>
 #include <SFML/System/String.hpp>
 
+#include <bit>
 #include <limits>
 #include <ostream>
 
@@ -61,7 +62,7 @@ NSString* sfStringToNSString(const sf::String& string)
     const void* data   = reinterpret_cast<const void*>(string.getData());
 
     NSStringEncoding encoding = 0;
-    if (NSHostByteOrder() == NS_LittleEndian)
+    if (std::endian::native == std::endian::little)
         encoding = NSUTF32LittleEndianStringEncoding;
     else
         encoding = NSUTF32BigEndianStringEncoding;
