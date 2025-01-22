@@ -49,13 +49,13 @@ inline CGFloat getDefaultScaleFactor()
 /// \param delegate an object implementing WindowImplDelegateProtocol, or nil for default scale
 ///
 ////////////////////////////////////////////////////////////
-template <class T>
+template <typename T>
 void scaleIn(T& in, id<WindowImplDelegateProtocol> delegate)
 {
     in /= static_cast<T>(delegate ? [delegate displayScaleFactor] : getDefaultScaleFactor());
 }
 
-template <class T>
+template <typename T>
 void scaleInXY(T& in, id<WindowImplDelegateProtocol> delegate)
 {
     scaleIn(in.x, delegate);
@@ -69,13 +69,13 @@ void scaleInXY(T& in, id<WindowImplDelegateProtocol> delegate)
 /// \param delegate an object implementing WindowImplDelegateProtocol, or nil for default scale
 ///
 ////////////////////////////////////////////////////////////
-template <class T>
+template <typename T>
 void scaleOut(T& out, id<WindowImplDelegateProtocol> delegate)
 {
     out *= static_cast<T>(delegate ? [delegate displayScaleFactor] : getDefaultScaleFactor());
 }
 
-template <class T>
+template <typename T>
 void scaleOutXY(T& out, id<WindowImplDelegateProtocol> delegate)
 {
     scaleOut(out.x, delegate);
