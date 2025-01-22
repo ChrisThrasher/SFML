@@ -44,6 +44,7 @@
 #include FT_BITMAP_H
 #include FT_STROKER_H
 
+#include <bit>
 #include <ostream>
 #include <utility>
 
@@ -71,19 +72,10 @@ void close(FT_Stream)
 {
 }
 
-// Helper to interpret memory as a specific type
-template <typename T, typename U>
-inline T reinterpret(const U& input)
-{
-    T output;
-    std::memcpy(&output, &input, sizeof(U));
-    return output;
-}
-
 // Combine outline thickness, boldness and font glyph index into a single 64-bit key
 std::uint64_t combine(float outlineThickness, bool bold, std::uint32_t index)
 {
-    return (std::uint64_t{reinterpret<std::uint32_t>(outlineThickness)} << 32) | (std::uint64_t{bold} << 31) | index;
+    return (std::uint64_t{std::bit_cast<std::uint32_t>(outlineThickness)} << 32) | (std::uint64_t{bold} << 31) | index;
 }
 } // namespace
 
