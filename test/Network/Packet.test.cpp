@@ -86,10 +86,10 @@ TEST_CASE("[Network] sf::Packet")
     SECTION("Append and clear")
     {
         sf::Packet packet;
-        packet.append(data.data(), data.size());
+        packet.append(data.data(), sizeof(data));
         CHECK(packet.getReadPosition() == 0);
         CHECK(packet.getData() != nullptr);
-        CHECK(packet.getDataSize() == data.size());
+        CHECK(packet.getDataSize() == sizeof(data));
         CHECK(!packet.endOfPacket());
         CHECK(bool{packet});
 
@@ -275,17 +275,17 @@ TEST_CASE("[Network] sf::Packet")
         CHECK(packet.onSend(size) == nullptr);
         CHECK(size == 0);
 
-        packet.append(data.data(), data.size());
+        packet.append(data.data(), sizeof(data));
         CHECK(packet.onSend(size) != nullptr);
-        CHECK(size == data.size());
+        CHECK(size == sizeof(data));
     }
 
     SECTION("onReceive")
     {
         Packet packet;
-        packet.onReceive(data.data(), data.size());
+        packet.onReceive(data.data(), sizeof(data));
         CHECK(packet.getReadPosition() == 0);
         CHECK(packet.getData() != nullptr);
-        CHECK(packet.getDataSize() == data.size());
+        CHECK(packet.getDataSize() == sizeof(data));
     }
 }
