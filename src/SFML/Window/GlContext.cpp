@@ -919,7 +919,7 @@ void GlContext::initialize(const ContextSettings& requestedSettings)
             // Desktop OpenGL:                The beginning of the returned string is "major.minor"
 
             // Helper to parse OpenGL version strings
-            static const auto parseVersionString =
+            const auto parseVersionString =
                 [](const char* versionString, const char* prefix, unsigned int& major, unsigned int& minor)
             {
                 const std::size_t prefixLength = std::strlen(prefix);
