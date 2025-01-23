@@ -55,7 +55,7 @@ namespace
 ////////////////////////////////////////////////////////////
 void extensionSanityCheck()
 {
-    static const auto check = [](int& flag, auto... entryPoints)
+    const auto check = [](int& flag, auto... entryPoints)
     {
         // If a required entry point is missing, flag the whole extension as unavailable
         if (!(entryPoints && ...))
