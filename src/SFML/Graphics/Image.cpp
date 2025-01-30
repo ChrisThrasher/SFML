@@ -341,21 +341,39 @@ bool Image::saveToFile(const std::filesystem::path& filename) const
         {
             // BMP format
             std::ofstream file(filename, std::ios::binary);
-            if (stbi_write_bmp_to_func(writeStdOfstream, &file, convertedSize.x, convertedSize.y, 4, m_pixels.data()) && file)
+            if (stbi_write_bmp_to_func(writeStdOfstream,
+                                       &file,
+                                       convertedSize.x,
+                                       convertedSize.y,
+                                       STBI_rgb_alpha,
+                                       m_pixels.data()) &&
+                file)
                 return true;
         }
         else if (extension == ".tga")
         {
             // TGA format
             std::ofstream file(filename, std::ios::binary);
-            if (stbi_write_tga_to_func(writeStdOfstream, &file, convertedSize.x, convertedSize.y, 4, m_pixels.data()) && file)
+            if (stbi_write_tga_to_func(writeStdOfstream,
+                                       &file,
+                                       convertedSize.x,
+                                       convertedSize.y,
+                                       STBI_rgb_alpha,
+                                       m_pixels.data()) &&
+                file)
                 return true;
         }
         else if (extension == ".png")
         {
             // PNG format
             std::ofstream file(filename, std::ios::binary);
-            if (stbi_write_png_to_func(writeStdOfstream, &file, convertedSize.x, convertedSize.y, 4, m_pixels.data(), 0) &&
+            if (stbi_write_png_to_func(writeStdOfstream,
+                                       &file,
+                                       convertedSize.x,
+                                       convertedSize.y,
+                                       STBI_rgb_alpha,
+                                       m_pixels.data(),
+                                       0) &&
                 file)
                 return true;
         }
@@ -363,7 +381,13 @@ bool Image::saveToFile(const std::filesystem::path& filename) const
         {
             // JPG format
             std::ofstream file(filename, std::ios::binary);
-            if (stbi_write_jpg_to_func(writeStdOfstream, &file, convertedSize.x, convertedSize.y, 4, m_pixels.data(), 90) &&
+            if (stbi_write_jpg_to_func(writeStdOfstream,
+                                       &file,
+                                       convertedSize.x,
+                                       convertedSize.y,
+                                       STBI_rgb_alpha,
+                                       m_pixels.data(),
+                                       90) &&
                 file)
                 return true;
         }
@@ -393,25 +417,47 @@ std::optional<std::vector<std::uint8_t>> Image::saveToMemory(std::string_view fo
         if (specified == "bmp")
         {
             // BMP format
-            if (stbi_write_bmp_to_func(bufferFromCallback, &buffer, convertedSize.x, convertedSize.y, 4, m_pixels.data()))
+            if (stbi_write_bmp_to_func(bufferFromCallback,
+                                       &buffer,
+                                       convertedSize.x,
+                                       convertedSize.y,
+                                       STBI_rgb_alpha,
+                                       m_pixels.data()))
                 return buffer;
         }
         else if (specified == "tga")
         {
             // TGA format
-            if (stbi_write_tga_to_func(bufferFromCallback, &buffer, convertedSize.x, convertedSize.y, 4, m_pixels.data()))
+            if (stbi_write_tga_to_func(bufferFromCallback,
+                                       &buffer,
+                                       convertedSize.x,
+                                       convertedSize.y,
+                                       STBI_rgb_alpha,
+                                       m_pixels.data()))
                 return buffer;
         }
         else if (specified == "png")
         {
             // PNG format
-            if (stbi_write_png_to_func(bufferFromCallback, &buffer, convertedSize.x, convertedSize.y, 4, m_pixels.data(), 0))
+            if (stbi_write_png_to_func(bufferFromCallback,
+                                       &buffer,
+                                       convertedSize.x,
+                                       convertedSize.y,
+                                       STBI_rgb_alpha,
+                                       m_pixels.data(),
+                                       0))
                 return buffer;
         }
         else if (specified == "jpg" || specified == "jpeg")
         {
             // JPG format
-            if (stbi_write_jpg_to_func(bufferFromCallback, &buffer, convertedSize.x, convertedSize.y, 4, m_pixels.data(), 90))
+            if (stbi_write_jpg_to_func(bufferFromCallback,
+                                       &buffer,
+                                       convertedSize.x,
+                                       convertedSize.y,
+                                       STBI_rgb_alpha,
+                                       m_pixels.data(),
+                                       90))
                 return buffer;
         }
     }
