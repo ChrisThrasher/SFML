@@ -93,13 +93,14 @@ bool SoundFileReaderWav::check(InputStream& stream)
     config.format         = ma_format_s16;
     ma_decoder decoder{};
 
-    if (ma_decoder_init(&onRead, &onSeek, &stream, &config, &decoder) == MA_SUCCESS)
+    if (const auto result = ma_decoder_init(&onRead, &onSeek, &stream, &config, &decoder); result != MA_SUCCESS)
     {
-        ma_decoder_uninit(&decoder);
-        return true;
+        err() << "Failed to initialize wav decoder: " << ma_result_description(result) << std::endl;
+        return false;
     }
 
-    return false;
+    ma_decoder_uninit(&decoder);
+    return true;
 }
 
 
