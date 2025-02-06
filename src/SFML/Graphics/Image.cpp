@@ -333,8 +333,8 @@ bool Image::saveToFile(const std::filesystem::path& filename) const
         auto writeStdOfstream = [](void* context, void* data, int size)
         {
             auto& file = *static_cast<std::ofstream*>(context);
-            if (file)
-                file.write(static_cast<const char*>(data), static_cast<std::streamsize>(size));
+            assert(file);
+            file.write(static_cast<const char*>(data), static_cast<std::streamsize>(size));
         };
 
         if (extension == ".bmp")
