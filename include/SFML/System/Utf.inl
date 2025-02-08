@@ -134,7 +134,7 @@ In Utf<8>::decode(In begin, In end, char32_t& output, char32_t replacement)
 
 ////////////////////////////////////////////////////////////
 template <typename Out>
-Out Utf<8>::encode(char32_t input, Out output, std::uint8_t replacement)
+Out Utf<8>::encode(char32_t input, Out output, char8_t replacement)
 {
     // Some useful precomputed data
     static constexpr std::array firstBytes = std::to_array<std::uint8_t>({0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC});
