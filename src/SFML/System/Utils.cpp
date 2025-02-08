@@ -46,8 +46,8 @@ std::string formatDebugPathInfo(const std::filesystem::path& path)
     std::ostringstream oss;
     // convert to UTF-8 to handle non-ascii/non-latin1 filenames on windows
     // cast is required to work in C++20 where u8string is char8_t which can't be printed to char stream
-    oss << "    Provided path: " << reinterpret_cast<const char*>(path.u8string().c_str()) << '\n' //
-        << "    Absolute path: " << reinterpret_cast<const char*>(std::filesystem::absolute(path).u8string().c_str());
+    oss << "\tProvided path: " << reinterpret_cast<const char*>(path.u8string().c_str()) << '\n' //
+        << "\tAbsolute path: " << reinterpret_cast<const char*>(std::filesystem::absolute(path).u8string().c_str());
     return oss.str();
 }
 
