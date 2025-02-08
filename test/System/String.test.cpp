@@ -25,174 +25,7 @@ auto select(const std::basic_string<T>& string16, const std::basic_string<T>& st
     else
         return string32;
 }
-
-auto toHex(const char32_t character)
-{
-    std::ostringstream stream;
-    stream << "[\\x" << std::uppercase << std::hex << std::uint32_t{character} << ']';
-    return stream.str();
-}
 } // namespace
-
-// Specialize StringMaker for alternative std::basic_string<T> specializations
-// std::string's string conversion cannot be specialized but all other string types get special treatment
-// https://github.com/catchorg/Catch2/blob/devel/docs/tostring.md#catchstringmaker-specialisation
-namespace Catch
-{
-template <>
-struct StringMaker<sf::U8String>
-{
-    static std::string convert(const sf::U8String& string)
-    {
-        std::ostringstream output;
-        for (const auto character : string)
-        {
-            if (character >= 32 && character < 127)
-                output << std::string(1, static_cast<char>(character));
-            else
-                output << toHex(character);
-        }
-        return output.str();
-    }
-};
-} // namespace Catch
-
-TEST_CASE("[System] sf::U8StringCharTraits")
-{
-    SECTION("Type traits")
-    {
-        STATIC_CHECK(std::is_trivially_copy_constructible_v<sf::U8StringCharTraits>);
-        STATIC_CHECK(std::is_trivially_copy_assignable_v<sf::U8StringCharTraits>);
-        STATIC_CHECK(std::is_trivially_move_constructible_v<sf::U8StringCharTraits>);
-        STATIC_CHECK(std::is_trivially_move_assignable_v<sf::U8StringCharTraits>);
-    }
-
-    SECTION("assign(char_type&, const char_type&)")
-    {
-        sf::U8StringCharTraits::char_type       c1 = 'a';
-        const sf::U8StringCharTraits::char_type c2 = 'b';
-        sf::U8StringCharTraits::assign(c1, c2);
-        CHECK(c1 == 'b');
-        CHECK(c2 == 'b');
-    }
-
-    SECTION("assign(char_type*, std::size_t, char_type)")
-    {
-        std::array<sf::U8StringCharTraits::char_type, 4> s = {'a', 'b', 'c', '\0'};
-        CHECK(sf::U8StringCharTraits::assign(s.data(), 2, 'd') == s.data());
-        CHECK(s[0] == 'd');
-        CHECK(s[1] == 'd');
-        CHECK(s[2] == 'c');
-    }
-
-    SECTION("eq()")
-    {
-        CHECK(sf::U8StringCharTraits::eq(0, 0));
-        CHECK(!sf::U8StringCharTraits::eq(1, 0));
-        CHECK(!sf::U8StringCharTraits::eq(0, 1));
-        CHECK(sf::U8StringCharTraits::eq(1, 1));
-    }
-
-    SECTION("lt()")
-    {
-        CHECK(!sf::U8StringCharTraits::lt(0, 0));
-        CHECK(!sf::U8StringCharTraits::lt(1, 0));
-        CHECK(sf::U8StringCharTraits::lt(0, 1));
-        CHECK(!sf::U8StringCharTraits::lt(1, 1));
-    }
-
-    SECTION("move()")
-    {
-        std::array<sf::U8StringCharTraits::char_type, 4>       s1 = {'a', 'b', 'c', '\0'};
-        const std::array<sf::U8StringCharTraits::char_type, 4> s2 = {'d', 'e', 'f', '\0'};
-        CHECK(sf::U8StringCharTraits::move(s1.data(), s2.data(), s2.size()) == s1.data());
-        CHECK(s1[0] == 'd');
-        CHECK(s1[1] == 'e');
-        CHECK(s1[2] == 'f');
-        CHECK(s2[0] == 'd');
-        CHECK(s2[1] == 'e');
-        CHECK(s2[2] == 'f');
-    }
-
-    SECTION("copy()")
-    {
-        std::array<sf::U8StringCharTraits::char_type, 4>       s1 = {'a', 'b', 'c', '\0'};
-        const std::array<sf::U8StringCharTraits::char_type, 4> s2 = {'d', 'e', 'f', '\0'};
-        CHECK(sf::U8StringCharTraits::copy(s1.data(), s2.data(), s2.size()) == s1.data());
-        CHECK(s1[0] == 'd');
-        CHECK(s1[1] == 'e');
-        CHECK(s1[2] == 'f');
-        CHECK(s2[0] == 'd');
-        CHECK(s2[1] == 'e');
-        CHECK(s2[2] == 'f');
-    }
-
-    SECTION("compare()")
-    {
-        const std::array<sf::U8StringCharTraits::char_type, 4> s1 = {'a', 'b', 'c', '\0'};
-        const std::array<sf::U8StringCharTraits::char_type, 4> s2 = {'a', 'b', 'c', '\0'};
-        const std::array<sf::U8StringCharTraits::char_type, 4> s3 = {'d', 'e', 'f', '\0'};
-        CHECK(sf::U8StringCharTraits::compare(s1.data(), s2.data(), s1.size()) == 0);
-        CHECK(sf::U8StringCharTraits::compare(s1.data(), s3.data(), s1.size()) < 0);
-        CHECK(sf::U8StringCharTraits::compare(s3.data(), s1.data(), s3.size()) > 0);
-    }
-
-    SECTION("length()")
-    {
-        const std::array<sf::U8StringCharTraits::char_type, 2> s1 = {'a', '\0'};
-        const std::array<sf::U8StringCharTraits::char_type, 6> s2 = {'a', 'b', 'c', 'd', 'e', '\0'};
-        CHECK(sf::U8StringCharTraits::length(s1.data()) == 1);
-        CHECK(sf::U8StringCharTraits::length(s2.data()) == 5);
-    }
-
-    SECTION("find()")
-    {
-        const std::array<sf::U8StringCharTraits::char_type, 5> s = {'a', 'b', 'c', 'd', 'e'};
-        CHECK(*sf::U8StringCharTraits::find(s.data(), s.size(), 'a') == 'a');
-        CHECK(sf::U8StringCharTraits::find(s.data(), s.size(), 'f') == nullptr);
-    }
-
-    SECTION("to_char_type()")
-    {
-        CHECK(sf::U8StringCharTraits::to_char_type(sf::U8StringCharTraits::int_type{0}) ==
-              sf::U8StringCharTraits::char_type{0});
-        CHECK(sf::U8StringCharTraits::to_char_type(sf::U8StringCharTraits::int_type{1}) ==
-              sf::U8StringCharTraits::char_type{1});
-        CHECK(sf::U8StringCharTraits::to_char_type(sf::U8StringCharTraits::int_type{10}) ==
-              sf::U8StringCharTraits::char_type{10});
-    }
-
-    SECTION("to_int_type()")
-    {
-        CHECK(sf::U8StringCharTraits::to_int_type(sf::U8StringCharTraits::char_type{0}) ==
-              sf::U8StringCharTraits::int_type{0});
-        CHECK(sf::U8StringCharTraits::to_int_type(sf::U8StringCharTraits::char_type{1}) ==
-              sf::U8StringCharTraits::int_type{1});
-        CHECK(sf::U8StringCharTraits::to_int_type(sf::U8StringCharTraits::char_type{10}) ==
-              sf::U8StringCharTraits::int_type{10});
-    }
-
-    SECTION("eq_int_type()")
-    {
-        CHECK(sf::U8StringCharTraits::eq_int_type(sf::U8StringCharTraits::int_type{0}, sf::U8StringCharTraits::int_type{0}));
-        CHECK(sf::U8StringCharTraits::eq_int_type(sf::U8StringCharTraits::int_type{1}, sf::U8StringCharTraits::int_type{1}));
-        CHECK(sf::U8StringCharTraits::eq_int_type(sf::U8StringCharTraits::int_type{10},
-                                                  sf::U8StringCharTraits::int_type{10}));
-    }
-
-    SECTION("eof()")
-    {
-        CHECK(sf::U8StringCharTraits::eof() == ~sf::U8StringCharTraits::int_type{0});
-    }
-
-    SECTION("not_eof()")
-    {
-        CHECK(sf::U8StringCharTraits::not_eof(sf::U8StringCharTraits::int_type{0}) == sf::U8StringCharTraits::int_type{0});
-        CHECK(sf::U8StringCharTraits::not_eof(sf::U8StringCharTraits::int_type{1}) == sf::U8StringCharTraits::int_type{1});
-        CHECK(sf::U8StringCharTraits::not_eof(sf::U8StringCharTraits::int_type{10}) == sf::U8StringCharTraits::int_type{10});
-        CHECK(sf::U8StringCharTraits::not_eof(sf::U8StringCharTraits::eof()) != sf::U8StringCharTraits::eof());
-    }
-}
 
 TEST_CASE("[System] sf::String")
 {
@@ -233,7 +66,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == L"a"s);
             CHECK(string.toAnsiString() == "a"s);
             CHECK(string.toWideString() == L"a"s);
-            CHECK(string.toUtf8() == sf::U8String{'a'});
+            CHECK(string.toUtf8() == u8"a"s);
             CHECK(string.toUtf16() == u"a"s);
             CHECK(string.toUtf32() == U"a"s);
             CHECK(string.getSize() == 1);
@@ -262,7 +95,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(std::wstring(string) == L"Escargot"s);
                 CHECK(string.toAnsiString() == "Escargot"s);
                 CHECK(string.toWideString() == L"Escargot"s);
-                CHECK(string.toUtf8() == sf::U8String{'E', 's', 'c', 'a', 'r', 'g', 'o', 't'});
+                CHECK(string.toUtf8() == u8"Escargot"s);
                 CHECK(string.toUtf16() == u"Escargot"s);
                 CHECK(string.toUtf32() == U"Escargot"s);
                 CHECK(string.getSize() == 8);
@@ -278,7 +111,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == L"Csiga"s);
             CHECK(string.toAnsiString() == "Csiga"s);
             CHECK(string.toWideString() == L"Csiga"s);
-            CHECK(string.toUtf8() == sf::U8String{'C', 's', 'i', 'g', 'a'});
+            CHECK(string.toUtf8() == u8"Csiga"s);
             CHECK(string.toUtf16() == u"Csiga"s);
             CHECK(string.toUtf32() == U"Csiga"s);
             CHECK(string.getSize() == 5);
@@ -294,7 +127,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(std::wstring(string) == L"ú"s);
                 CHECK(string.toAnsiString() == select("\xFA"s, "\0"s));
                 CHECK(string.toWideString() == L"ú"s);
-                CHECK(string.toUtf8() == sf::U8String{0xC3, 0xBA});
+                CHECK(string.toUtf8() == u8"ú"s);
                 CHECK(string.toUtf16() == u"ú"s);
                 CHECK(string.toUtf32() == U"ú"s);
                 CHECK(string.getSize() == 1);
@@ -307,7 +140,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(std::wstring(string) == L"Ǻ"s);
                 CHECK(string.toAnsiString() == "\0"s);
                 CHECK(string.toWideString() == L"Ǻ"s);
-                CHECK(string.toUtf8() == sf::U8String{0xC7, 0xBA});
+                CHECK(string.toUtf8() == u8"Ǻ"s);
                 CHECK(string.toUtf16() == u"Ǻ"s);
                 CHECK(string.toUtf32() == U"Ǻ"s);
                 CHECK(string.getSize() == 1);
@@ -337,8 +170,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(std::wstring(string) == L"Улитка"s);
                 CHECK(string.toAnsiString() == "\0\0\0\0\0\0"s);
                 CHECK(string.toWideString() == L"Улитка"s);
-                CHECK(string.toUtf8() ==
-                      sf::U8String{0xD0, 0xA3, 0xD0, 0xBB, 0xD0, 0xB8, 0xD1, 0x82, 0xD0, 0xBA, 0xD0, 0xB0});
+                CHECK(string.toUtf8() == u8"Улитка"s);
                 CHECK(string.toUtf16() == u"Улитка"s);
                 CHECK(string.toUtf32() == U"Улитка"s);
                 CHECK(string.getSize() == 6);
@@ -354,7 +186,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == L"Полжав"s);
             CHECK(string.toAnsiString() == "\0\0\0\0\0\0"s);
             CHECK(string.toWideString() == L"Полжав"s);
-            CHECK(string.toUtf8() == sf::U8String{0xD0, 0x9F, 0xD0, 0xBE, 0xD0, 0xBB, 0xD0, 0xB6, 0xD0, 0xB0, 0xD0, 0xB2});
+            CHECK(string.toUtf8() == u8"Полжав"s);
             CHECK(string.toUtf16() == u"Полжав"s);
             CHECK(string.toUtf32() == U"Полжав"s);
             CHECK(string.getSize() == 6);
@@ -369,7 +201,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == select(L""s, L"🐌"s));
             CHECK(string.toAnsiString() == "\0"s);
             CHECK(string.toWideString() == select(L""s, L"🐌"s));
-            CHECK(string.toUtf8() == sf::U8String{0xF0, 0x9F, 0x90, 0x8C});
+            CHECK(string.toUtf8() == u8"🐌"s);
             CHECK(string.toUtf16() == u"🐌"s);
             CHECK(string.toUtf32() == U"🐌"s);
             CHECK(string.getSize() == 1);
@@ -398,8 +230,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(std::wstring(string) == L"カタツムリ"s);
                 CHECK(string.toAnsiString() == "\0\0\0\0\0"s);
                 CHECK(string.toWideString() == L"カタツムリ"s);
-                CHECK(string.toUtf8() ==
-                      sf::U8String{0xE3, 0x82, 0xAB, 0xE3, 0x82, 0xBF, 0xE3, 0x83, 0x84, 0xE3, 0x83, 0xA0, 0xE3, 0x83, 0xAA});
+                CHECK(string.toUtf8() == u8"カタツムリ"s);
                 CHECK(string.toUtf16() == u"カタツムリ"s);
                 CHECK(string.toUtf32() == U"カタツムリ"s);
                 CHECK(string.getSize() == 5);
@@ -412,7 +243,7 @@ TEST_CASE("[System] sf::String")
                 CHECK(std::wstring(string) == select(L""s, L"🐌🐚"s));
                 CHECK(string.toAnsiString() == "\0\0"s);
                 CHECK(string.toWideString() == select(L""s, L"🐌🐚"s));
-                CHECK(string.toUtf8() == sf::U8String{0xF0, 0x9F, 0x90, 0x8C, 0xF0, 0x9F, 0x90, 0x9A});
+                CHECK(string.toUtf8() == u8"🐌🐚"s);
                 CHECK(string.toUtf16() == u"🐌🐚"s);
                 CHECK(string.toUtf32() == U"🐌🐚"s);
                 CHECK(string.getSize() == 2);
@@ -428,7 +259,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == L"گھونگا"s);
             CHECK(string.toAnsiString() == "\0\0\0\0\0\0"s);
             CHECK(string.toWideString() == L"گھونگا"s);
-            CHECK(string.toUtf8() == sf::U8String{0xDA, 0xAF, 0xDA, 0xBE, 0xD9, 0x88, 0xD9, 0x86, 0xDA, 0xAF, 0xD8, 0xA7});
+            CHECK(string.toUtf8() == u8"گھونگا"s);
             CHECK(string.toUtf16() == u"گھونگا"s);
             CHECK(string.toUtf32() == U"گھونگا"s);
             CHECK(string.getSize() == 6);
@@ -452,7 +283,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == L"wxyz"s);
             CHECK(string.toAnsiString() == "wxyz"s);
             CHECK(string.toWideString() == L"wxyz"s);
-            CHECK(string.toUtf8() == sf::U8String{'w', 'x', 'y', 'z'});
+            CHECK(string.toUtf8() == u8"wxyz"s);
             CHECK(string.toUtf16() == u"wxyz"s);
             CHECK(string.toUtf32() == U"wxyz"s);
             CHECK(string.getSize() == 4);
@@ -466,7 +297,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == select(L""s, L"🐌"s));
             CHECK(string.toAnsiString() == "\0"s);
             CHECK(string.toWideString() == select(L""s, L"🐌"s));
-            CHECK(string.toUtf8() == sf::U8String{0xF0, 0x9F, 0x90, 0x8C});
+            CHECK(string.toUtf8() == u8"🐌"s);
             CHECK(string.toUtf16() == u"🐌"s);
             CHECK(string.toUtf32() == U"🐌"s);
             CHECK(string.getSize() == 1);
@@ -484,7 +315,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == L"SFML!"s);
             CHECK(string.toAnsiString() == "SFML!"s);
             CHECK(string.toWideString() == L"SFML!"s);
-            CHECK(string.toUtf8() == sf::U8String{'S', 'F', 'M', 'L', '!'});
+            CHECK(string.toUtf8() == u8"SFML!"s);
             CHECK(string.toUtf16() == u"SFML!"s);
             CHECK(string.toUtf32() == U"SFML!"s);
             CHECK(string.getSize() == 5);
@@ -502,7 +333,7 @@ TEST_CASE("[System] sf::String")
                                                   "ata"s,
                                                   "pi\0ata"s));
             CHECK(string.toWideString() == L"piñata"s);
-            CHECK(string.toUtf8() == sf::U8String{'p', 'i', 0xC3, 0xB1, 'a', 't', 'a'});
+            CHECK(string.toUtf8() == u8"piñata"s);
             CHECK(string.toUtf16() == u"piñata"s);
             CHECK(string.toUtf32() == U"piñata"s);
             CHECK(string.getSize() == 6);
@@ -516,7 +347,7 @@ TEST_CASE("[System] sf::String")
             CHECK(std::wstring(string) == L"달팽이"s);
             CHECK(string.toAnsiString() == "\0\0\0"s);
             CHECK(string.toWideString() == L"달팽이"s);
-            CHECK(string.toUtf8() == sf::U8String{0xEB, 0x8B, 0xAC, 0xED, 0x8C, 0xBD, 0xEC, 0x9D, 0xB4});
+            CHECK(string.toUtf8() == u8"달팽이"s);
             CHECK(string.toUtf16() == u"달팽이"s);
             CHECK(string.toUtf32() == U"달팽이"s);
             CHECK(string.getSize() == 3);
@@ -533,8 +364,7 @@ TEST_CASE("[System] sf::String")
         CHECK(std::wstring(string) == select(L"+="s, L"👍+👎=🤷"s));
         CHECK(string.toAnsiString() == "\0+\0=\0"s);
         CHECK(string.toWideString() == select(L"+="s, L"👍+👎=🤷"s));
-        CHECK(string.toUtf8() ==
-              sf::U8String{0xF0, 0x9F, 0x91, 0x8D, '+', 0xF0, 0x9F, 0x91, 0x8E, '=', 0xF0, 0x9F, 0xA4, 0xB7});
+        CHECK(string.toUtf8() == u8"👍+👎=🤷"s);
         CHECK(string.toUtf16() == u"👍+👎=🤷"s);
         CHECK(string.toUtf32() == U"👍+👎=🤷"s);
         CHECK(string.getSize() == 5);
