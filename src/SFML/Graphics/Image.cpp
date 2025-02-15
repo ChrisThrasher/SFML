@@ -29,12 +29,9 @@
 
 #include <SFML/System/Err.hpp>
 #include <SFML/System/Exception.hpp>
-#include <SFML/System/InputStream.hpp>
+#include <SFML/System/FileInputStream.hpp>
+#include <SFML/System/MemoryInputStream.hpp>
 #include <SFML/System/Utils.hpp>
-#ifdef SFML_SYSTEM_ANDROID
-#include <SFML/System/Android/Activity.hpp>
-#include <SFML/System/Android/ResourceStream.hpp>
-#endif
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -200,89 +197,23 @@ void Image::resize(Vector2u size, const std::uint8_t* pixels)
 ////////////////////////////////////////////////////////////
 bool Image::loadFromFile(const std::filesystem::path& filename)
 {
-#ifdef SFML_SYSTEM_ANDROID
-
-    if (priv::getActivityStatesPtr() != nullptr)
+    FileInputStream stream;
+    if (!stream.open(filename))
     {
-        priv::ResourceStream stream(filename);
-        return loadFromStream(stream);
-    }
-
-#endif
-
-    // Set up the stb_image callbacks for the std::ifstream
-    const auto readStdIfStream = [](void* user, char* data, int size)
-    {
-        auto& file = *static_cast<std::ifstream*>(user);
-        file.read(data, size);
-        return static_cast<int>(file.gcount());
-    };
-    const auto skipStdIfStream = [](void* user, int size)
-    {
-        auto& file = *static_cast<std::ifstream*>(user);
-        if (!file.seekg(size, std::ios_base::cur))
-            err() << "Failed to seek image loader std::ifstream" << std::endl;
-    };
-    const auto eofStdIfStream = [](void* user)
-    {
-        auto& file = *static_cast<std::ifstream*>(user);
-        return static_cast<int>(file.eof());
-    };
-    const stbi_io_callbacks callbacks{readStdIfStream, skipStdIfStream, eofStdIfStream};
-
-    // Open file
-    std::ifstream file(filename, std::ios::binary);
-    if (!file.is_open())
-    {
-        // Error, failed to open the file
         err() << "Failed to load image\n"
-              << formatDebugPathInfo(filename) << "\nReason: " << std::strerror(errno) << std::endl;
+              << formatDebugPathInfo(filename) << "\nReason: " << stbi_failure_reason() << std::endl;
         return false;
     }
 
-    // Load the image and get a pointer to the pixels in memory
-    sf::Vector2i imageSize;
-    int          channels = 0;
-    if (const auto ptr = StbPtr(
-            stbi_load_from_callbacks(&callbacks, &file, &imageSize.x, &imageSize.y, &channels, STBI_rgb_alpha)))
-    {
-        resize(Vector2u(imageSize), ptr.get());
-        return true;
-    }
-
-    // Error, failed to load the image
-    err() << "Failed to load image\n"
-          << formatDebugPathInfo(filename) << "\nReason: " << stbi_failure_reason() << std::endl;
-
-    return false;
+    return loadFromStream(stream);
 }
 
 
 ////////////////////////////////////////////////////////////
 bool Image::loadFromMemory(const void* data, std::size_t size)
 {
-    // Check input parameters
-    if (data && size)
-    {
-        // Load the image and get a pointer to the pixels in memory
-        Vector2i    imageSize;
-        int         channels = 0;
-        const auto* buffer   = static_cast<const unsigned char*>(data);
-        if (const auto ptr = StbPtr(
-                stbi_load_from_memory(buffer, static_cast<int>(size), &imageSize.x, &imageSize.y, &channels, STBI_rgb_alpha)))
-        {
-            resize(Vector2u(imageSize), ptr.get());
-            return true;
-        }
-
-        // Error, failed to load the image
-        err() << "Failed to load image from memory. Reason: " << stbi_failure_reason() << std::endl;
-
-        return false;
-    }
-
-    err() << "Failed to load image from memory, no data provided" << std::endl;
-    return false;
+    MemoryInputStream stream(data, size);
+    return loadFromStream(stream);
 }
 
 
