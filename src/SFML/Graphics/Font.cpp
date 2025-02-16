@@ -75,6 +75,7 @@ void close(FT_Stream)
 template <typename T, typename U>
 inline T reinterpret(const U& input)
 {
+    static_assert(sizeof(T) == sizeof(U));
     T output;
     std::memcpy(&output, &input, sizeof(U));
     return output;
