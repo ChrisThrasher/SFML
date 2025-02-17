@@ -636,7 +636,7 @@ std::size_t Utf<32>::count(In begin, In end)
 {
     static_assert(sizeof(decltype(*begin)) == sizeof(char32_t));
 
-    return static_cast<std::size_t>(end - begin);
+    return static_cast<std::size_t>(std::distance(begin, end));
 }
 
 
