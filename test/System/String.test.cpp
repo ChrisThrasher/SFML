@@ -366,9 +366,9 @@ TEST_CASE("[System] sf::String")
         {
             const sf::String string = U'🐌';
             CHECK(std::string(string) == "\0"s);
-            CHECK(std::wstring(string) == select(L""s, L"🐌"s));
+            CHECK(std::wstring(string) == L"🐌"s);
             CHECK(string.toAnsiString() == "\0"s);
-            CHECK(string.toWideString() == select(L""s, L"🐌"s));
+            CHECK(string.toWideString() == L"🐌"s);
             CHECK(string.toUtf8() == sf::U8String{0xF0, 0x9F, 0x90, 0x8C});
             CHECK(string.toUtf16() == u"🐌"s);
             CHECK(string.toUtf32() == U"🐌"s);
@@ -409,9 +409,9 @@ TEST_CASE("[System] sf::String")
             {
                 const sf::String string = U"🐌🐚";
                 CHECK(std::string(string) == "\0\0"s);
-                CHECK(std::wstring(string) == select(L""s, L"🐌🐚"s));
+                CHECK(std::wstring(string) == L"🐌🐚"s);
                 CHECK(string.toAnsiString() == "\0\0"s);
-                CHECK(string.toWideString() == select(L""s, L"🐌🐚"s));
+                CHECK(string.toWideString() == L"🐌🐚"s);
                 CHECK(string.toUtf8() == sf::U8String{0xF0, 0x9F, 0x90, 0x8C, 0xF0, 0x9F, 0x90, 0x9A});
                 CHECK(string.toUtf16() == u"🐌🐚"s);
                 CHECK(string.toUtf32() == U"🐌🐚"s);
@@ -463,9 +463,9 @@ TEST_CASE("[System] sf::String")
             constexpr std::array<std::uint8_t, 4> characters{0xF0, 0x9F, 0x90, 0x8C};
             const sf::String                      string = sf::String::fromUtf8(characters.begin(), characters.end());
             CHECK(std::string(string) == "\0"s);
-            CHECK(std::wstring(string) == select(L""s, L"🐌"s));
+            CHECK(std::wstring(string) == L"🐌"s);
             CHECK(string.toAnsiString() == "\0"s);
-            CHECK(string.toWideString() == select(L""s, L"🐌"s));
+            CHECK(string.toWideString() == L"🐌"s);
             CHECK(string.toUtf8() == sf::U8String{0xF0, 0x9F, 0x90, 0x8C});
             CHECK(string.toUtf16() == u"🐌"s);
             CHECK(string.toUtf32() == U"🐌"s);
@@ -530,9 +530,9 @@ TEST_CASE("[System] sf::String")
         constexpr std::u32string_view characters = U"👍+👎=🤷"sv;
         const sf::String              string     = sf::String::fromUtf32(characters.begin(), characters.end());
         CHECK(std::string(string) == "\0+\0=\0"s);
-        CHECK(std::wstring(string) == select(L"+="s, L"👍+👎=🤷"s));
+        CHECK(std::wstring(string) == L"👍+👎=🤷"s);
         CHECK(string.toAnsiString() == "\0+\0=\0"s);
-        CHECK(string.toWideString() == select(L"+="s, L"👍+👎=🤷"s));
+        CHECK(string.toWideString() == L"👍+👎=🤷"s);
         CHECK(string.toUtf8() ==
               sf::U8String{0xF0, 0x9F, 0x91, 0x8D, '+', 0xF0, 0x9F, 0x91, 0x8E, '=', 0xF0, 0x9F, 0xA4, 0xB7});
         CHECK(string.toUtf16() == u"👍+👎=🤷"s);

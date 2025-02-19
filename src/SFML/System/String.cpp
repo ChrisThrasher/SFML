@@ -189,7 +189,9 @@ String::String(const wchar_t* wideString)
         if (length > 0)
         {
             m_string.reserve(length + 1);
-            Utf32::fromWide(wideString, wideString + length, std::back_inserter(m_string));
+            Utf16::toUtf32(reinterpret_cast<const char16_t*>(wideString),
+                           reinterpret_cast<const char16_t*>(wideString + length),
+                           std::back_inserter(m_string));
         }
     }
 }
@@ -199,7 +201,9 @@ String::String(const wchar_t* wideString)
 String::String(const std::wstring& wideString)
 {
     m_string.reserve(wideString.length() + 1);
-    Utf32::fromWide(wideString.begin(), wideString.end(), std::back_inserter(m_string));
+    Utf16::toUtf32(reinterpret_cast<const char16_t*>(&*wideString.begin()),
+                   reinterpret_cast<const char16_t*>(&*wideString.end()),
+                   std::back_inserter(m_string));
 }
 
 

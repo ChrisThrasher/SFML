@@ -33,7 +33,6 @@
 #include <SFML/System/Win32/WindowsHeader.hpp>
 
 #include <ostream>
-#include <string_view>
 
 #include <cstring>
 
@@ -66,8 +65,7 @@ String ClipboardImpl::getString()
         return text;
     }
 
-    const std::u16string_view string(static_cast<const char16_t*>(GlobalLock(clipboardHandle)));
-    text = String::fromUtf16(string.begin(), string.end());
+    text = String(static_cast<wchar_t*>(GlobalLock(clipboardHandle)));
     GlobalUnlock(clipboardHandle);
 
     CloseClipboard();
@@ -92,11 +90,10 @@ void ClipboardImpl::setString(const String& text)
     }
 
     // Create a Win32-compatible string
-    const auto        string     = text.toUtf16();
-    const std::size_t stringSize = (string.size() + 1) * sizeof(char16_t);
+    const std::size_t stringSize = (text.getSize() + 1) * sizeof(WCHAR);
     if (const HANDLE stringHandle = GlobalAlloc(GMEM_MOVEABLE, stringSize))
     {
-        std::memcpy(GlobalLock(stringHandle), string.data(), stringSize);
+        std::memcpy(GlobalLock(stringHandle), text.toWideString().data(), stringSize);
         GlobalUnlock(stringHandle);
         SetClipboardData(CF_UNICODETEXT, stringHandle);
     }

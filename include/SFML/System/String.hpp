@@ -300,8 +300,8 @@ public:
     ////////////////////////////////////////////////////////////
     /// \brief Convert the Unicode string to a wide string
     ///
-    /// Characters that do not fit in the target encoding are
-    /// discarded from the returned string.
+    /// Uses UTF-16 encoding when sizeof(wchar_t) == 2 and UTF-32
+    /// when sizeof(wchar_t) == 4.
     ///
     /// \return Converted wide string
     ///

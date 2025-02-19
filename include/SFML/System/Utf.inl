@@ -702,13 +702,15 @@ Out Utf<32>::encodeAnsi(char32_t codepoint, Out output, char replacement, const 
 
 ////////////////////////////////////////////////////////////
 template <typename Out>
-Out Utf<32>::encodeWide(char32_t codepoint, Out output, wchar_t replacement)
+Out Utf<32>::encodeWide(char32_t codepoint, Out output, wchar_t /* replacement */)
 {
-    // The encoding of wide characters is not well defined and is left to the system;
-    // however we can safely assume that it is UCS-2 on Windows and
-    // UCS-4 on Unix systems.
-    // For UCS-2 we need to check if the source characters fits in (UCS-2 is a subset of UCS-4).
-    // For UCS-4 we can do a direct copy (UCS-4 *is* UTF-32).
+    // The encoding of wide characters is not well defined and is left to the system.
+    // However we can assume that it is UTF-16 on Windows and UTF-32 on Unix systems.
+
+    // The replacement character is unused because an older version of this function
+    // would convert UTF-32 to UCS-2 on Windows which is a potentially lossy operation.
+    // Not all Unicode codepoints can be encoded as UCS-2 thus requiring the presence
+    // of a replacement character.
 
     if constexpr (sizeof(wchar_t) == 4)
     {
@@ -716,14 +718,7 @@ Out Utf<32>::encodeWide(char32_t codepoint, Out output, wchar_t replacement)
     }
     else
     {
-        if ((codepoint <= 0xFFFF) && ((codepoint < 0xD800) || (codepoint > 0xDFFF)))
-        {
-            *output++ = static_cast<wchar_t>(codepoint);
-        }
-        else if (replacement)
-        {
-            *output++ = replacement;
-        }
+        toUtf16(&codepoint, &codepoint + 1, output);
     }
 
     return output;
