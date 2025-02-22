@@ -587,12 +587,12 @@ std::unique_ptr<GlContext> GlContext::create(const ContextSettings& settings, co
         !(sharedContext->context->m_settings.attributeFlags & ContextSettings::Core))
     {
         // Re-create our shared context as a core context
-        const ContextSettings sharedSettings{/* depthBits */ 0,
-                                             /* stencilBits */ 0,
-                                             /* antiAliasingLevel */ 0,
-                                             settings.majorVersion,
-                                             settings.minorVersion,
-                                             settings.attributeFlags};
+        const ContextSettings sharedSettings{.depthBits         = 0,
+                                             .stencilBits       = 0,
+                                             .antiAliasingLevel = 0,
+                                             .majorVersion      = settings.majorVersion,
+                                             .minorVersion      = settings.minorVersion,
+                                             .attributeFlags    = settings.attributeFlags};
 
         sharedContext->context.emplace(nullptr, sharedSettings, Vector2u(1, 1));
         sharedContext->context->initialize(sharedSettings);
@@ -636,12 +636,12 @@ std::unique_ptr<GlContext> GlContext::create(const ContextSettings& settings, Ve
         !(sharedContext->context->m_settings.attributeFlags & ContextSettings::Core))
     {
         // Re-create our shared context as a core context
-        const ContextSettings sharedSettings{/* depthBits */ 0,
-                                             /* stencilBits */ 0,
-                                             /* antiAliasingLevel */ 0,
-                                             settings.majorVersion,
-                                             settings.minorVersion,
-                                             settings.attributeFlags};
+        const ContextSettings sharedSettings{.depthBits         = 0,
+                                             .stencilBits       = 0,
+                                             .antiAliasingLevel = 0,
+                                             .majorVersion      = settings.majorVersion,
+                                             .minorVersion      = settings.minorVersion,
+                                             .attributeFlags    = settings.attributeFlags};
 
         sharedContext->context.emplace(nullptr, sharedSettings, Vector2u(1, 1));
         sharedContext->context->initialize(sharedSettings);

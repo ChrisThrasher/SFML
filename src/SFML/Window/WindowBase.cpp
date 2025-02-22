@@ -89,13 +89,13 @@ void WindowBase::create(VideoMode mode, const String& title, std::uint32_t style
                                       title,
                                       style,
                                       state,
-                                      ContextSettings{/* depthBits */ 0,
-                                                      /* stencilBits */ 0,
-                                                      /* antiAliasingLevel */ 0,
-                                                      /* majorVersion */ 0,
-                                                      /* minorVersion */ 0,
-                                                      /* attributeFlags */ 0xFFFFFFFF,
-                                                      /* sRgbCapable */ false});
+                                      ContextSettings{.depthBits         = 0,
+                                                      .stencilBits       = 0,
+                                                      .antiAliasingLevel = 0,
+                                                      .majorVersion      = 0,
+                                                      .minorVersion      = 0,
+                                                      .attributeFlags    = 0xFFFFFFFF,
+                                                      .sRgbCapable       = false});
 
     // Perform common initializations
     initialize();

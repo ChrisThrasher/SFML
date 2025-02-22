@@ -32,8 +32,8 @@ TEST_CASE("[Graphics] sf::RenderTexture", runDisplayTests())
         {
             CHECK_THROWS_AS(sf::RenderTexture({1'000'000, 1'000'000}), sf::Exception);
 
-            CHECK_NOTHROW(sf::RenderTexture({100, 100}, sf::ContextSettings{8 /* depthBits */, 0 /* stencilBits */}));
-            CHECK_NOTHROW(sf::RenderTexture({100, 100}, sf::ContextSettings{0 /* depthBits */, 8 /* stencilBits */}));
+            CHECK_NOTHROW(sf::RenderTexture({100, 100}, sf::ContextSettings{.depthBits = 8, .stencilBits = 0}));
+            CHECK_NOTHROW(sf::RenderTexture({100, 100}, sf::ContextSettings{.depthBits = 0, .stencilBits = 8}));
 
             const sf::RenderTexture renderTexture({360, 480});
             CHECK(renderTexture.getSize() == sf::Vector2u(360, 480));
@@ -55,8 +55,8 @@ TEST_CASE("[Graphics] sf::RenderTexture", runDisplayTests())
         sf::RenderTexture renderTexture;
         CHECK(!renderTexture.resize({1'000'000, 1'000'000}));
 
-        CHECK(renderTexture.resize({100, 100}, sf::ContextSettings{8 /* depthBits */, 0 /* stencilBits */}));
-        CHECK(renderTexture.resize({100, 100}, sf::ContextSettings{0 /* depthBits */, 8 /* stencilBits */}));
+        CHECK(renderTexture.resize({100, 100}, sf::ContextSettings{.depthBits = 8, .stencilBits = 0}));
+        CHECK(renderTexture.resize({100, 100}, sf::ContextSettings{.depthBits = 0, .stencilBits = 8}));
 
         REQUIRE(renderTexture.resize({360, 480}));
         CHECK(renderTexture.getSize() == sf::Vector2u(360, 480));
@@ -83,8 +83,8 @@ TEST_CASE("[Graphics] sf::RenderTexture", runDisplayTests())
         CHECK(!renderTexture.isSrgb());
         CHECK(renderTexture.resize({360, 480}));
         CHECK(renderTexture.getSize() == sf::Vector2u(360, 480));
-        CHECK(renderTexture.resize({100, 100}, sf::ContextSettings{8 /* depthBits */, 0 /* stencilBits */}));
-        CHECK(renderTexture.resize({100, 100}, sf::ContextSettings{0 /* depthBits */, 8 /* stencilBits */}));
+        CHECK(renderTexture.resize({100, 100}, sf::ContextSettings{.depthBits = 8, .stencilBits = 0}));
+        CHECK(renderTexture.resize({100, 100}, sf::ContextSettings{.depthBits = 0, .stencilBits = 8}));
     }
 
     SECTION("getMaximumAntiAliasingLevel()")
