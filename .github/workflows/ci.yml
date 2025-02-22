@@ -113,14 +113,10 @@ jobs:
       with:
         arch: ${{ contains(matrix.platform.name, 'arm64') && 'amd64_arm64' || contains(matrix.platform.name, 'x86') && 'x86' || 'x64' }}
 
-    # Although the CMake configuration will run with 3.24 on Windows and 3.22
-    # elsewhere, we install 3.25 on Windows in order to support specifying
-    # CMAKE_MSVC_DEBUG_INFORMATION_FORMAT which allows CCache to cache MSVC object
-    # files, see: https://cmake.org/cmake/help/latest/release/3.25.html#variables
     - name: Get CMake and Ninja
       uses: lukka/get-cmake@latest
       with:
-        cmakeVersion: ${{ runner.os == 'Windows' && '3.25' || '3.22' }}
+        cmakeVersion: 3.28
         ninjaVersion: latest
 
     - name: Install Linux Dependencies and Tools
