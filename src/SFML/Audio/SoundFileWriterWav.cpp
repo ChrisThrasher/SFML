@@ -126,8 +126,8 @@ bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
         static constexpr auto speakerTopFrontCenter     = 0x2000u;
         static constexpr auto speakerTopFrontRight      = 0x4000u;
         static constexpr auto speakerTopBackLeft        = 0x8000u;
-        static constexpr auto speakerTopBackCenter      = 0x10000u;
-        static constexpr auto speakerTopBackRight       = 0x20000u;
+        static constexpr auto speakerTopBackCenter      = 0x10'000u;
+        static constexpr auto speakerTopBackRight       = 0x20'000u;
 
         struct SupportedChannel
         {
