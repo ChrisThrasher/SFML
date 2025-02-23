@@ -32,6 +32,7 @@
 #include <algorithm>
 #include <fcntl.h>
 #include <libudev.h>
+#include <limits>
 #include <linux/joystick.h>
 #include <memory>
 #include <ostream>
@@ -610,7 +611,7 @@ JoystickState JoystickImpl::JoystickImpl::update()
             // An axis was moved
             case JS_EVENT_AXIS:
             {
-                const float value = joyState.value * 100.f / 32767.f;
+                const float value = joyState.value * 100.f / std::numeric_limits<std::int16_t>::max();
 
                 if (joyState.number < m_mapping.size())
                 {
