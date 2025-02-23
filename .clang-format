@@ -120,6 +120,13 @@ IncludeCategories:
 SortIncludes: true
 SortUsingDeclarations: true
 
+# Integer literals
+IntegerLiteralSeparator:
+    Decimal: 3
+    DecimalMinDigits: 5
+    Hex: 2
+    HexMinDigits: 6
+
 # Penalties
 PenaltyBreakAssignment: 1000
 PenaltyBreakBeforeFirstCallParameter: 1000

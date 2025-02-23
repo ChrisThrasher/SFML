@@ -147,7 +147,7 @@ using glIsEnabledFuncType   = GLboolean (*)(GLenum);
 #endif
 
 #if !defined(GL_CONTEXT_FLAG_DEBUG_BIT)
-#define GL_CONTEXT_FLAG_DEBUG_BIT 0x00000002
+#define GL_CONTEXT_FLAG_DEBUG_BIT 0x00'00'00'02
 #endif
 
 #if !defined(GL_CONTEXT_PROFILE_MASK)
@@ -155,11 +155,11 @@ using glIsEnabledFuncType   = GLboolean (*)(GLenum);
 #endif
 
 #if !defined(GL_CONTEXT_CORE_PROFILE_BIT)
-#define GL_CONTEXT_CORE_PROFILE_BIT 0x00000001
+#define GL_CONTEXT_CORE_PROFILE_BIT 0x00'00'00'01
 #endif
 
 #if !defined(GL_CONTEXT_COMPATIBILITY_PROFILE_BIT)
-#define GL_CONTEXT_COMPATIBILITY_PROFILE_BIT 0x00000002
+#define GL_CONTEXT_COMPATIBILITY_PROFILE_BIT 0x00'00'00'02
 #endif
 
 

@@ -503,7 +503,7 @@ private:
         Sawtooth
     };
 
-    static constexpr unsigned int sampleRate{44100};
+    static constexpr unsigned int sampleRate{44'100};
     static constexpr std::size_t  chunkSize{sampleRate / 100};
     static constexpr float        timePerSample{1.f / float{sampleRate}};
 
@@ -609,7 +609,7 @@ private:
         // It doesn't make sense to seek in a tone generator
     }
 
-    static constexpr unsigned int sampleRate{44100};
+    static constexpr unsigned int sampleRate{44'100};
     static constexpr std::size_t  chunkSize{sampleRate / 100};
     static constexpr float        timePerSample{1.f / float{sampleRate}};
 

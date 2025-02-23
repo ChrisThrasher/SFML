@@ -140,7 +140,7 @@ Out Utf<8>::encode(char32_t input, Out output, std::uint8_t replacement)
     static constexpr std::array<std::uint8_t, 7> firstBytes = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
 
     // encode the character
-    if ((input > 0x0010FFFF) || ((input >= 0xD800) && (input <= 0xDBFF)))
+    if ((input > 0x00'10'FF'FF) || ((input >= 0xD800) && (input <= 0xDBFF)))
     {
         // Invalid character
         if (replacement)
@@ -370,7 +370,7 @@ In Utf<16>::decode(In begin, In end, char32_t& output, char32_t replacement)
             if ((second >= 0xDC00) && (second <= 0xDFFF))
             {
                 // The second element is valid: convert the two elements to a UTF-32 character
-                output = ((first - 0xD800u) << 10) + (second - 0xDC00) + 0x0010000;
+                output = ((first - 0xD800u) << 10) + (second - 0xDC00) + 0x0'01'00'00;
             }
             else
             {
@@ -414,7 +414,7 @@ Out Utf<16>::encode(char32_t input, Out output, char16_t replacement)
             *output++ = static_cast<char16_t>(input);
         }
     }
-    else if (input > 0x0010FFFF)
+    else if (input > 0x00'10'FF'FF)
     {
         // Invalid character (greater than the maximum Unicode value)
         if (replacement)
@@ -423,7 +423,7 @@ Out Utf<16>::encode(char32_t input, Out output, char16_t replacement)
     else
     {
         // The input character will be converted to two UTF-16 elements
-        input -= 0x0010000;
+        input -= 0x0'01'00'00;
         *output++ = static_cast<char16_t>((input >> 10) + 0xD800);
         *output++ = static_cast<char16_t>((input & 0x3FFUL) + 0xDC00);
     }

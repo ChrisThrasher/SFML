@@ -82,11 +82,11 @@ TEST_CASE("[Window] sf::Event")
         CHECK(event.is<sf::Event::FocusGained>());
         CHECK(event.getIf<sf::Event::FocusGained>());
 
-        event = sf::Event::TextEntered{123456};
+        event = sf::Event::TextEntered{123'456};
         CHECK(event.is<sf::Event::TextEntered>());
         CHECK(event.getIf<sf::Event::TextEntered>());
         const auto& textEntered = *event.getIf<sf::Event::TextEntered>();
-        CHECK(textEntered.unicode == 123456);
+        CHECK(textEntered.unicode == 123'456);
 
         event = sf::Event::KeyPressed{sf::Keyboard::Key::C, sf::Keyboard::Scan::C, true, true, true, true};
         CHECK(event.is<sf::Event::KeyPressed>());

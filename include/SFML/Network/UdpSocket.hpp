@@ -53,7 +53,7 @@ public:
     // Constants
     ////////////////////////////////////////////////////////////
     // NOLINTNEXTLINE(readability-identifier-naming)
-    static constexpr std::size_t MaxDatagramSize{65507}; //!< The maximum number of bytes that can be sent in a single UDP datagram
+    static constexpr std::size_t MaxDatagramSize{65'507}; //!< The maximum number of bytes that can be sent in a single UDP datagram
 
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor

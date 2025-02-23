@@ -76,7 +76,7 @@ public:
     /// \see `stop`, `getAvailableDevices`
     ///
     ////////////////////////////////////////////////////////////
-    [[nodiscard]] bool start(unsigned int sampleRate = 44100);
+    [[nodiscard]] bool start(unsigned int sampleRate = 44'100);
 
     ////////////////////////////////////////////////////////////
     /// \brief Stop the capture

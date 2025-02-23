@@ -302,33 +302,33 @@ TEST_CASE("[Audio] sf::InputSoundFile")
         SECTION("flac")
         {
             sf::InputSoundFile inputSoundFile("Audio/ding.flac");
-            inputSoundFile.seek(1'000);
+            inputSoundFile.seek(1000);
             CHECK(inputSoundFile.getTimeOffset() == sf::microseconds(22'675));
-            CHECK(inputSoundFile.getSampleOffset() == 1'000);
+            CHECK(inputSoundFile.getSampleOffset() == 1000);
         }
 
         SECTION("mp3")
         {
             sf::InputSoundFile inputSoundFile("Audio/ding.mp3");
-            inputSoundFile.seek(1'000);
+            inputSoundFile.seek(1000);
             CHECK(inputSoundFile.getTimeOffset() == sf::microseconds(22'675));
-            CHECK(inputSoundFile.getSampleOffset() == 1'000);
+            CHECK(inputSoundFile.getSampleOffset() == 1000);
         }
 
         SECTION("ogg")
         {
             sf::InputSoundFile inputSoundFile("Audio/doodle_pop.ogg");
-            inputSoundFile.seek(1'000);
+            inputSoundFile.seek(1000);
             CHECK(inputSoundFile.getTimeOffset() == sf::microseconds(11'337));
-            CHECK(inputSoundFile.getSampleOffset() == 1'000);
+            CHECK(inputSoundFile.getSampleOffset() == 1000);
         }
 
         SECTION("wav")
         {
             sf::InputSoundFile inputSoundFile("Audio/killdeer.wav");
-            inputSoundFile.seek(1'000);
+            inputSoundFile.seek(1000);
             CHECK(inputSoundFile.getTimeOffset() == sf::microseconds(45'351));
-            CHECK(inputSoundFile.getSampleOffset() == 1'000);
+            CHECK(inputSoundFile.getSampleOffset() == 1000);
         }
     }
 
@@ -341,7 +341,7 @@ TEST_CASE("[Audio] sf::InputSoundFile")
         CHECK(inputSoundFile.getSampleRate() == 44'100);
         CHECK(inputSoundFile.getDuration() == sf::microseconds(1'990'884));
         CHECK(inputSoundFile.getTimeOffset() == sf::milliseconds(100));
-        CHECK(inputSoundFile.getSampleOffset() == 4'410);
+        CHECK(inputSoundFile.getSampleOffset() == 4410);
     }
 
     SECTION("read()")

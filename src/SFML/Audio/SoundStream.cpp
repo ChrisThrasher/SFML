@@ -180,7 +180,7 @@ struct SoundStream::Impl : priv::MiniaudioUtils::SoundBase
         // If we don't have valid values yet, initialize with defaults so sound creation doesn't fail
         *format     = ma_format_s16;
         *channels   = impl.channelCount ? impl.channelCount : 1;
-        *sampleRate = impl.sampleRate ? impl.sampleRate : 44100;
+        *sampleRate = impl.sampleRate ? impl.sampleRate : 44'100;
 
         return MA_SUCCESS;
     }

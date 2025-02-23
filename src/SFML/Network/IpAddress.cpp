@@ -139,7 +139,7 @@ std::optional<IpAddress> IpAddress::getLocalAddress()
     // Connect the socket to a public ip (here 1.1.1.1) on any
     // port. This will give the local address of the network interface
     // used for default routing which is usually what we want.
-    sockaddr_in address = priv::SocketImpl::createAddress(0x01010101, 9);
+    sockaddr_in address = priv::SocketImpl::createAddress(0x01'01'01'01, 9);
     if (connect(sock, reinterpret_cast<sockaddr*>(&address), sizeof(address)) == -1)
     {
         priv::SocketImpl::close(sock);

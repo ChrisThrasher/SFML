@@ -261,7 +261,7 @@ bool ewmhSupported()
                                 rootWindow,
                                 netWmName,
                                 0,
-                                0x7fffffff,
+                                0x7f'ff'ff'ff,
                                 False,
                                 utf8StringType,
                                 &actualType,
@@ -515,7 +515,7 @@ m_cursorGrabbed(m_fullscreen)
     int     depth  = 0;
 
     // Check if the user chose to not create an OpenGL context (settings.attributeFlags will be 0xFFFFFFFF)
-    if (settings.attributeFlags == 0xFFFFFFFF)
+    if (settings.attributeFlags == 0xFF'FF'FF'FF)
     {
         // Choose default visual since the user is going to use their own rendering API
         visual = DefaultVisual(m_display.get(), m_screen);

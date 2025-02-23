@@ -37,14 +37,14 @@
 /// keys (cmd, ctrl, alt, shift)
 ///
 ////////////////////////////////////////////////////////////
-#define NSRightShiftKeyMask     0x020004
-#define NSLeftShiftKeyMask      0x020002
-#define NSRightCommandKeyMask   0x100010
-#define NSLeftCommandKeyMask    0x100008
-#define NSRightAlternateKeyMask 0x080040
-#define NSLeftAlternateKeyMask  0x080020
-#define NSRightControlKeyMask   0x042000
-#define NSLeftControlKeyMask    0x040001
+#define NSRightShiftKeyMask     0x02'00'04
+#define NSLeftShiftKeyMask      0x02'00'02
+#define NSRightCommandKeyMask   0x10'00'10
+#define NSLeftCommandKeyMask    0x10'00'08
+#define NSRightAlternateKeyMask 0x08'00'40
+#define NSLeftAlternateKeyMask  0x08'00'20
+#define NSRightControlKeyMask   0x04'20'00
+#define NSLeftControlKeyMask    0x04'00'01
 
 
 ////////////////////////////////////////////////////////////

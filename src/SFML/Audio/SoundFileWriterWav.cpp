@@ -126,8 +126,8 @@ bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
         static constexpr auto speakerTopFrontCenter     = 0x2000u;
         static constexpr auto speakerTopFrontRight      = 0x4000u;
         static constexpr auto speakerTopBackLeft        = 0x8000u;
-        static constexpr auto speakerTopBackCenter      = 0x10'000u;
-        static constexpr auto speakerTopBackRight       = 0x20'000u;
+        static constexpr auto speakerTopBackCenter      = 0x10000u;
+        static constexpr auto speakerTopBackRight       = 0x20000u;
 
         struct SupportedChannel
         {
@@ -265,7 +265,7 @@ void SoundFileWriterWav::writeHeader(unsigned int sampleRate, unsigned int chann
         encode(m_file, fmtChunkSize);
 
         // Write the format (Extensible)
-        const std::uint16_t format = 65534;
+        const std::uint16_t format = 65'534;
         encode(m_file, format);
     }
     else
