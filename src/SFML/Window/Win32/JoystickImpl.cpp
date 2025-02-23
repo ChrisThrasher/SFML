@@ -930,7 +930,8 @@ JoystickState JoystickImpl::updateDInputBuffered()
                 }
                 else
                 {
-                    m_state.axes[axis] = (static_cast<float>(static_cast<short>(events[i].dwData)) + 0.5f) * 100.f / 32767.5f;
+                    m_state.axes[axis] = (static_cast<float>(static_cast<short>(events[i].dwData)) + 0.5f) * 100.f /
+                                         std::numeric_limits<std::int16_t>::max();
                 }
 
                 eventHandled = true;
@@ -1024,7 +1025,7 @@ JoystickState JoystickImpl::updateDInputPolled()
                     state.axes[axis] = (static_cast<float>(*reinterpret_cast<const LONG*>(
                                             reinterpret_cast<const char*>(&joystate) + m_axes[axis])) +
                                         0.5f) *
-                                       100.f / 32767.5f;
+                                       100.f / std::numeric_limits<std::int16_t>::max();
                 }
             }
             else
@@ -1111,8 +1112,8 @@ BOOL CALLBACK JoystickImpl::deviceObjectEnumerationCallback(const DIDEVICEOBJECT
         propertyRange.diph.dwHeaderSize = sizeof(propertyRange.diph);
         propertyRange.diph.dwObj        = deviceObjectInstance->dwType;
         propertyRange.diph.dwHow        = DIPH_BYID;
-        propertyRange.lMin              = -32768;
-        propertyRange.lMax              = 32767;
+        propertyRange.lMin              = std::numeric_limits<std::int16_t>::min();
+        propertyRange.lMax              = std::numeric_limits<std::int16_t>::max();
 
         const HRESULT result = joystick.m_device->SetProperty(DIPROP_RANGE, &propertyRange.diph);
 
