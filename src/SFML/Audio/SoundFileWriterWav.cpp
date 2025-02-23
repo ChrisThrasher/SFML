@@ -59,10 +59,10 @@ void encode(std::ostream& stream, std::uint16_t value)
 void encode(std::ostream& stream, std::uint32_t value)
 {
     const std::array bytes = {
-        static_cast<char>(value & 0x000000FF),
-        static_cast<char>((value & 0x0000FF00) >> 8),
-        static_cast<char>((value & 0x00FF0000) >> 16),
-        static_cast<char>((value & 0xFF000000) >> 24),
+        static_cast<char>((value & 0x00'00'00'FF) >> 0),
+        static_cast<char>((value & 0x00'00'FF'00) >> 8),
+        static_cast<char>((value & 0x00'FF'00'00) >> 16),
+        static_cast<char>((value & 0xFF'00'00'00) >> 24),
     };
     stream.write(bytes.data(), bytes.size());
 }
@@ -126,8 +126,8 @@ bool SoundFileWriterWav::open(const std::filesystem::path&     filename,
         static constexpr auto speakerTopFrontCenter     = 0x2000u;
         static constexpr auto speakerTopFrontRight      = 0x4000u;
         static constexpr auto speakerTopBackLeft        = 0x8000u;
-        static constexpr auto speakerTopBackCenter      = 0x10000u;
-        static constexpr auto speakerTopBackRight       = 0x20000u;
+        static constexpr auto speakerTopBackCenter      = 0x10'000u;
+        static constexpr auto speakerTopBackRight       = 0x20'000u;
 
         struct SupportedChannel
         {
