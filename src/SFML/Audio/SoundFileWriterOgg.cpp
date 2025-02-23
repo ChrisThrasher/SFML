@@ -213,7 +213,7 @@ void SoundFileWriterOgg::write(const std::int16_t* samples, std::uint64_t count)
         for (int i = 0; i < std::min(frameCount, bufferSize); ++i)
         {
             for (unsigned int j = 0; j < m_channelCount; ++j)
-                buffer[j][i] = samples[m_remapTable[j]] / 32767.0f;
+                buffer[j][i] = samples[m_remapTable[j]] / static_cast<float>(std::numeric_limits<std::int16_t>::max());
 
             samples += m_channelCount;
         }
