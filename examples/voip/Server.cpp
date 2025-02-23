@@ -34,7 +34,7 @@ public:
     NetworkAudioStream()
     {
         // Set the sound parameters
-        initialize(1, 44100, {sf::SoundChannel::Mono});
+        initialize(1, 44'100, {sf::SoundChannel::Mono});
     }
 
     ////////////////////////////////////////////////////////////

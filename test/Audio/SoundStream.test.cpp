@@ -93,9 +93,9 @@ TEST_CASE("[Audio] sf::SoundStream", runAudioDeviceTests())
     {
         const std::vector channelMap{sf::SoundChannel::FrontLeft, sf::SoundChannel::FrontRight};
         SoundStream       soundStream;
-        soundStream.initialize(2, 44100, channelMap);
+        soundStream.initialize(2, 44'100, channelMap);
         CHECK(soundStream.getChannelCount() == 2);
-        CHECK(soundStream.getSampleRate() == 44100);
+        CHECK(soundStream.getSampleRate() == 44'100);
         CHECK(soundStream.getChannelMap() == channelMap);
         CHECK(soundStream.getStatus() == sf::SoundStream::Status::Stopped);
         CHECK(soundStream.getPlayingOffset() == sf::Time::Zero);

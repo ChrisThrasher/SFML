@@ -121,7 +121,7 @@ bool keepFileDescriptor(int fileDesc)
     // This is the keyboard test used by SDL.
     // The first 32 bits are ESC, numbers and Q to D;  If we have any of those,
     // consider it a keyboard device; do not test for KEY_RESERVED, though
-    const bool isKeyboard = (bitmaskKey[0] & 0xFFFFFFFE);
+    const bool isKeyboard = (bitmaskKey[0] & 0xFF'FF'FF'FE);
 
     const bool isAbs = TEST_BIT(EV_ABS, bitmaskEv) && TEST_BIT(ABS_X, bitmaskAbs) && TEST_BIT(ABS_Y, bitmaskAbs);
 

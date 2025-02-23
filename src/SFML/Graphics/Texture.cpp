@@ -181,8 +181,8 @@ Texture::~Texture()
 #ifndef NDEBUG
     // Set m_texture and m_cacheId to an invalid value to help the assert and glIsTexture in bind detect trying
     // to bind this texture in cases where it has already been destroyed but its memory not yet deallocated
-    m_texture = 0xFFFFFFFFu;
-    m_cacheId = 0xFFFFFFFFFFFFFFFFull;
+    m_texture = 0xFF'FF'FF'FFu;
+    m_cacheId = 0xFF'FF'FF'FF'FF'FF'FF'FFull;
 #endif
 }
 

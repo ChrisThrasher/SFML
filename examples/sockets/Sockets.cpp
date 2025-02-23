@@ -16,7 +16,7 @@
 int main()
 {
     // Choose an arbitrary port for opening sockets
-    const unsigned short port = 50001;
+    const unsigned short port = 50'001;
 
     // TCP, UDP or connected UDP ?
     char protocol = 0;

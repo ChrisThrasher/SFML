@@ -323,7 +323,7 @@ int WglContext::selectBestPixelFormat(HDC deviceContext, unsigned int bitsPerPix
         // Get the best format among the returned ones
         if (isValid && (nbFormats > 0))
         {
-            int bestScore = 0x7FFFFFFF;
+            int bestScore = 0x7F'FF'FF'FF;
             for (UINT i = 0; i < nbFormats; ++i)
             {
                 // Extract the components of the current format

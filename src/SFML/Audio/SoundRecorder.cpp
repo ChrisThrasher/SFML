@@ -153,7 +153,7 @@ struct SoundRecorder::Impl
     std::optional<ma_device>  captureDevice;                  //!< The miniaudio capture device
     std::string               deviceName{getDefaultDevice()}; //!< Name of the audio capture device
     unsigned int              channelCount{1};                //!< Number of recording channels
-    unsigned int              sampleRate{44100};              //!< Sample rate
+    unsigned int              sampleRate{44'100};             //!< Sample rate
     std::vector<std::int16_t> samples;                        //!< Buffer to store captured samples
     std::vector<SoundChannel> channelMap{SoundChannel::Mono}; //!< The map of position in sample frame to sound channel
 };

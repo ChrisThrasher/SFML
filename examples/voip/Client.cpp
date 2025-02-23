@@ -138,7 +138,7 @@ void doClient(unsigned short port)
     std::cin.ignore(10'000, '\n');
 
     // Start capturing audio data
-    if (!recorder.start(44100))
+    if (!recorder.start(44'100))
     {
         std::cerr << "Failed to start recorder" << std::endl;
         return;

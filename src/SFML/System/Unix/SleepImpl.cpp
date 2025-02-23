@@ -42,7 +42,7 @@ void sleepImpl(Time time)
     // Construct the time to wait
     timespec ti{};
     ti.tv_sec  = static_cast<time_t>(usecs / 1'000'000);
-    ti.tv_nsec = static_cast<long>((usecs % 1'000'000) * 1'000);
+    ti.tv_nsec = static_cast<long>((usecs % 1'000'000) * 1000);
 
     // Wait...
     // If nanosleep returns -1, we check errno. If it is EINTR

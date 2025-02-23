@@ -304,7 +304,7 @@ XVisualInfo GlxContext::selectBestVisual(::Display* display, unsigned int bitsPe
     if (const auto visuals = X11Ptr<XVisualInfo[]>(XGetVisualInfo(display, 0, nullptr, &count)))
     {
         // Evaluate all the returned visuals, and pick the best one
-        int         bestScore  = 0x7FFFFFFF;
+        int         bestScore  = 0x7F'FF'FF'FF;
         XVisualInfo bestVisual = XVisualInfo();
         for (std::size_t i = 0; i < static_cast<std::size_t>(count); ++i)
         {

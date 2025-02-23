@@ -572,7 +572,7 @@ TEST_CASE("[System] sf::String")
         const sf::String string("a little bit of this and a little bit of that");
         CHECK(string.find("a little bit") == 0);
         CHECK(string.find("a little bit", 15) == 25);
-        CHECK(string.find("a little bit", 1'000) == sf::String::InvalidPos);
+        CHECK(string.find("a little bit", 1000) == sf::String::InvalidPos);
         CHECK(string.find("no way you find this") == sf::String::InvalidPos);
     }
 
@@ -591,7 +591,7 @@ TEST_CASE("[System] sf::String")
         CHECK(string.substring(0) == "let's get some substrings");
         CHECK(string.substring(10) == "some substrings");
         CHECK(string.substring(10, 4) == "some");
-        CHECK_THROWS_AS((void)string.substring(1'000), std::out_of_range);
+        CHECK_THROWS_AS((void)string.substring(1000), std::out_of_range);
         CHECK_THROWS_AS((void)string.substring(420, 69), std::out_of_range);
     }
 

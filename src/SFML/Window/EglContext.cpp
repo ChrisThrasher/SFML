@@ -297,7 +297,7 @@ EGLConfig EglContext::getBestConfig(EGLDisplay display, unsigned int bitsPerPixe
     eglCheck(eglGetConfigs(display, configs.get(), configCount, &configCount));
 
     // Evaluate all the returned configs, and pick the best one
-    int       bestScore = 0x7FFFFFFF;
+    int       bestScore = 0x7F'FF'FF'FF;
     EGLConfig bestConfig{};
 
     for (std::size_t i = 0; i < static_cast<std::size_t>(configCount); ++i)
@@ -349,7 +349,7 @@ EGLConfig EglContext::getBestConfig(EGLDisplay display, unsigned int bitsPerPixe
         }
     }
 
-    assert(bestScore < 0x7FFFFFFF && "Failed to calculate best config");
+    assert(bestScore < 0x7F'FF'FF'FF && "Failed to calculate best config");
 
     return bestConfig;
 }

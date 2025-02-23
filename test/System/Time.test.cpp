@@ -57,7 +57,7 @@ TEST_CASE("[System] sf::Time")
 
         SECTION("Construct from microseconds")
         {
-            constexpr sf::Time time = sf::microseconds(987654);
+            constexpr sf::Time time = sf::microseconds(987'654);
             CHECK(time.asSeconds() == Approx(0.987654f));
             STATIC_CHECK(time.asMilliseconds() == 987);
             STATIC_CHECK(time.asMicroseconds() == 987'654);
@@ -74,7 +74,7 @@ TEST_CASE("[System] sf::Time")
             {
                 constexpr sf::Time time = 1s;
                 STATIC_CHECK(time.asSeconds() == 1.f);
-                STATIC_CHECK(time.asMilliseconds() == 1'000);
+                STATIC_CHECK(time.asMilliseconds() == 1000);
                 STATIC_CHECK(time.asMicroseconds() == 1'000'000);
             }
             {
@@ -175,38 +175,38 @@ TEST_CASE("[System] sf::Time")
         {
             STATIC_CHECK(sf::seconds(54.999f) < sf::seconds(55));
             STATIC_CHECK(sf::microseconds(10) < sf::milliseconds(10));
-            STATIC_CHECK(sf::milliseconds(1'000) < sf::microseconds(1'000'001));
+            STATIC_CHECK(sf::milliseconds(1000) < sf::microseconds(1'000'001));
         }
 
         SECTION("operator>")
         {
             STATIC_CHECK(sf::seconds(55.001f) > sf::seconds(55));
             STATIC_CHECK(sf::microseconds(1) > sf::seconds(0.0000001f));
-            STATIC_CHECK(sf::microseconds(1'000'001) > sf::milliseconds(1'000));
+            STATIC_CHECK(sf::microseconds(1'000'001) > sf::milliseconds(1000));
         }
 
         SECTION("operator<=")
         {
             STATIC_CHECK(sf::milliseconds(100) <= sf::milliseconds(100));
-            STATIC_CHECK(sf::seconds(0.0012f) <= sf::microseconds(1'201));
+            STATIC_CHECK(sf::seconds(0.0012f) <= sf::microseconds(1201));
         }
 
         SECTION("operator>=")
         {
             STATIC_CHECK(sf::milliseconds(100) >= sf::milliseconds(-100));
-            STATIC_CHECK(sf::microseconds(1'201) >= sf::seconds(0.0012f));
+            STATIC_CHECK(sf::microseconds(1201) >= sf::seconds(0.0012f));
         }
 
         SECTION("operator-")
         {
             STATIC_CHECK(sf::seconds(-1) == -sf::seconds(1));
-            STATIC_CHECK(sf::microseconds(1'234) == -sf::microseconds(-1'234));
+            STATIC_CHECK(sf::microseconds(1234) == -sf::microseconds(-1234));
         }
 
         SECTION("operator+")
         {
             STATIC_CHECK(sf::seconds(1) + sf::seconds(1) == sf::seconds(2));
-            STATIC_CHECK(sf::milliseconds(400) + sf::microseconds(400) == sf::microseconds(400400));
+            STATIC_CHECK(sf::milliseconds(400) + sf::microseconds(400) == sf::microseconds(400'400));
         }
 
         SECTION("operator+=")
@@ -219,7 +219,7 @@ TEST_CASE("[System] sf::Time")
         SECTION("operator-")
         {
             STATIC_CHECK(sf::seconds(1) - sf::seconds(1) == sf::seconds(0));
-            STATIC_CHECK(sf::milliseconds(400) - sf::microseconds(400) == sf::microseconds(399600));
+            STATIC_CHECK(sf::milliseconds(400) - sf::microseconds(400) == sf::microseconds(399'600));
         }
 
         SECTION("operator-=")
@@ -243,11 +243,11 @@ TEST_CASE("[System] sf::Time")
 
         SECTION("operator*=")
         {
-            sf::Time time = sf::milliseconds(1'000);
+            sf::Time time = sf::milliseconds(1000);
             time *= std::int64_t{10};
             CHECK(time == sf::milliseconds(10'000));
             time *= 0.1f;
-            CHECK(time.asMilliseconds() == 1'000);
+            CHECK(time.asMilliseconds() == 1000);
         }
 
         SECTION("operator/")
@@ -262,11 +262,11 @@ TEST_CASE("[System] sf::Time")
 
         SECTION("operator/=")
         {
-            sf::Time time = sf::milliseconds(1'000);
+            sf::Time time = sf::milliseconds(1000);
             time /= std::int64_t{2};
             CHECK(time == sf::milliseconds(500));
             time /= 0.5f;
-            CHECK(time.asMilliseconds() == 1'000);
+            CHECK(time.asMilliseconds() == 1000);
         }
 
         SECTION("operator%")

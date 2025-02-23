@@ -39,9 +39,9 @@
 #endif
 
 // Define missing constants
-#define ASENSOR_TYPE_GRAVITY             0x00000009
-#define ASENSOR_TYPE_LINEAR_ACCELERATION 0x0000000a
-#define ASENSOR_TYPE_ORIENTATION         0x00000003
+#define ASENSOR_TYPE_GRAVITY             0x00'00'00'09
+#define ASENSOR_TYPE_LINEAR_ACCELERATION 0x00'00'00'0a
+#define ASENSOR_TYPE_ORIENTATION         0x00'00'00'03
 
 namespace
 {

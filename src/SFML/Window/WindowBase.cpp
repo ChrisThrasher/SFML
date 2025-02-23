@@ -94,7 +94,7 @@ void WindowBase::create(VideoMode mode, const String& title, std::uint32_t style
                                                       /* antiAliasingLevel */ 0,
                                                       /* majorVersion */ 0,
                                                       /* minorVersion */ 0,
-                                                      /* attributeFlags */ 0xFFFFFFFF,
+                                                      /* attributeFlags */ 0xFF'FF'FF'FF,
                                                       /* sRgbCapable */ false});
 
     // Perform common initializations
