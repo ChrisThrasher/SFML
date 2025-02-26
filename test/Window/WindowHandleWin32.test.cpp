@@ -16,21 +16,6 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <SystemUtil.hpp>
-#include <sstream>
-
-namespace Catch
-{
-template <typename T>
-struct StringMaker<sf::Vector2<T>>
-{
-    static std::string convert(sf::Vector2<T> vector)
-    {
-        std::ostringstream os;
-        sf::setStreamPrecision(os, std::numeric_limits<T>::max_digits10);
-        return os << "(" << vector.x << ", " << vector.y << ")";
-    }
-};
-} // namespace Catch
 
 TEST_CASE("[Window] sf::WindowHandle (Win32)")
 {
