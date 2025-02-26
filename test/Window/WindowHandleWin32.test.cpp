@@ -1,9 +1,5 @@
 #include <SFML/Window/WindowHandle.hpp>
 
-// Other 1st party headers
-#include <SFML/Window/Window.hpp>
-#include <SFML/Window/WindowBase.hpp>
-
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -12,12 +8,14 @@
 #endif
 #include <Windows.h>
 
-// Do I really need to include this before Catch?
-#include <SystemUtil.hpp>
+// Other 1st party headers
+#include <SFML/Window/Window.hpp>
+#include <SFML/Window/WindowBase.hpp>
 
 // Include after Windows.h to fix printing sf::Vector2<T>s when assertions fail
 #include <catch2/catch_template_test_macros.hpp>
 
+#include <SystemUtil.hpp>
 #include <optional>
 
 namespace
