@@ -4,11 +4,6 @@
 #include <SFML/Window/Window.hpp>
 #include <SFML/Window/WindowBase.hpp>
 
-#include <catch2/catch_template_test_macros.hpp>
-
-#include <SystemUtil.hpp>
-#include <optional>
-
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -16,6 +11,12 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <Windows.h>
+
+// Include after Windows.h to fix printing sf::Vector2<T>s when assertions fail
+#include <catch2/catch_template_test_macros.hpp>
+
+#include <SystemUtil.hpp>
+#include <optional>
 
 namespace
 {
@@ -100,6 +101,8 @@ sf::WindowHandle createWindow<ExStyleMenuWindow>(LPWSTR className, HINSTANCE hIn
 
 TEMPLATE_TEST_CASE("[Window] sf::WindowHandle (Win32)", "", NormalWindow, NormalMenuWindow, ExStyleWindow, ExStyleMenuWindow)
 {
+    using sf::operator<<;
+
     const WNDCLASSW classInfo{{}, wndProc, {}, {}, GetModuleHandleW(nullptr), {}, {}, {}, {}, L"sfml_WindowHandleTests"};
 
     const ATOM winClassId = RegisterClassW(&classInfo);
