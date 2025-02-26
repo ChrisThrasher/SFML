@@ -38,7 +38,7 @@ std::ostream& operator<<(std::ostream& os, Time time)
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& os, Vector2<T> vector)
+std::ostream& operator<<(std::ostream& os, const Vector2<T>& vector)
 {
     setStreamPrecision(os, std::numeric_limits<T>::max_digits10);
     return os << "(" << vector.x << ", " << vector.y << ")";
@@ -51,9 +51,9 @@ std::ostream& operator<<(std::ostream& os, const Vector3<T>& vector)
     return os << "(" << vector.x << ", " << vector.y << ", " << vector.z << ")";
 }
 
-template std::ostream& operator<<(std::ostream&, Vector2<int>);
-template std::ostream& operator<<(std::ostream&, Vector2<unsigned int>);
-template std::ostream& operator<<(std::ostream&, Vector2<float>);
+template std::ostream& operator<<(std::ostream&, const Vector2<int>&);
+template std::ostream& operator<<(std::ostream&, const Vector2<unsigned int>&);
+template std::ostream& operator<<(std::ostream&, const Vector2<float>&);
 
 template std::ostream& operator<<(std::ostream&, const Vector3<int>&);
 template std::ostream& operator<<(std::ostream&, const Vector3<unsigned int>&);
