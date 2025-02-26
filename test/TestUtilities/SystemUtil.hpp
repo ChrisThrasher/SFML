@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <SFML/System/Vector2.hpp>
-
 #include <filesystem>
 #include <iosfwd>
 #include <vector>
@@ -21,6 +19,9 @@ class String;
 class Time;
 
 template <typename>
+class Vector2;
+
+template <typename>
 class Vector3;
 
 void setStreamPrecision(std::ostream& os, int maxDigits10);
@@ -30,11 +31,7 @@ std::ostream& operator<<(std::ostream& os, const String& string);
 std::ostream& operator<<(std::ostream& os, Time time);
 
 template <typename T>
-std::ostream& operator<<(std::ostream& os, const Vector2<T>& vector)
-{
-    setStreamPrecision(os, std::numeric_limits<T>::max_digits10);
-    return os << "(" << vector.x << ", " << vector.y << ")";
-}
+std::ostream& operator<<(std::ostream& os, const Vector2<T>& vector);
 
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const Vector3<T>& vector);
