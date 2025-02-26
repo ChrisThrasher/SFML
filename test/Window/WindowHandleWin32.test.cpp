@@ -15,8 +15,7 @@
 //
 #include <catch2/catch_test_macros.hpp>
 
-#include <iomanip>
-#include <limits>
+#include <SystemUtil.hpp>
 #include <sstream>
 
 namespace Catch
@@ -27,15 +26,15 @@ struct StringMaker<sf::Vector2<T>>
     static std::string convert(sf::Vector2<T> vector)
     {
         std::ostringstream os;
-        os << std::fixed << std::setprecision(std::numeric_limits<T>::max_digits10);
-        os << "(" << vector.x << ", " << vector.y << ")";
-        return os.str();
+        sf::setStreamPrecision(os, std::numeric_limits<T>::max_digits10);
+        return os << "(" << vector.x << ", " << vector.y << ")";
     }
 };
 } // namespace Catch
 
 TEST_CASE("[Window] sf::WindowHandle (Win32)")
 {
+    using sf::operator<<;
     const sf::Vector2i vec1(1, 2);
     const sf::Vector2i vec2(3, 4);
     CHECK(vec1 == vec2);
