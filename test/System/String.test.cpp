@@ -491,8 +491,8 @@ TEST_CASE("[System] sf::String")
             CHECK(string[0] == 0);
         }
         {
-            constexpr std::array<std::uint8_t, 4> characters{'w', 'x', 'y', 'z'};
-            const sf::String                      string = sf::String::fromUtf8(characters.begin(), characters.end());
+            constexpr auto   characters = u8"wxyz"sv;
+            const sf::String string     = sf::String::fromUtf8(characters.begin(), characters.end());
             CHECK(std::string(string) == "wxyz"s);
             CHECK(std::wstring(string) == L"wxyz"s);
             CHECK(string.toAnsiString() == "wxyz"s);
@@ -505,8 +505,8 @@ TEST_CASE("[System] sf::String")
             CHECK(string.getData() != nullptr);
         }
         {
-            constexpr std::array<std::uint8_t, 4> characters{0xF0, 0x9F, 0x90, 0x8C};
-            const sf::String                      string = sf::String::fromUtf8(characters.begin(), characters.end());
+            constexpr auto   characters = u8"🐌"sv;
+            const sf::String string     = sf::String::fromUtf8(characters.begin(), characters.end());
             CHECK(std::string(string) == "\0"s);
             CHECK(std::wstring(string) == select(L""s, L"🐌"s));
             CHECK(string.toAnsiString() == "\0"s);
