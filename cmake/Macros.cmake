@@ -423,9 +423,9 @@ function(sfml_add_test target SOURCES DEPENDS)
         add_dependencies(${target} "install-mesa3d")
     endif()
 
+    set(CMAKE_CATCH_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
     # Delay test registration when cross compiling to avoid running crosscompiled app on host OS
     if(CMAKE_CROSSCOMPILING)
-        set(CMAKE_CATCH_DISCOVER_TESTS_DISCOVERY_MODE PRE_TEST)
 
         # When running tests on Android, use a custom shell script to invoke commands using adb shell
         if(SFML_OS_ANDROID)

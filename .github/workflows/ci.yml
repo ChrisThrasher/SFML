@@ -215,6 +215,11 @@ jobs:
       if: matrix.platform.name == 'Android'
       run: examples/android/gradlew ${{ matrix.type.name == 'Debug' && 'assembleDebug' || 'assembleRelease' }} -p examples/android -P ARCH_ABI=${{matrix.config.arch}} -P MIN_SDK=${{matrix.config.api}}
 
+    - name: Joystick Debugging
+      if: runner.os == 'Windows'
+      run: |
+        echo "blah"
+
     - name: Prepare Test
       run: |
         set -e
