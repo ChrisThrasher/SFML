@@ -88,7 +88,7 @@ macro(sfml_add_library module)
     set_public_symbols_hidden(${target})
 
     # enable precompiled headers
-    if (SFML_ENABLE_PCH AND (NOT ${target} STREQUAL "sfml-system"))
+    if(SFML_ENABLE_PCH AND (NOT ${target} STREQUAL "sfml-system"))
         message(VERBOSE "enabling PCH for SFML library '${target}'")
         target_precompile_headers(${target} REUSE_FROM sfml-system)
     endif()
@@ -334,7 +334,7 @@ macro(sfml_add_example target)
     endif()
 
     # enable precompiled headers
-    if (SFML_ENABLE_PCH)
+    if(SFML_ENABLE_PCH)
         message(VERBOSE "enabling PCH for SFML example '${target}'")
         target_precompile_headers(${target} REUSE_FROM sfml-system)
     endif()
@@ -386,7 +386,7 @@ function(sfml_add_test target SOURCES DEPENDS)
     add_executable(${target} ${SOURCES} ${PROJECT_SOURCE_DIR}/test/main.cpp)
 
     # enable precompiled headers
-    if (SFML_ENABLE_PCH)
+    if(SFML_ENABLE_PCH)
         message(VERBOSE "enabling PCH for SFML test '${target}'")
         target_precompile_headers(${target} REUSE_FROM sfml-system)
     endif()
