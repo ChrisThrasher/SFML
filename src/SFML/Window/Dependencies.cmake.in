@@ -4,21 +4,21 @@ include(CMakeFindDependencyMacro)
 
 # detect the OS
 if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(FIND_SFML_OS_WINDOWS 1)
+    set(FIND_SFML_OS_WINDOWS ON)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(FIND_SFML_OS_LINUX 1)
+    set(FIND_SFML_OS_LINUX ON)
 
     if(@SFML_USE_DRM@)
-        set(FIND_SFML_USE_DRM 1)
+        set(FIND_SFML_USE_DRM ON)
     endif()
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-    set(FIND_SFML_OS_FREEBSD 1)
+    set(FIND_SFML_OS_FREEBSD ON)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
-    set(FIND_SFML_OS_ANDROID 1)
+    set(FIND_SFML_OS_ANDROID ON)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
-    set(FIND_SFML_OS_IOS 1)
+    set(FIND_SFML_OS_IOS ON)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(FIND_SFML_OS_MACOS 1)
+    set(FIND_SFML_OS_MACOS ON)
 endif()
 
 # start with an empty list
