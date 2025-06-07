@@ -474,33 +474,30 @@ Font::Page& Font::loadPage(unsigned int characterSize) const
 ////////////////////////////////////////////////////////////
 Glyph Font::loadGlyph(char32_t codePoint, unsigned int characterSize, bool bold, float outlineThickness) const
 {
-    // The glyph to return
-    Glyph glyph;
-
     // Stop if no font is loaded
     if (!m_fontHandles)
-        return glyph;
+        return {};
 
     // Get our FT_Face
     FT_Face face = m_fontHandles->face;
     if (!face)
-        return glyph;
+        return {};
 
     // Set the character size
     if (!setCurrentSize(characterSize))
-        return glyph;
+        return {};
 
     // Load the glyph corresponding to the code point
     FT_Int32 flags = FT_LOAD_TARGET_NORMAL | FT_LOAD_FORCE_AUTOHINT;
     if (outlineThickness != 0)
         flags |= FT_LOAD_NO_BITMAP;
     if (FT_Load_Char(face, codePoint, flags) != 0)
-        return glyph;
+        return {};
 
     // Retrieve the glyph
     FT_Glyph glyphDesc = nullptr;
     if (FT_Get_Glyph(face->glyph, &glyphDesc) != 0)
-        return glyph;
+        return {};
 
     // Apply bold and outline (there is no fallback for outline) if necessary -- first technique using outline (highest quality)
     const FT_Pos weight  = 1 << 6;
@@ -544,6 +541,7 @@ Glyph Font::loadGlyph(char32_t codePoint, unsigned int characterSize, bool bold,
     }
 
     // Compute the glyph's advance offset
+    Glyph glyph;
     glyph.advance = static_cast<float>(bitmapGlyph->root.advance.x >> 16);
     if (bold)
         glyph.advance += static_cast<float>(weight) / float{1 << 6};
