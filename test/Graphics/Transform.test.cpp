@@ -5,7 +5,6 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <GraphicsUtil.hpp>
-#include <sstream>
 #include <type_traits>
 #include <vector>
 

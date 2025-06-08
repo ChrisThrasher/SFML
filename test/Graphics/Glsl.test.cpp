@@ -1,7 +1,6 @@
 #include <SFML/Graphics/Glsl.hpp>
 
 // Other 1st party headers
-#include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/Transform.hpp>
 
 #include <catch2/catch_test_macros.hpp>

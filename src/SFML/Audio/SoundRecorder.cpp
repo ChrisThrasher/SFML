@@ -28,7 +28,6 @@
 #include <SFML/Audio/SoundRecorder.hpp>
 
 #include <SFML/System/Err.hpp>
-#include <SFML/System/Sleep.hpp>
 
 #include <miniaudio.h>
 
