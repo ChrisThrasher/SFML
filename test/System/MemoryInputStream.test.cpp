@@ -3,7 +3,6 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <array>
-#include <ostream>
 #include <string_view>
 
 TEST_CASE("[System] sf::MemoryInputStream")

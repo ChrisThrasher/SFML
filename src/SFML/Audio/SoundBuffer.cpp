@@ -33,7 +33,6 @@
 #include <SFML/System/Err.hpp>
 #include <SFML/System/Exception.hpp>
 
-#include <exception>
 #include <ostream>
 #include <utility>
 
