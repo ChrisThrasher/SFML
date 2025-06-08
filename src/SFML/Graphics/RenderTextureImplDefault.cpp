@@ -33,8 +33,6 @@
 #include <SFML/Window/Context.hpp>
 #include <SFML/Window/ContextSettings.hpp>
 
-#include <memory>
-
 
 namespace sf::priv
 {
