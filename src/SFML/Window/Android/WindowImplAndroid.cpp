@@ -335,7 +335,7 @@ int WindowImplAndroid::processScrollEvent(AInputEvent* inputEvent, ActivityState
     auto    jni     = Jni::attachCurrentThread(states.activity->vm, &lJNIEnv);
     if (!jni)
     {
-        err() << "Failed to initialize JNI, couldn't get the Unicode value" << std::endl;
+        err() << "Failed to initialize JNI" << std::endl;
         return 0;
     }
 
@@ -505,24 +505,18 @@ int WindowImplAndroid::processMotionEvent(AInputEvent* inputEvent, ActivityState
         }
         else if (static_cast<std::uint32_t>(device) & AINPUT_SOURCE_JOYSTICK)
         {
-            /* NOTE:
-            I haven't found a reasonable mapping between input event and device ID which caused it.
-            Furthermore, it seems like all axii changes coming from the single gamepad are contained
-            in the single input event, meaning that I can poll values for all axii in this single
-            loop iteration and it'll work.
-
-            Also, whoever coded Windows gamepad support had normalized axii values to <-100, 100>
-            instead of sane interval of <-1, 1>.
-
-            Also also, a same gamepad connected via same method can report different axii
-            on Windows and Android. Xbox One for example will report triggers as negative/positive
-            values on the single axis, while Android reports them on two separate axii.
-            */
+            // There seems to be no direct mapping between input event and the ID of the device that
+            // caused the event. However, as the single input event contains all axii changes, it's possible
+            // to poll values for all axii in a single loop iteration.
+            //
+            // Additionally, some controllers such as the Xbox One controller will report triggers as
+            // negative/positive values on the single axis on Windows, while Android reports them
+            // on two separate axii.
             const auto deviceId = AInputEvent_getDeviceId(inputEvent);
             if (states.joystickStates.find(deviceId) == states.joystickStates.end())
                 return 1;
 
-            const float factor = 100.f; // Windows code normalizes axis to range <-100, 100> instead of sane <-1, 1>
+            const float factor = 100.f; // SFML normalizes axis to the range <-100, 100> instead of <-1, 1>
             auto&       axes   = states.joystickStates.at(deviceId).axes;
 
             for (unsigned axisIdx = 0; axisIdx < Joystick::AxisCount; ++axisIdx)

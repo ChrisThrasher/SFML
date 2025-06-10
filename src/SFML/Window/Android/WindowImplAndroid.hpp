@@ -239,7 +239,7 @@ private:
     static int processPointerEvent(bool isDown, AInputEvent* event, ActivityStates& states);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Convert a Android key to SFML key code / joy button code
+    /// \brief Convert a Android key to SFML key code / joystick button code
     ///
     /// \param symbol Android key to convert
     ///

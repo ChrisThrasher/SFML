@@ -128,9 +128,11 @@ bool JoystickImpl::open(unsigned int joyIndex)
             continue;
         }
 
+        // Found device might be already registered. It might be even registered for
+        // another joystick index. So skip that and search for some other.
         if (states.joystickStates.find(deviceId) != states.joystickStates.end())
-            continue; // this gamepad is already registered
 
+             continue;
         if (const auto capabilities = getCapabilitiesFromJni(*inputDevice))
             m_capabilities = *capabilities;
         else
@@ -200,7 +202,7 @@ JoystickState JoystickImpl::update() const
     const bool isConnected = inputDeviceClass->getDevice(m_currentDeviceIdx).has_value();
     if (states.joystickStates.find(m_currentDeviceIdx) == states.joystickStates.end())
     {
-        // This technically shouldn't happen, but when I have connected physical gamepad
+        // This technically shouldn't happen, but when I have connect physical gamepad
         // and then connect/disconnect a bluetooth one, states for the physical one
         // disappears for a frame and then it reconnects.
         return {false};
