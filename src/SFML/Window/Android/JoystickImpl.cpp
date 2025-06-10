@@ -136,7 +136,7 @@ bool JoystickImpl::open(unsigned int joyIndex)
         if (const auto capabilities = getCapabilitiesFromJni(*inputDevice))
             m_capabilities = *capabilities;
         else
-            continue;
+            return false;
 
         m_identification = Joystick::Identification{
             inputDevice->getName(),
