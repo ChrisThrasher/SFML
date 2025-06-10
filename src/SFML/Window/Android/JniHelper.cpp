@@ -4,6 +4,10 @@
 
 #include <ostream>
 
+JniListClass::JniListClass(JNIEnv* env, jclass listClass) : m_env(env), m_listClass(listClass)
+{
+}
+
 std::optional<JniListClass> JniListClass::findClass(JNIEnv* env)
 {
     assert(env);
@@ -12,6 +16,24 @@ std::optional<JniListClass> JniListClass::findClass(JNIEnv* env)
         return std::nullopt;
 
     return JniListClass(env, listClass);
+}
+
+JniMotionRange::JniMotionRange(JNIEnv* env, jobject motionRange, jmethodID getAxisMethod) :
+m_env(env),
+m_motionRange(motionRange),
+m_getAxisMethod(getAxisMethod)
+{
+}
+
+int JniMotionRange::getAxis() const
+{
+    return m_env->CallIntMethod(m_motionRange, m_getAxisMethod);
+}
+
+JniMotionRangeClass::JniMotionRangeClass(JNIEnv* env, jclass motionRangeClass) :
+m_env(env),
+m_motionRangeClass(motionRangeClass)
+{
 }
 
 std::optional<JniMotionRangeClass> JniMotionRangeClass::findClass(JNIEnv* env)
@@ -34,6 +56,54 @@ std::optional<JniMotionRange> JniMotionRangeClass::makeFromJava(jobject motionRa
     }
 
     return JniMotionRange(m_env, motionRange, getAxisMethod);
+}
+
+JniInputDevice::JniInputDevice(JNIEnv*   env,
+                               jobject   inputDevice,
+                               jmethodID getNameMethod,
+                               jmethodID getVendorIdMethod,
+                               jmethodID getProductIdMethod,
+                               jmethodID supportsSourceMethod,
+                               jmethodID getMotionRangesMethod) :
+m_env(env),
+m_inputDevice(inputDevice),
+m_getNameMethod(getNameMethod),
+m_getVendorIdMethod(getVendorIdMethod),
+m_getProductIdMethod(getProductIdMethod),
+m_supportsSourceMethod(supportsSourceMethod),
+m_getMotionRangesMethod(getMotionRangesMethod)
+{
+}
+
+unsigned JniInputDevice::getVendorId() const
+{
+    return static_cast<unsigned>(m_env->CallIntMethod(m_inputDevice, m_getVendorIdMethod));
+}
+
+unsigned JniInputDevice::getProductId() const
+{
+    return static_cast<unsigned>(m_env->CallIntMethod(m_inputDevice, m_getProductIdMethod));
+}
+
+std::string JniInputDevice::getName() const
+{
+    return javaStringToStd(static_cast<jstring>(m_env->CallObjectMethod(m_inputDevice, m_getNameMethod)));
+}
+
+bool JniInputDevice::supportsSource(size_t sourceFlags) const
+{
+    return m_env->CallBooleanMethod(m_inputDevice, m_supportsSourceMethod, jint(sourceFlags));
+}
+
+JniInputDeviceClass::JniInputDeviceClass(JNIEnv* env,
+                                         jclass inputDeviceClass,
+                                         jmethodID getDeviceIdsMethod,
+                                         jmethodID getDeviceMethod) :
+m_env(env),
+m_inputDeviceClass(inputDeviceClass),
+m_getDeviceIdsMethod(getDeviceIdsMethod),
+m_getDeviceMethod(getDeviceMethod)
+{
 }
 
 std::optional<JniInputDeviceClass> JniInputDeviceClass::findClass(JNIEnv* env)
@@ -109,6 +179,21 @@ std::optional<JniList<JniMotionRange, JniMotionRangeClass>> JniInputDevice::getM
         return std::nullopt;
 
     return cls->makeFromJava<JniMotionRange, JniMotionRangeClass>(list);
+}
+
+Jni::Jni(Jni&& other) noexcept
+{
+    std::swap(m_vm, other.m_vm);
+}
+
+Jni::Jni(JavaVM* vm) : m_vm(vm)
+{
+}
+
+Jni::~Jni()
+{
+    if (m_vm)
+        m_vm->DetachCurrentThread();
 }
 
 std::optional<Jni> Jni::attachCurrentThread(JavaVM* vm, JNIEnv** env)
