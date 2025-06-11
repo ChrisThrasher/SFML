@@ -132,7 +132,7 @@ bool JoystickImpl::open(unsigned int joyIndex)
         // another joystick index. So skip that and search for some other.
         if (states.joystickStates.find(deviceId) != states.joystickStates.end())
             continue;
- 
+
         if (const auto capabilities = getCapabilitiesFromJni(*inputDevice))
             m_capabilities = *capabilities;
         else
