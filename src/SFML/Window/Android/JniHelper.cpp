@@ -58,13 +58,14 @@ std::optional<JniMotionRange> JniMotionRangeClass::makeFromJava(jobject motionRa
     return JniMotionRange(m_env, motionRange, getAxisMethod);
 }
 
-JniInputDevice::JniInputDevice(JNIEnv*   env,
-                               jobject   inputDevice,
-                               jmethodID getNameMethod,
-                               jmethodID getVendorIdMethod,
-                               jmethodID getProductIdMethod,
-                               jmethodID supportsSourceMethod,
-                               jmethodID getMotionRangesMethod) :
+JniInputDevice::JniInputDevice(
+    JNIEnv*   env,
+    jobject   inputDevice,
+    jmethodID getNameMethod,
+    jmethodID getVendorIdMethod,
+    jmethodID getProductIdMethod,
+    jmethodID supportsSourceMethod,
+    jmethodID getMotionRangesMethod) :
 m_env(env),
 m_inputDevice(inputDevice),
 m_getNameMethod(getNameMethod),
@@ -95,10 +96,7 @@ bool JniInputDevice::supportsSource(size_t sourceFlags) const
     return m_env->CallBooleanMethod(m_inputDevice, m_supportsSourceMethod, jint(sourceFlags));
 }
 
-JniInputDeviceClass::JniInputDeviceClass(JNIEnv* env,
-                                         jclass inputDeviceClass,
-                                         jmethodID getDeviceIdsMethod,
-                                         jmethodID getDeviceMethod) :
+JniInputDeviceClass::JniInputDeviceClass(JNIEnv* env, jclass inputDeviceClass, jmethodID getDeviceIdsMethod, jmethodID getDeviceMethod) :
 m_env(env),
 m_inputDeviceClass(inputDeviceClass),
 m_getDeviceIdsMethod(getDeviceIdsMethod),

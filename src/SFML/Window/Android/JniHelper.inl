@@ -26,8 +26,9 @@
 // Headers
 ////////////////////////////////////////////////////////////
 
-#include <SFML/System/Err.hpp>
 #include <SFML/Window/Android/JniHelper.hpp> // NOLINT(misc-header-include-cycle)
+
+#include <SFML/System/Err.hpp>
 
 #include <android/native_activity.h>
 

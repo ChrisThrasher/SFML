@@ -177,9 +177,9 @@ private:
 
 public:
     Jni(Jni&& other) noexcept;
-    
+
     Jni(const Jni&&) = delete;
-    
+
     ~Jni();
 
     ////////////////////////////////////////////////////////////

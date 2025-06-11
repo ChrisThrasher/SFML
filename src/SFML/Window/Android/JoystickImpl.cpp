@@ -131,8 +131,8 @@ bool JoystickImpl::open(unsigned int joyIndex)
         // Found device might be already registered. It might be even registered for
         // another joystick index. So skip that and search for some other.
         if (states.joystickStates.find(deviceId) != states.joystickStates.end())
-
-             continue;
+            continue;
+ 
         if (const auto capabilities = getCapabilitiesFromJni(*inputDevice))
             m_capabilities = *capabilities;
         else
