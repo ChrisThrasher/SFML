@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
+// Copyright (C) 2007-2025 Laurent Gomila (laurent@sfml-dev.org)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -36,9 +36,7 @@
 #include <android/configuration.h>
 #include <android/native_activity.h>
 
-#include <array>
 #include <fstream>
-#include <map>
 #include <mutex>
 #include <string>
 #include <unordered_map>
@@ -59,7 +57,6 @@ private:
 
 namespace sf::priv
 {
-
 struct ActivityStates
 {
     ANativeActivity* activity{};
@@ -83,7 +80,7 @@ struct ActivityStates
     Vector2i                                           mousePosition;
     EnumArray<Mouse::Button, bool, Mouse::ButtonCount> isButtonPressed{};
 
-    std::map<int32_t, JoystickState> joystickStates; ///< Indexed by physical device ID
+    std::unordered_map<std::int32_t, JoystickState> joystickStates; ///< Indexed by physical device ID
 
     bool mainOver{};
 
