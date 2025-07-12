@@ -708,7 +708,7 @@ void Shader::setUniformArray(const std::string& name, const float* scalarArray, 
 ////////////////////////////////////////////////////////////
 void Shader::setUniformArray(const std::string& name, const Glsl::Vec2* vectorArray, std::size_t length)
 {
-    std::vector<float> contiguous = flatten(vectorArray, length);
+    const std::vector<float> contiguous = flatten(vectorArray, length);
 
     const UniformBinder binder(*this, name);
     if (binder.location != -1)
@@ -719,7 +719,7 @@ void Shader::setUniformArray(const std::string& name, const Glsl::Vec2* vectorAr
 ////////////////////////////////////////////////////////////
 void Shader::setUniformArray(const std::string& name, const Glsl::Vec3* vectorArray, std::size_t length)
 {
-    std::vector<float> contiguous = flatten(vectorArray, length);
+    const std::vector<float> contiguous = flatten(vectorArray, length);
 
     const UniformBinder binder(*this, name);
     if (binder.location != -1)
@@ -730,7 +730,7 @@ void Shader::setUniformArray(const std::string& name, const Glsl::Vec3* vectorAr
 ////////////////////////////////////////////////////////////
 void Shader::setUniformArray(const std::string& name, const Glsl::Vec4* vectorArray, std::size_t length)
 {
-    std::vector<float> contiguous = flatten(vectorArray, length);
+    const std::vector<float> contiguous = flatten(vectorArray, length);
 
     const UniformBinder binder(*this, name);
     if (binder.location != -1)
